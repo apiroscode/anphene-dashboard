@@ -1,19 +1,49 @@
 {
   "name": "anphene-dashboard",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
+    "@apollo/react-hooks": "^3.1.5",
+    "@hookform/resolvers": "0.0.3",
+    "@material-ui/core": "^4.9.14",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.53",
+    "@material-ui/styles": "^4.9.14",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link": "^1.2.14",
+    "apollo-link-batch-http": "^1.2.14",
+    "apollo-link-context": "^1.0.20",
+    "apollo-link-error": "^1.1.13",
+    "apollo-upload-client": "^13.0.0",
+    "clsx": "^1.1.0",
+    "downshift": "^5.4.0",
+    "easy-peasy": "^3.3.0",
+    "graphql": "^15.0.0",
+    "graphql-tag": "^2.10.3",
+    "js-cookie": "^2.2.1",
+    "lodash.debounce": "^4.0.8",
+    "material-ui-toggle-icon": "^1.0.6",
+    "notistack": "^0.9.14",
+    "pluralize": "^8.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-hook-form": "^6.0.0-rc.1",
+    "react-infinite-scroller": "^1.2.4",
+    "react-inlinesvg": "^1.2.0",
+    "react-router": "^6.0.0-alpha.5",
+    "react-router-dom": "^6.0.0-alpha.5",
+    "react-scripts": "3.4.1",
+    "react-sortable-hoc": "^1.11.0",
+    "slugify": "^1.4.0",
+    "superstruct": "^0.8.3",
+    "use-debounce": "^3.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -30,5 +60,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^5.6.4",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.3.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "query-string": "^6.12.1",
+    "react-refresh": "^0.8.2",
+    "source-map-explorer": "^2.4.2"
   }
 }
