@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
 import * as yup from "yup";
 
 import { useMutation } from "@apollo/react-hooks";
 import { yupResolver } from "@hookform/resolvers";
 
-import { GET_ALL_PERMISSIONS } from "@/graphql/queries/groups";
-import { CREATE_GROUP } from "@/graphql/mutations/groups";
+import { GET_GROUP } from "@/graphql/queries/groups";
+import { DELETE_GROUP, UPDATE_GROUP } from "@/graphql/mutations/groups";
+
 import { getErrors, SaveButton } from "@/components/form";
 import { ColGrid, Header, QueryWrapper } from "@/components/Template";
 
@@ -18,37 +19,43 @@ import { FormGeneralInformation, FormPermissions } from "../components";
 const schema = yup.object().shape({
   name: yup.string().required(),
 });
-const defaultValues = { name: "", permissions: [] };
 
 const Base = ({ data }) => {
-  const { allPermissions } = data;
-  const navigate = useNavigate();
+  const { allPermissions, permissionGroup } = data;
+  const [update] = useMutation(UPDATE_GROUP);
   const { enqueueSnackbar } = useSnackbar();
-  const [create] = useMutation(CREATE_GROUP);
+
+  const deleteProps = {
+    mutation: DELETE_GROUP,
+    id: permissionGroup.id,
+    name: permissionGroup.name,
+    field: "groupDelete",
+  };
 
   const methods = useForm({
-    defaultValues,
+    defaultValues: {
+      name: permissionGroup.name,
+      permissions: permissionGroup.permissions.map((item) => item.code),
+    },
     resolver: yupResolver(schema),
   });
   const {
+    watch,
+    register,
+    unregister,
     control,
     errors,
     setError,
-    watch,
     setValue,
-    register,
-    unregister,
+    formState: { isDirty, isSubmitting },
     handleSubmit,
-    formState: { isSubmitting, isDirty },
+    reset,
   } = methods;
   const permissions = watch("permissions");
 
   useEffect(() => {
     register("permissions");
-
-    return () => {
-      unregister("permissions");
-    };
+    return () => unregister("permissions");
   }, [register, unregister]);
 
   const handlePermission = (e) => {
@@ -56,26 +63,26 @@ const Base = ({ data }) => {
       setValue("permissions", [...permissions, e.target.name]);
     } else {
       const newPermissions = permissions.filter((item) => item !== e.target.name);
-      setValue(
-        "permissions",
-        newPermissions.length > 0 ? newPermissions : defaultValues.permissions
-      );
+      setValue("permissions", newPermissions);
     }
   };
 
   const onSubmit = async (data) => {
     const {
       data: {
-        groupCreate: { group, errors },
+        groupUpdate: { group, errors },
       },
-    } = await create({ variables: data });
+    } = await update({ variables: { id: permissionGroup.id, ...data } });
     if (errors.length > 0) {
       setError(getErrors(errors));
     } else {
-      enqueueSnackbar(`Group ${data.name} successfully created.`, {
+      enqueueSnackbar(`Group ${data.name} successfully updated.`, {
         variant: "success",
       });
-      navigate(`../${group.id}`);
+      reset({
+        name: group.name,
+        permissions: group.permissions.map((item) => item.code),
+      });
     }
   };
 
@@ -90,13 +97,21 @@ const Base = ({ data }) => {
           handlePermission={handlePermission}
         />
       </ColGrid>
-      <SaveButton onSubmit={handleSubmit(onSubmit)} loading={isSubmitting} disabled={!isDirty} />
+      <SaveButton
+        deleteProps={deleteProps}
+        onSubmit={handleSubmit(onSubmit)}
+        loading={isSubmitting}
+        disabled={!isDirty}
+      />
     </>
   );
 };
 
-export default () => (
-  <QueryWrapper query={GET_ALL_PERMISSIONS} fieldName="allPermissions">
-    {(data) => <Base data={data} />}
-  </QueryWrapper>
-);
+export default () => {
+  const { id } = useParams();
+  return (
+    <QueryWrapper query={GET_GROUP} id={id} fieldName={"permissionGroup"}>
+      {(data) => <Base data={data} />}
+    </QueryWrapper>
+  );
+};

@@ -27,16 +27,17 @@ export default () => {
           sortField: "NAME",
         },
       ],
-      bulkLoading: loading,
-      bulkMutations: [
-        {
-          mutation: bulkDeleteMutation,
-          type: "icon",
-          icon: <DeleteIcon />,
-          label: "delete",
-        },
-      ],
     },
+
+    bulkLoading: loading,
+    bulkMutations: [
+      {
+        mutation: bulkDeleteMutation,
+        type: "icon",
+        icon: <DeleteIcon />,
+        label: "delete",
+      },
+    ],
   };
   return <List {...props} />;
 };

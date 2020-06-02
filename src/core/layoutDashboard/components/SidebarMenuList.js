@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { useStoreState } from "easy-peasy";
 import SVG from "react-inlinesvg";
-import { Link as RouterLink, useLocation, matchPath } from "react-router-dom";
+import { Link as RouterLink, matchPath, useLocation } from "react-router-dom";
 
 import { Link, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";

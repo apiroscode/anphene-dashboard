@@ -1,9 +1,22 @@
 import React from "react";
 
-import { List } from "@/components/Template";
+import { useMutation } from "@apollo/react-hooks";
+import { Delete as DeleteIcon } from "@material-ui/icons";
+
 import { GET_STAFF_USERS } from "@/graphql/queries/staff";
+import {
+  BULK_ACTIVATE_STAFF,
+  BULK_DEACTIVATE_STAFF,
+  BULK_DELETE_STAFF,
+} from "@/graphql/mutations/staff";
+
+import { List } from "@/components/Template";
 
 export default () => {
+  const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_STAFF);
+  const [bulkActivate, { loading: activateLoading }] = useMutation(BULK_ACTIVATE_STAFF);
+  const [bulkDeactivate, { loading: deactivateLoading }] = useMutation(BULK_DEACTIVATE_STAFF);
+
   const props = {
     appName: "Staff Member",
     query: GET_STAFF_USERS,
@@ -52,6 +65,25 @@ export default () => {
         },
       ],
     },
+    bulkLoading: deleteLoading || activateLoading || deactivateLoading,
+    bulkMutations: [
+      {
+        mutation: bulkActivate,
+        type: "text",
+        label: "activate",
+      },
+      {
+        mutation: bulkDeactivate,
+        type: "text",
+        label: "deactivate",
+      },
+      {
+        mutation: bulkDelete,
+        type: "icon",
+        icon: <DeleteIcon />,
+        label: "delete",
+      },
+    ],
   };
   return <List {...props} />;
 };

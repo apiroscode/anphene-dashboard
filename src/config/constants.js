@@ -1,4 +1,8 @@
 export const DELAYED_TIMEOUT = 300;
+export const IMAGE_VALIDATION = {
+  fileSize: 2 * 1024 * 1024,
+  formats: ["image/jpg", "image/jpeg", "image/png"],
+};
 
 const BASE_URI =
   process.env.NODE_ENV === "development"

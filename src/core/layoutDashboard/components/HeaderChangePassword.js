@@ -5,14 +5,15 @@ import { useSnackbar } from "notistack";
 import * as yup from "yup";
 
 import { useMutation } from "@apollo/react-hooks";
+import { yupResolver } from "@hookform/resolvers";
 import { Grid } from "@material-ui/core";
 
-import { getErrors, PasswordField, validationResolver } from "@/components/form";
+import { getErrors, PasswordField } from "@/components/form";
 import { Dialog } from "@/components/Dialog";
 
 import { CHANGE_PASSWORD } from "@/graphql/mutations/auth";
 
-const validationSchema = yup.object().shape({
+const schema = yup.object().shape({
   newPassword: yup.string().required(),
   oldPassword: yup.string().required(),
 });
@@ -28,11 +29,10 @@ export const HeaderChangePassword = (props) => {
     handleSubmit,
     errors,
     reset,
-    formState: { dirty, isSubmitting },
+    formState: { isDirty, isSubmitting },
   } = useForm({
     defaultValues: { newPassword: "", oldPassword: "" },
-    validationResolver,
-    validationContext: validationSchema,
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {
@@ -59,7 +59,7 @@ export const HeaderChangePassword = (props) => {
       handleClose={onClose}
       title="Change Password"
       okText="CHANGE PASSWORD"
-      okProps={{ loading: isSubmitting, disabled: !dirty }}
+      okProps={{ loading: isSubmitting, disabled: !isDirty }}
     >
       <Grid container direction="column" justify="center" alignItems="stretch" spacing={2}>
         <Grid item>

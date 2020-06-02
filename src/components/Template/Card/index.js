@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 
-import { Box, Divider, Card as CardMui, Typography } from "@material-ui/core";
+import { Box, Card as CardMui, Divider, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(

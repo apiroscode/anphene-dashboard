@@ -6,13 +6,26 @@ export const staffFragment = gql`
     email
     isStaff
     isActive
-    lastLogin
+    note
+    name
+    userPermissions {
+      code
+      name
+    }
+  }
+`;
+
+export const staffDetailFragment = gql`
+  fragment staffDetailFragment on User {
+    id
+    email
+    isActive
     note
     name
     idCard
     dateJoined
-    userPermissions {
-      code
+    permissionGroups {
+      id
       name
     }
   }

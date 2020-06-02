@@ -17,9 +17,12 @@ const ResetPasswordConfirm = lazy(() => import("@/app/users/ResetPasswordConfirm
 const Configuration = lazy(() => import("@/app/configuration"));
 
 const StaffList = lazy(() => import("@/app/staff/list"));
+const StaffCreate = lazy(() => import("@/app/staff/create"));
+const StaffUpdate = lazy(() => import("@/app/staff/update"));
 
 const GroupList = lazy(() => import("@/app/groups/list"));
 const GroupCreate = lazy(() => import("@/app/groups/create"));
+const GroupUpdate = lazy(() => import("@/app/groups/update"));
 
 const NotFound = () => {
   return <div>Not found</div>;
@@ -34,11 +37,23 @@ export const Routes = () => (
           element={<Configuration />}
           permissions={[PermissionEnum.MANAGE_STAFF]}
         />
+
         <Route
           path="configuration/staff"
           element={<StaffList />}
           permissions={[PermissionEnum.MANAGE_STAFF]}
         />
+        <Route
+          path="configuration/staff/create"
+          element={<StaffCreate />}
+          permissions={[PermissionEnum.MANAGE_STAFF]}
+        />
+        <Route
+          path="configuration/staff/:id"
+          element={<StaffUpdate />}
+          permissions={[PermissionEnum.MANAGE_STAFF]}
+        />
+
         <Route
           path="configuration/permission-groups"
           element={<GroupList />}
@@ -49,6 +64,12 @@ export const Routes = () => (
           element={<GroupCreate />}
           permissions={[PermissionEnum.MANAGE_GROUPS]}
         />
+        <Route
+          path="configuration/permission-groups/:id"
+          element={<GroupUpdate />}
+          permissions={[PermissionEnum.MANAGE_GROUPS]}
+        />
+
         <Route path="403" element={<NotFound code={403} />} />
         <Route path="404" element={<NotFound code={404} />} />
         <Route path="/*" element={<Navigate to="404" />} />

@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 
-import { capitalize, IconButton, Tooltip } from "@material-ui/core";
+import { capitalize, IconButton, Tooltip, Button } from "@material-ui/core";
 
-import { Button } from "@/components/Button";
 import { Dialog } from "@/components/Dialog";
 
 export const TableBulkMutation = (props) => {
-  const { item, selected, setSelected, appName, pluralAppName, params, query } = props;
+  const { item, selected, setSelected, appName, pluralAppName, variables, query } = props;
   const [open, setOpen] = useState(false);
-
   const labelCapitalize = capitalize(item.label);
   let textNumber = "this",
     textAppName = appName.toLowerCase();
@@ -27,7 +25,7 @@ export const TableBulkMutation = (props) => {
   const handleMutation = () => {
     item.mutation({
       variables: { ids: selected },
-      refetchQueries: [{ query, variables: params }],
+      refetchQueries: [{ query, variables }],
     });
     handleClose();
   };
@@ -40,7 +38,7 @@ export const TableBulkMutation = (props) => {
             {item.icon}
           </IconButton>
         ) : (
-          <Button aria-label={item.label} onClick={handleOpen}>
+          <Button variant="outlined" onClick={handleOpen}>
             {item.label.toUpperCase()}
           </Button>
         )}

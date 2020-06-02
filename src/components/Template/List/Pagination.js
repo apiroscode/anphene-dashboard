@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IconButton, Select, MenuItem, Typography } from "@material-ui/core";
+import { IconButton, MenuItem, Select, Typography } from "@material-ui/core";
 import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 

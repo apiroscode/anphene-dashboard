@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { SnackbarProvider } from "notistack";
 
 import { useApolloClient } from "@apollo/react-hooks";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import { INIT_URI } from "@/config/constants";
 import { theme as mainTheme } from "@/config/theme";

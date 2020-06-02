@@ -6,17 +6,18 @@ import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import { useMutation } from "@apollo/react-hooks";
+import { yupResolver } from "@hookform/resolvers";
 import { Box, Button, Card, CardContent, Link, Typography } from "@material-ui/core";
 import { VpnKey } from "@material-ui/icons";
 
 import { useQS } from "@/utils/hooks";
-import { getErrors, PasswordField, validationResolver } from "@/components/form";
+import { getErrors, PasswordField } from "@/components/form";
 
 import { PASSWORD_RESET_CONFIRM } from "@/graphql/mutations/auth";
 
 import { useStyles } from "../styles";
 
-const validationSchema = yup.object().shape({
+const schema = yup.object().shape({
   password: yup.string().required(),
 });
 
@@ -37,8 +38,7 @@ export default () => {
     formState: { isSubmitting },
   } = useForm({
     defaultValues: { password: "" },
-    validationResolver,
-    validationContext: validationSchema,
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {

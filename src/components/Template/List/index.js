@@ -88,13 +88,11 @@ export const List = (props) => {
       ...(usePagination ? { pageSize: 25 } : {}),
     }
   );
-  const newParams = usePagination
+  const variables = usePagination
     ? renameKeys(params, { pageSize: params.before ? "last" : "first" })
     : params;
 
-  const { data, loading: queryLoading } = useQuery(query, {
-    variables: newParams,
-  });
+  const { data, loading: queryLoading } = useQuery(query, { variables });
   const loading = bulkLoading || queryLoading;
   const paginationInfo = paginate(
     maybe(() => data?.[queryField]?.pageInfo),
@@ -152,6 +150,7 @@ export const List = (props) => {
     data: maybe(() => data?.[queryField]?.edges, []),
     pluralAppName,
     filterVariables,
+    variables,
     params,
     setParams,
     loading,

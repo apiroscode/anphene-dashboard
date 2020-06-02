@@ -1,6 +1,10 @@
 import gql from "graphql-tag";
 
-import { listGroupFragment, permissionsFragment } from "@/graphql/fragments/groups";
+import {
+  listGroupFragment,
+  permissionsFragment,
+  updateGroupFragment,
+} from "@/graphql/fragments/groups";
 import { filterVariable, pageInfo } from "@/graphql/fragments/pageInfo";
 
 export const GET_ALL_PERMISSIONS = gql`
@@ -33,4 +37,17 @@ export const GET_GROUPS = gql`
   }
   ${pageInfo}
   ${listGroupFragment}
+`;
+
+export const GET_GROUP = gql`
+  query GET_GROUP($id: ID!) {
+    permissionGroup(id: $id) {
+      ...updateGroupFragment
+    }
+    allPermissions {
+      ...permissionsFragment
+    }
+  }
+  ${updateGroupFragment}
+  ${permissionsFragment}
 `;

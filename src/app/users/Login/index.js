@@ -7,16 +7,17 @@ import { Link as RouterLink } from "react-router-dom";
 import * as yup from "yup";
 
 import { useMutation } from "@apollo/react-hooks";
+import { yupResolver } from "@hookform/resolvers";
 import { Box, Button, Card, CardContent, Link, TextField } from "@material-ui/core";
 import { Lock } from "@material-ui/icons";
 
-import { getErrors, PasswordField, validationResolver } from "@/components/form";
+import { getErrors, PasswordField } from "@/components/form";
 
 import { LOGIN, LOGOUT } from "@/graphql/mutations/auth";
 
 import { useStyles } from "../styles";
 
-const validationSchema = yup.object().shape({
+const schema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required(),
 });
@@ -35,8 +36,7 @@ export default () => {
     formState: { isSubmitting },
   } = useForm({
     defaultValues: { email: "", password: "" },
-    validationResolver,
-    validationContext: validationSchema,
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {

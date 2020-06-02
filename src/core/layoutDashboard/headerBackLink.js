@@ -27,4 +27,11 @@ export const backLink = [
       backUrl: "/configuration/permission-groups",
     },
   },
+  {
+    condition: { path: "/configuration/staff/:subUrl" },
+    backLink: {
+      backLabel: "STAFF",
+      backUrl: "/configuration/staff",
+    },
+  },
 ];
