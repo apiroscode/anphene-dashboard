@@ -119,9 +119,9 @@ export const theme = (appTheme) => {
           fontWeight: 600,
         },
         root: {
-          "& svg": {
-            marginLeft: 8,
-          },
+          // "& svg": {
+          //   marginLeft: 8,
+          // },
           borderRadius: 4,
         },
         text: {

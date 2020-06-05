@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import * as yup from "yup";
 
-import { useMutation } from "@apollo/react-hooks";
 import { yupResolver } from "@hookform/resolvers";
+
+import { useMutation } from "@/utils/hooks";
 
 import { GET_ALL_PERMISSIONS } from "@/graphql/queries/groups";
 import { CREATE_GROUP } from "@/graphql/mutations/groups";
@@ -64,11 +65,15 @@ const Base = ({ data }) => {
   };
 
   const onSubmit = async (data) => {
+    const result = await create({ variables: data });
+    if (result === undefined) return;
+
     const {
       data: {
         groupCreate: { group, errors },
       },
-    } = await create({ variables: data });
+    } = result;
+
     if (errors.length > 0) {
       setError(getErrors(errors));
     } else {

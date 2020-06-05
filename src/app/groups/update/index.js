@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 import * as yup from "yup";
 
-import { useMutation } from "@apollo/react-hooks";
 import { yupResolver } from "@hookform/resolvers";
+
+import { useMutation } from "@/utils/hooks";
 
 import { GET_GROUP } from "@/graphql/queries/groups";
 import { DELETE_GROUP, UPDATE_GROUP } from "@/graphql/mutations/groups";
@@ -68,11 +69,15 @@ const Base = ({ data }) => {
   };
 
   const onSubmit = async (data) => {
+    const result = await update({ variables: { id: permissionGroup.id, ...data } });
+    if (result === undefined) return;
+
     const {
       data: {
         groupUpdate: { group, errors },
       },
-    } = await update({ variables: { id: permissionGroup.id, ...data } });
+    } = result;
+
     if (errors.length > 0) {
       setError(getErrors(errors));
     } else {
@@ -88,7 +93,7 @@ const Base = ({ data }) => {
 
   return (
     <>
-      <Header title="Create Group" />
+      <Header title={`Update ${permissionGroup.name}`} />
       <ColGrid>
         <FormGeneralInformation control={control} errors={errors} />
         <FormPermissions
@@ -110,7 +115,7 @@ const Base = ({ data }) => {
 export default () => {
   const { id } = useParams();
   return (
-    <QueryWrapper query={GET_GROUP} id={id} fieldName={"permissionGroup"}>
+    <QueryWrapper query={GET_GROUP} id={id} fieldName="permissionGroup">
       {(data) => <Base data={data} />}
     </QueryWrapper>
   );

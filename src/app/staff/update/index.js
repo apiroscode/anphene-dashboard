@@ -4,8 +4,9 @@ import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
-import { useMutation } from "@apollo/react-hooks";
 import { yupResolver } from "@hookform/resolvers";
+
+import { useMutation } from "@/utils/hooks";
 
 import { GET_STAFF } from "@/graphql/queries/staff";
 import { DELETE_STAFF, UPDATE_STAFF } from "@/graphql/mutations/staff";
@@ -13,7 +14,7 @@ import { DELETE_STAFF, UPDATE_STAFF } from "@/graphql/mutations/staff";
 import { getErrors, SaveButton } from "@/components/form";
 import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
 
-import { FormGroups, FormIdCard, FormUserInformation, schema } from "../components";
+import { FormGroups, FormIdCard, FormUserInformation, FormDetail, schema } from "../components";
 
 const Base = (props) => {
   const { user, groups: groupsData } = props;
@@ -34,6 +35,7 @@ const Base = (props) => {
       name: user.name,
       note: user.note,
       idCard: "",
+      isActive: user.isActive,
       groups: user.permissionGroups.map((item) => item.id),
     },
   });
@@ -64,11 +66,14 @@ const Base = (props) => {
   }, [register, unregister]);
 
   const onSubmit = async (data) => {
+    const result = await update({ variables: { id: user.id, ...data } });
+    if (result === undefined) return;
+
     const {
       data: {
         staffUpdate: { user: updatedUser, errors },
       },
-    } = await update({ variables: { id: user.id, ...data } });
+    } = result;
 
     if (errors.length > 0) {
       setError(getErrors(errors));
@@ -87,7 +92,7 @@ const Base = (props) => {
   };
   return (
     <>
-      <Header title="Invite Staff" />
+      <Header title={`Update ${user.name}`} />
       <ColGrid>
         <RowGrid>
           <FormUserInformation control={control} errors={errors} />
@@ -98,7 +103,10 @@ const Base = (props) => {
             idCardUrl={user.idCard}
           />
         </RowGrid>
-        <FormGroups groupsData={groupsData} setValue={setValue} groups={groups} />
+        <RowGrid>
+          <FormGroups groupsData={groupsData} setValue={setValue} groups={groups} />
+          <FormDetail control={control} errors={errors} />
+        </RowGrid>
       </ColGrid>
       <SaveButton
         deleteProps={deleteProps}

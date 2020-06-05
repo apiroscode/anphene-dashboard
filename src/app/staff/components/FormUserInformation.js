@@ -9,7 +9,7 @@ import { Card } from "@/components/Template";
 export const FormUserInformation = (props) => {
   const { control, errors } = props;
   return (
-    <Card title="User Information" useMargin>
+    <Card title="Staff Information" useMargin>
       <Controller
         as={TextField}
         control={control}
@@ -29,16 +29,6 @@ export const FormUserInformation = (props) => {
         fullWidth
         error={!!errors.name}
         helperText={errors.name?.message}
-      />
-      <Controller
-        as={TextField}
-        control={control}
-        name="note"
-        type="text"
-        label="Note"
-        fullWidth
-        error={!!errors.note}
-        helperText={errors.note?.message}
       />
     </Card>
   );

@@ -15,6 +15,19 @@ export const staffFragment = gql`
   }
 `;
 
+export const staffListFragment = gql`
+  fragment staffListFragment on User {
+    id
+    name
+    email
+    isActive
+    permissionGroups {
+      id
+      name
+    }
+  }
+`;
+
 export const staffDetailFragment = gql`
   fragment staffDetailFragment on User {
     id

@@ -4,9 +4,10 @@ import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
 import * as yup from "yup";
 
-import { useMutation } from "@apollo/react-hooks";
 import { yupResolver } from "@hookform/resolvers";
 import { Grid } from "@material-ui/core";
+
+import { useMutation } from "@/utils/hooks";
 
 import { getErrors, PasswordField } from "@/components/form";
 import { Dialog } from "@/components/Dialog";
@@ -36,11 +37,14 @@ export const HeaderChangePassword = (props) => {
   });
 
   const onSubmit = async (data) => {
+    const result = await changePassword({ variables: data });
+    if (result === undefined) return;
+
     const {
       data: {
         passwordChange: { user, errors },
       },
-    } = await changePassword({ variables: data });
+    } = result;
     if (errors.length > 0) {
       setError(getErrors(errors));
     } else {

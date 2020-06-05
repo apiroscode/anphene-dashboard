@@ -3,9 +3,8 @@ import React, { useEffect } from "react";
 import { useStoreActions } from "easy-peasy";
 import { Navigate } from "react-router";
 
-import { useQuery } from "@apollo/react-hooks";
-
 import { maybe } from "@/utils";
+import { useQuery } from "@/utils/hooks";
 
 export const QueryWrapper = (props) => {
   const { id, vars, query, fieldName, children } = props;

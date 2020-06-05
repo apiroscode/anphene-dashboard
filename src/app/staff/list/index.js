@@ -1,6 +1,5 @@
 import React from "react";
 
-import { useMutation } from "@apollo/react-hooks";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { GET_STAFF_USERS } from "@/graphql/queries/staff";
@@ -9,6 +8,8 @@ import {
   BULK_DEACTIVATE_STAFF,
   BULK_DELETE_STAFF,
 } from "@/graphql/mutations/staff";
+
+import { useMutation } from "@/utils/hooks";
 
 import { List } from "@/components/Template";
 
@@ -58,6 +59,12 @@ export default () => {
           sortField: "EMAIL",
         },
         {
+          label: "Groups",
+          field: "permissionGroups",
+          align: "left",
+          render: (value) => value.map((item) => item.name).join(", "),
+        },
+        {
           label: "Active ?",
           field: "isActive",
           align: "center",
@@ -85,5 +92,6 @@ export default () => {
       },
     ],
   };
+
   return <List {...props} />;
 };

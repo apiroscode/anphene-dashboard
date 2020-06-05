@@ -4,8 +4,9 @@ import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-import { useMutation } from "@apollo/react-hooks";
 import { yupResolver } from "@hookform/resolvers";
+
+import { useMutation } from "@/utils/hooks";
 
 import { GET_GROUPS_FOR_STAFF } from "@/graphql/queries/staff";
 import { CREATE_STAFF } from "@/graphql/mutations/staff";
@@ -55,11 +56,14 @@ const Base = ({ groups: groupsData }) => {
   }, [register, unregister]);
 
   const onSubmit = async (data) => {
+    const result = await create({ variables: { ...data, redirectUrl: CONFIRM_PASSWORD_URI } });
+    if (result === undefined) return;
+
     const {
       data: {
         staffCreate: { user, errors },
       },
-    } = await create({ variables: { ...data, redirectUrl: CONFIRM_PASSWORD_URI } });
+    } = result;
 
     if (errors.length > 0) {
       setError(getErrors(errors));

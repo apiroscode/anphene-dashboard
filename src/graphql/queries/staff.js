@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 import { filterVariable, pageInfo } from "@/graphql/fragments/pageInfo";
-import { staffDetailFragment } from "@/graphql/fragments/staff";
+import { staffDetailFragment, staffListFragment } from "@/graphql/fragments/staff";
 
 export const GET_STAFF_USERS = gql`
   query GET_STAFF_USERS(
@@ -18,15 +18,13 @@ export const GET_STAFF_USERS = gql`
       }
       edges {
         node {
-          id
-          name
-          email
-          isActive
+         ...staffListFragment
         }
       }
     }
   }
   ${pageInfo}
+  ${staffListFragment}
 `;
 
 export const GET_GROUPS_FOR_STAFF = gql`

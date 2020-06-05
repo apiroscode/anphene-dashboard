@@ -34,4 +34,11 @@ export const backLink = [
       backUrl: "/configuration/staff",
     },
   },
+  {
+    condition: { path: "/configuration/attributes/:subUrl" },
+    backLink: {
+      backLabel: "ATTRIBUTES",
+      backUrl: "/configuration/attributes",
+    },
+  },
 ];

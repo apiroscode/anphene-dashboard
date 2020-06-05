@@ -1,15 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import clsx from "clsx";
 import { useStoreActions } from "easy-peasy";
 import pluralize from "pluralize";
 
-import { useQuery } from "@apollo/react-hooks";
 import { Card, Tab, Tabs } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { maybe, paginate, renameKeys } from "@/utils";
-import { useLocalStorage, useQS } from "@/utils/hooks";
+import { useLocalStorage, useQS, useQuery } from "@/utils/hooks";
 
 import { Header } from "../Header";
 
@@ -19,6 +17,8 @@ import { FilterSearch } from "./FilterSearch";
 import { FilterSave } from "./FilterSave";
 import { Table } from "./Table";
 import { Pagination } from "./Pagination";
+
+const DEFAULT_PAGE_SIZE = 25;
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -36,12 +36,12 @@ const useStyles = makeStyles(
         flexDirection: "column",
         alignItems: "flex-start",
       },
-    },
-    filterStyle: {
-      marginLeft: theme.spacing(2),
-      [theme.breakpoints.down("sm")]: {
-        marginTop: theme.spacing(2),
-        marginLeft: 0,
+      "& > *:not(:first-child)": {
+        marginLeft: theme.spacing(2),
+        [theme.breakpoints.down("sm")]: {
+          marginTop: theme.spacing(2),
+          marginLeft: 0,
+        },
       },
     },
     filterSearch: {
@@ -85,7 +85,7 @@ export const List = (props) => {
       ...(table.defaultSort
         ? { sortDirection: table.defaultSort.direction, sortField: table.defaultSort.field }
         : {}),
-      ...(usePagination ? { pageSize: 25 } : {}),
+      ...(usePagination ? { pageSize: DEFAULT_PAGE_SIZE } : {}),
     }
   );
   const variables = usePagination
@@ -185,7 +185,7 @@ export const List = (props) => {
           ))}
           {tabValue === "custom" && <Tab label="Custom Filter" value="custom" />}
         </Tabs>
-        {filters.length > 0 && useSearch ? (
+        {filters.length > 0 || useSearch ? (
           <div className={classes.filter}>
             {filters.length > 0 && (
               <div>
@@ -193,12 +193,12 @@ export const List = (props) => {
               </div>
             )}
             {useSearch && (
-              <div className={clsx(classes.filterStyle, classes.filterSearch)}>
+              <div className={classes.filterSearch}>
                 <FilterSearch {...baseProps} />
               </div>
             )}
             {totalFilters > 0 && (
-              <div className={clsx(classes.filterStyle)}>
+              <div>
                 <FilterSave {...baseProps} />
               </div>
             )}

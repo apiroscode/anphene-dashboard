@@ -9,6 +9,7 @@ import { Loading } from "./components/Loading";
 
 const LayoutUser = lazy(() => import("./layoutUser"));
 const LayoutDashboard = lazy(() => import("./layoutDashboard"));
+const Exception = lazy(() => import("./components/Exception"));
 
 const Login = lazy(() => import("@/app/users/Login"));
 const ResetPassword = lazy(() => import("@/app/users/ResetPassword"));
@@ -24,9 +25,9 @@ const GroupList = lazy(() => import("@/app/groups/list"));
 const GroupCreate = lazy(() => import("@/app/groups/create"));
 const GroupUpdate = lazy(() => import("@/app/groups/update"));
 
-const NotFound = () => {
-  return <div>Not found</div>;
-};
+const AttributeList = lazy(() => import("@/app/attributes/list"));
+const AttributeCreate = lazy(() => import("@/app/attributes/create"));
+const AttributeUpdate = lazy(() => import("@/app/attributes/update"));
 
 export const Routes = () => (
   <Suspense fallback={<Loading />}>
@@ -37,7 +38,6 @@ export const Routes = () => (
           element={<Configuration />}
           permissions={[PermissionEnum.MANAGE_STAFF]}
         />
-
         <Route
           path="configuration/staff"
           element={<StaffList />}
@@ -70,8 +70,25 @@ export const Routes = () => (
           permissions={[PermissionEnum.MANAGE_GROUPS]}
         />
 
-        <Route path="403" element={<NotFound code={403} />} />
-        <Route path="404" element={<NotFound code={404} />} />
+        <Route
+          path="configuration/attributes"
+          element={<AttributeList />}
+          permissions={[PermissionEnum.MANAGE_ATTRIBUTES]}
+        />
+        <Route
+          path="configuration/attributes/create"
+          element={<AttributeCreate />}
+          permissions={[PermissionEnum.MANAGE_ATTRIBUTES]}
+        />
+        <Route
+          path="configuration/attributes/:id"
+          element={<AttributeUpdate />}
+          permissions={[PermissionEnum.MANAGE_ATTRIBUTES]}
+        />
+
+        <Route path="403" element={<Exception code={403} />} />
+        <Route path="404" element={<Exception code={404} />} />
+        <Route path="500" element={<Exception code={500} />} />
         <Route path="/*" element={<Navigate to="404" />} />
       </Route>
       <Route path="user/*" element={<LayoutUser />} auth>

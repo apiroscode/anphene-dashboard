@@ -4,9 +4,10 @@ import { useStoreState } from "easy-peasy";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router";
 
-import { useMutation } from "@apollo/react-hooks";
 import { Box, Container, Portal } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+import { useMutation } from "@/utils/hooks";
 
 import { Button } from "@/components/Button";
 import { Dialog } from "@/components/Dialog";
@@ -48,7 +49,10 @@ const Delete = ({ deleteProps, handleBack }) => {
   };
 
   const handleMutation = async () => {
-    const { data } = await deleteMutation({ variables: { id } });
+    const result = await deleteMutation({ variables: { id } });
+    if (result === undefined) return;
+
+    const { data } = result;
     const errors = data[field].errors;
 
     if (errors.length > 0) {

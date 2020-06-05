@@ -17,7 +17,7 @@ const useStyles = makeStyles(
     },
     content: {
       "&>:not(:last-child)": {
-        marginBottom: theme.spacing(3),
+        marginBottom: theme.spacing(2),
       },
     },
   }),
