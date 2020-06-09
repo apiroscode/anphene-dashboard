@@ -1,6 +1,7 @@
 import { maybe } from "@/utils";
 
 export const onError = ({ message, graphQLErrors, networkError }, navigate) => {
+  console.log("here");
   if (networkError) {
     navigate("/500");
   } else if (graphQLErrors.length > 0) {

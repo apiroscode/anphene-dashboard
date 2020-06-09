@@ -29,6 +29,10 @@ const AttributeList = lazy(() => import("@/app/attributes/list"));
 const AttributeCreate = lazy(() => import("@/app/attributes/create"));
 const AttributeUpdate = lazy(() => import("@/app/attributes/update"));
 
+const ProductTypeList = lazy(() => import("@/app/productTypes/list"));
+const ProductTypeCreate = lazy(() => import("@/app/productTypes/create"));
+const ProductTypeUpdate = lazy(() => import("@/app/productTypes/update"));
+
 export const Routes = () => (
   <Suspense fallback={<Loading />}>
     <ReactRoutes>
@@ -84,6 +88,22 @@ export const Routes = () => (
           path="configuration/attributes/:id"
           element={<AttributeUpdate />}
           permissions={[PermissionEnum.MANAGE_ATTRIBUTES]}
+        />
+
+        <Route
+          path="configuration/product-types"
+          element={<ProductTypeList />}
+          permissions={[PermissionEnum.MANAGE_PRODUCT_TYPES]}
+        />
+        <Route
+          path="configuration/product-types/create"
+          element={<ProductTypeCreate />}
+          permissions={[PermissionEnum.MANAGE_PRODUCT_TYPES]}
+        />
+        <Route
+          path="configuration/product-types/:id"
+          element={<ProductTypeUpdate />}
+          permissions={[PermissionEnum.MANAGE_PRODUCT_TYPES]}
         />
 
         <Route path="403" element={<Exception code={403} />} />

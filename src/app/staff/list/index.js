@@ -12,6 +12,7 @@ import {
 import { useMutation } from "@/utils/hooks";
 
 import { List } from "@/components/Template";
+import { FilterRadioBox } from "@/components/Template/List/Filters";
 
 export default () => {
   const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_STAFF);
@@ -24,7 +25,7 @@ export default () => {
     queryField: "staffUsers",
     filters: [
       {
-        type: "radioBox",
+        component: <FilterRadioBox />,
         field: "status",
         label: "Is staff still active",
         defaultValue: "ACTIVE",

@@ -4,6 +4,8 @@ import { PermissionEnum } from "@/config/enum";
 import StaffMembers from "@/components/icons/StaffMembers";
 import PermissionGroups from "@/components/icons/PermissionGroups";
 import Attributes from "@/components/icons/Attributes";
+import ProductTypes from "@/components/icons/ProductTypes";
+
 export const menuItems = [
   {
     description: "Attributes and Product Types",
@@ -13,6 +15,13 @@ export const menuItems = [
         url: "attributes",
         label: "Attributes",
         description: "Determine attributes used to create product types",
+        permission: PermissionEnum.MANAGE_ATTRIBUTES,
+      },
+      {
+        icon: <ProductTypes fontSize="inherit" viewBox="0 0 44 44" />,
+        url: "product-types",
+        label: "Product Types",
+        description: "Defines types of products you sell",
         permission: PermissionEnum.MANAGE_ATTRIBUTES,
       },
     ],

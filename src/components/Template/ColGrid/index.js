@@ -8,7 +8,7 @@ const useStyles = makeStyles(
       display: "grid",
       gridRowGap: theme.spacing(3),
       gridColumnGap: theme.spacing(3),
-      gridTemplateColumns: "9fr 4fr",
+      gridTemplateColumns: ({ reverse }) => (reverse ? "4fr 9fr" : "9fr 4fr"),
       alignItems: "start",
       [theme.breakpoints.down("sm")]: {
         gridRowGap: theme.spacing(1),
@@ -19,8 +19,9 @@ const useStyles = makeStyles(
   { name: "COL_GRID" }
 );
 
-export const ColGrid = ({ children, ...props }) => {
-  const classes = useStyles();
+export const ColGrid = ({ children, reverse, ...props }) => {
+  const classes = useStyles({ reverse });
+
   return (
     <div className={classes.root} {...props}>
       {children}

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 
 import clsx from "clsx";
 
@@ -15,12 +15,6 @@ import {
 import { lighten, makeStyles } from "@material-ui/core/styles";
 
 import { Checkbox } from "@/components/Checkbox";
-
-import { FilterRadioBox } from "./FilterButtonComponents";
-
-const filterComponents = {
-  radioBox: (props) => <FilterRadioBox {...props} />,
-};
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -193,7 +187,7 @@ export const FilterButton = (props) => {
                     {tempFilter[filter.field] !== undefined && (
                       <>
                         <ListItem className={classes.filterComponent}>
-                          {filterComponents[filter.type]({
+                          {cloneElement(filter.component, {
                             ...baseProps,
                             filter,
                           })}

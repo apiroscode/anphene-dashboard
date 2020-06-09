@@ -1,9 +1,14 @@
 import React from "react";
-import { List } from "@/components/Template";
+
 import { Delete as DeleteIcon } from "@material-ui/icons";
+
+import { useMutation } from "@/utils/hooks";
+
 import { GET_ATTRIBUTES } from "@/graphql/queries/attributes";
 import { BULK_DELETE_ATTRIBUTE } from "@/graphql/mutations/attributes";
-import { useMutation } from "@/utils/hooks";
+
+import { List } from "@/components/Template";
+import { FilterRadioBox } from "@/components/Template/List/Filters";
 
 export default () => {
   const [bulkDelete, { loading }] = useMutation(BULK_DELETE_ATTRIBUTE);
@@ -14,9 +19,10 @@ export default () => {
     queryField: "attributes",
     filters: [
       {
-        type: "radioBox",
+        component: <FilterRadioBox />,
         field: "visibleInStorefront",
         label: "Visible on Product Page ",
+        defaultValue: true,
         items: [
           {
             label: "Yes",
@@ -29,9 +35,10 @@ export default () => {
         ],
       },
       {
-        type: "radioBox",
+        component: <FilterRadioBox />,
         field: "filterableInDashboard",
         label: "Filterable in Dashboard",
+        defaultValue: true,
         items: [
           {
             label: "Yes",
@@ -44,9 +51,10 @@ export default () => {
         ],
       },
       {
-        type: "radioBox",
+        component: <FilterRadioBox />,
         field: "filterableInStorefront",
         label: "Filterable in Storefront",
+        defaultValue: true,
         items: [
           {
             label: "Yes",
