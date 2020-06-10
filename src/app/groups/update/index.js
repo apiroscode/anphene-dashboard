@@ -7,36 +7,39 @@ import * as yup from "yup";
 
 import { yupResolver } from "@hookform/resolvers";
 
-import { useMutation } from "@/utils/hooks";
+import { PermissionEnum } from "@/config/enum";
+import { useMutation, usePermissions } from "@/utils/hooks";
 
 import { GET_GROUP } from "@/graphql/queries/groups";
 import { DELETE_GROUP, UPDATE_GROUP } from "@/graphql/mutations/groups";
 
 import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, QueryWrapper } from "@/components/Template";
+import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
 
 import { FormGeneralInformation, FormPermissions } from "../components";
+import { Staff } from "./Staff";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
 });
 
 const Base = ({ data }) => {
-  const { allPermissions, permissionGroup } = data;
+  const [gotPermission] = usePermissions(PermissionEnum.MANAGE_STAFF);
+  const { allPermissions, group } = data;
   const [update] = useMutation(UPDATE_GROUP);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
     mutation: DELETE_GROUP,
-    id: permissionGroup.id,
-    name: permissionGroup.name,
+    id: group.id,
+    name: group.name,
     field: "groupDelete",
   };
 
   const methods = useForm({
     defaultValues: {
-      name: permissionGroup.name,
-      permissions: permissionGroup.permissions.map((item) => item.code),
+      name: group.name,
+      permissions: group.permissions.map((item) => item.code),
     },
     resolver: yupResolver(schema),
   });
@@ -69,12 +72,12 @@ const Base = ({ data }) => {
   };
 
   const onSubmit = async (data) => {
-    const result = await update({ variables: { id: permissionGroup.id, ...data } });
+    const result = await update({ variables: { id: group.id, ...data } });
     if (result === undefined) return;
 
     const {
       data: {
-        groupUpdate: { group, errors },
+        groupUpdate: { group: updatedGroup, errors },
       },
     } = result;
 
@@ -85,17 +88,20 @@ const Base = ({ data }) => {
         variant: "success",
       });
       reset({
-        name: group.name,
-        permissions: group.permissions.map((item) => item.code),
+        name: updatedGroup.name,
+        permissions: updatedGroup.permissions.map((item) => item.code),
       });
     }
   };
 
   return (
     <>
-      <Header title={`Update ${permissionGroup.name}`} />
+      <Header title={`Update ${group.name}`} />
       <ColGrid>
-        <FormGeneralInformation control={control} errors={errors} />
+        <RowGrid>
+          <FormGeneralInformation control={control} errors={errors} />
+          {gotPermission && <Staff group={group} />}
+        </RowGrid>
         <FormPermissions
           allPermissions={allPermissions}
           permissions={permissions}
@@ -115,7 +121,7 @@ const Base = ({ data }) => {
 export default () => {
   const { id } = useParams();
   return (
-    <QueryWrapper query={GET_GROUP} id={id} fieldName="permissionGroup">
+    <QueryWrapper query={GET_GROUP} id={id} fieldName="group">
       {(data) => <Base data={data} />}
     </QueryWrapper>
   );

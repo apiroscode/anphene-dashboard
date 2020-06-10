@@ -11,7 +11,7 @@ import { yupResolver } from "@hookform/resolvers";
 import { Box, Button, Card, CardContent, Link, TextField } from "@material-ui/core";
 import { Lock } from "@material-ui/icons";
 
-import { getErrors, PasswordField } from "@/components/form";
+import { PasswordField } from "@/components/form";
 
 import { LOGIN, LOGOUT } from "@/graphql/mutations/auth";
 
@@ -48,7 +48,6 @@ export default () => {
       variables: { email: data.email.trim().toLowerCase(), password: data.password },
     });
     if (errors.length > 0) {
-      console.log(getErrors(errors));
       enqueueSnackbar(errors[0].message, {
         variant: "error",
       });

@@ -21,7 +21,7 @@ export const staffListFragment = gql`
     name
     email
     isActive
-    permissionGroups {
+    groups {
       id
       name
     }
@@ -37,7 +37,7 @@ export const staffDetailFragment = gql`
     name
     idCard
     dateJoined
-    permissionGroups {
+    groups {
       id
       name
     }

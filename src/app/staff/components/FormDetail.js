@@ -2,7 +2,7 @@ import React from "react";
 
 import { Controller } from "react-hook-form";
 
-import { TextField, Switch, FormControlLabel } from "@material-ui/core";
+import { FormControlLabel, Switch, TextField } from "@material-ui/core";
 
 import { Card } from "@/components/Template";
 

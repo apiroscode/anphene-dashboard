@@ -97,9 +97,9 @@ const Base = ({ groups: groupsData }) => {
 
 export default () => {
   return (
-    <QueryWrapper query={GET_GROUPS_FOR_STAFF} fieldName="permissionGroups">
+    <QueryWrapper query={GET_GROUPS_FOR_STAFF} fieldName="groups">
       {(data) => {
-        const groups = data.permissionGroups.edges.map((item) => item.node);
+        const groups = data.groups.edges.map((item) => item.node);
         return <Base groups={groups} />;
       }}
     </QueryWrapper>

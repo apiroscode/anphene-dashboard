@@ -14,7 +14,7 @@ export default () => {
   const props = {
     appName: "Group",
     query: GET_GROUPS,
-    queryField: "permissionGroups",
+    queryField: "groups",
     table: {
       defaultSort: {
         field: "NAME",

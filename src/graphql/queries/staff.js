@@ -29,7 +29,7 @@ export const GET_STAFF_USERS = gql`
 
 export const GET_GROUPS_FOR_STAFF = gql`
   query GET_GROUPS_FOR_STAFF {
-    permissionGroups(first: 100) {
+    groups(first: 100) {
       edges {
         node {
           id
@@ -45,7 +45,7 @@ export const GET_STAFF = gql`
     user(id: $id) {
       ...staffDetailFragment
     }
-    permissionGroups(first: 100) {
+    groups(first: 100) {
       edges {
         node {
           id

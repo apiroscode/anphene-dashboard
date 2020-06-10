@@ -1,12 +1,11 @@
 import React from "react";
-
-import { useStoreState } from "easy-peasy";
 import { Navigate, Route as ReactRoute } from "react-router-dom";
+import { usePermissions } from "@/utils/hooks";
 
 export const Route = (props) => {
   const { auth, isPrivate, permissions = [], ...rest } = props;
-  const user = useStoreState((state) => state.auth.user);
-  const isLoggedIn = !!user;
+  const [gotPermissions, isLoggedIn] = usePermissions(permissions);
+
   if (auth) {
     let checker, redirectPath;
     if (isPrivate) {
@@ -22,10 +21,6 @@ export const Route = (props) => {
       return <Navigate to={redirectPath} />;
     }
   } else if (permissions.length > 0) {
-    const userPermissions = user.userPermissions.map((perm) => perm.code);
-    const checkPermissions = (permission) => permissions.includes(permission);
-    const gotPermissions = userPermissions.some(checkPermissions);
-
     if (gotPermissions) {
       return <ReactRoute {...rest} />;
     } else {

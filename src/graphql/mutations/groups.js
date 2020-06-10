@@ -1,6 +1,10 @@
 import gql from "graphql-tag";
 
-import { baseGroupFragment, updateGroupFragment } from "@/graphql/fragments/groups";
+import {
+  baseGroupFragment,
+  updateGroupFragment,
+  usersGroupFragment,
+} from "@/graphql/fragments/groups";
 import { errorFragment } from "@/graphql/fragments/base";
 
 export const CREATE_GROUP = gql`
@@ -59,4 +63,34 @@ export const BULK_DELETE_GROUP = gql`
     }
   }
   ${errorFragment}
+`;
+
+export const ASSIGN_STAFF = gql`
+  mutation ASSIGN_STAFF($groupId: ID!, $staffIds: [ID]!) {
+    groupStaffAssign(groupId: $groupId, staffIds: $staffIds) {
+      errors {
+        ...errorFragment
+      }
+      group {
+        ...usersGroupFragment
+      }
+    }
+  }
+  ${errorFragment}
+  ${usersGroupFragment}
+`;
+
+export const UNASSIGN_STAFF = gql`
+  mutation UNASSIGN_STAFF($groupId: ID!, $staffIds: [ID]!) {
+    groupStaffUnassign(groupId: $groupId, staffIds: $staffIds) {
+      errors {
+        ...errorFragment
+      }
+      group {
+        ...usersGroupFragment
+      }
+    }
+  }
+  ${errorFragment}
+  ${usersGroupFragment}
 `;

@@ -1,7 +1,7 @@
 import createSvgIcon from "@material-ui/icons/utils/createSvgIcon";
 import React from "react";
 
-const PermissionGroups = createSvgIcon(
+const Groups = createSvgIcon(
   <>
     <path
       fillRule="evenodd"
@@ -10,7 +10,7 @@ const PermissionGroups = createSvgIcon(
       fill="#06847B"
     />
   </>,
-  "PermissionGroups"
+  "Groups"
 );
 
-export default PermissionGroups;
+export default Groups;

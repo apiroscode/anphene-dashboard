@@ -4,21 +4,13 @@ import { useSnackbar } from "notistack";
 import InfiniteScroll from "react-infinite-scroller";
 
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@material-ui/core";
+import { Button, CircularProgress, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { maybe } from "@/utils";
 
-import { GET_AVAILABLE_ATTRIBUTES } from "@/graphql/queries/productTypes";
-import { ATTRIBUTE_ASSIGN } from "@/graphql/mutations/productTypes";
+import { GET_AVAILABLE_STAFF } from "@/graphql/queries/groups";
+import { ASSIGN_STAFF } from "@/graphql/mutations/groups";
 
 import { Checkbox } from "@/components/Checkbox";
 import { Dialog } from "@/components/Dialog";
@@ -42,19 +34,16 @@ const useStyles = makeStyles(
 );
 
 const DialogContent = (props) => {
-  const { productType, type, selected, setSelected, loading } = props;
+  const { group, selected, setSelected, loading } = props;
   const classes = useStyles();
-  const queryVariables = { id: productType.id, inputType: type };
-  const { data, fetchMore } = useQuery(GET_AVAILABLE_ATTRIBUTES, {
+  const queryVariables = { id: group.id };
+  const { data, fetchMore } = useQuery(GET_AVAILABLE_STAFF, {
     variables: queryVariables,
     fetchPolicy: "network-only",
   });
 
-  const availableAttributes = maybe(() => data?.productType?.availableAttributes?.edges, []);
-  const hasMore = maybe(
-    () => data?.productType?.availableAttributes?.pageInfo?.hasNextPage,
-    false
-  );
+  const availableStaff = maybe(() => data?.group?.availableStaff?.edges, []);
+  const hasMore = maybe(() => data?.group?.availableStaff?.pageInfo?.hasNextPage, false);
 
   const handleClickCheckBox = (event, id) => {
     event.stopPropagation();
@@ -78,25 +67,22 @@ const DialogContent = (props) => {
   };
 
   const onFetchMore = () => {
-    const endCursor = maybe(
-      () => data?.productType?.availableAttributes?.pageInfo?.endCursor,
-      false
-    );
+    const endCursor = maybe(() => data?.group?.availableStaff?.pageInfo?.endCursor, false);
     fetchMore({
       variables: {
         ...queryVariables,
         after: endCursor,
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        const newEdges = fetchMoreResult?.productType?.availableAttributes?.edges;
-        const pageInfo = fetchMoreResult.productType?.availableAttributes?.pageInfo;
+        const newEdges = fetchMoreResult?.group?.availableStaff?.edges;
+        const pageInfo = fetchMoreResult.group?.availableStaff?.pageInfo;
         return newEdges.length
           ? {
-              productType: {
-                ...previousResult.productType,
-                availableAttributes: {
-                  __typename: previousResult.productType.availableAttributes.__typename,
-                  edges: [...previousResult.productType.availableAttributes.edges, ...newEdges],
+              group: {
+                ...previousResult.group,
+                availableStaff: {
+                  __typename: previousResult.group.availableStaff.__typename,
+                  edges: [...previousResult.group.availableStaff.edges, ...newEdges],
                   pageInfo,
                 },
               },
@@ -122,8 +108,8 @@ const DialogContent = (props) => {
     >
       <ResponsiveTable key="table">
         <TableBody>
-          {availableAttributes.length > 0 ? (
-            availableAttributes.map((item) => {
+          {availableStaff.length > 0 ? (
+            availableStaff.map((item) => {
               return (
                 <TableRow key={item.node.id}>
                   <TableCell padding="checkbox">
@@ -133,20 +119,15 @@ const DialogContent = (props) => {
                       size="small"
                     />
                   </TableCell>
-                  <TableCell>
-                    <Box display="flex" flexDirection="column">
-                      <Typography>{item.node.name}</Typography>
-                      <Typography variant="caption" color="textSecondary">
-                        {item.node.slug}
-                      </Typography>
-                    </Box>
-                  </TableCell>
+                  <TableCell>{item.node.name}</TableCell>
+                  <TableCell>{item.node.email}</TableCell>
+                  <TableCell>{item.node.isActive ? "Active" : "Disabled"}</TableCell>
                 </TableRow>
               );
             })
           ) : (
             <TableRow>
-              <TableCell>All attributes assigned</TableCell>
+              <TableCell>All staff assigned</TableCell>
             </TableRow>
           )}
         </TableBody>
@@ -155,21 +136,18 @@ const DialogContent = (props) => {
   );
 };
 
-export const AttributesAssign = (props) => {
-  const { productType, type } = props;
+export const StaffAssign = (props) => {
+  const { group } = props;
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [assign, { loading }] = useMutation(ATTRIBUTE_ASSIGN);
+  const [assign, { loading }] = useMutation(ASSIGN_STAFF);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState([]);
 
   const handleAssign = async () => {
     const variables = {
-      productTypeId: productType.id,
-      operations: selected.map((item) => ({
-        id: item,
-        type: type === "VARIANT" ? "VARIANT" : "PRODUCT",
-      })),
+      groupId: group.id,
+      staffIds: selected,
     };
 
     const result = await assign({ variables });
@@ -177,7 +155,7 @@ export const AttributesAssign = (props) => {
 
     const {
       data: {
-        attributeAssign: { errors },
+        groupStaffAssign: { errors },
       },
     } = result;
 
@@ -202,14 +180,14 @@ export const AttributesAssign = (props) => {
   return (
     <>
       <Button color="primary" onClick={handleOpen}>
-        ASSIGN ATTRIBUTE
+        ASSIGN STAFF
       </Button>
       <Dialog
         open={open}
-        title="Assign Attribute"
+        title="Assign Staff"
         handleOk={handleAssign}
         handleClose={handleClose}
-        okText="ASSIGN ATTRIBUTES"
+        okText="ASSIGN STAFF"
         okProps={{
           disabled: selected.length === 0 || loading,
         }}

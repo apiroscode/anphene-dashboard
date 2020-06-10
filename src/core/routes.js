@@ -40,7 +40,12 @@ export const Routes = () => (
         <Route
           path="configuration"
           element={<Configuration />}
-          permissions={[PermissionEnum.MANAGE_STAFF]}
+          permissions={[
+            PermissionEnum.MANAGE_ATTRIBUTES,
+            PermissionEnum.MANAGE_PRODUCT_TYPES,
+            PermissionEnum.MANAGE_GROUPS,
+            PermissionEnum.MANAGE_STAFF,
+          ]}
         />
         <Route
           path="configuration/staff"
@@ -59,17 +64,17 @@ export const Routes = () => (
         />
 
         <Route
-          path="configuration/permission-groups"
+          path="configuration/groups"
           element={<GroupList />}
           permissions={[PermissionEnum.MANAGE_GROUPS]}
         />
         <Route
-          path="configuration/permission-groups/create"
+          path="configuration/groups/create"
           element={<GroupCreate />}
           permissions={[PermissionEnum.MANAGE_GROUPS]}
         />
         <Route
-          path="configuration/permission-groups/:id"
+          path="configuration/groups/:id"
           element={<GroupUpdate />}
           permissions={[PermissionEnum.MANAGE_GROUPS]}
         />

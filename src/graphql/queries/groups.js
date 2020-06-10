@@ -18,10 +18,10 @@ export const GET_ALL_PERMISSIONS = gql`
 
 export const GET_GROUPS = gql`
   query GET_GROUPS(
-    ${filterVariable.type("PermissionGroupSortField")}
+    ${filterVariable.type("GroupSortField")}
     $search: String
   ) {
-    permissionGroups(
+    groups(
       ${filterVariable.vars}
       filter: { search: $search }
     ) {
@@ -41,7 +41,7 @@ export const GET_GROUPS = gql`
 
 export const GET_GROUP = gql`
   query GET_GROUP($id: ID!) {
-    permissionGroup(id: $id) {
+    group(id: $id) {
       ...updateGroupFragment
     }
     allPermissions {
@@ -50,4 +50,26 @@ export const GET_GROUP = gql`
   }
   ${updateGroupFragment}
   ${permissionsFragment}
+`;
+
+export const GET_AVAILABLE_STAFF = gql`
+  query GET_AVAILABLE_STAFF($id: ID!, $after: String) {
+    group(id: $id) {
+      id
+      availableStaff(first: 10, after: $after) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            name
+            email
+            isActive
+          }
+        }
+      }
+    }
+  }
 `;

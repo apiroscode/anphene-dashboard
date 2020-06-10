@@ -3,3 +3,4 @@ export { useQS } from "./useQS";
 export { useLocalStorage } from "./useLocalStorage";
 export { useQuery } from "./useQuery";
 export { useMutation } from "./useMutation";
+export { usePermissions } from "./usePermissions";

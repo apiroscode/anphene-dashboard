@@ -26,13 +26,27 @@ export const listGroupFragment = gql`
   ${baseGroupFragment}
 `;
 
+export const usersGroupFragment = gql`
+  fragment usersGroupFragment on Group {
+    id
+    users {
+      id
+      email
+      name
+      isActive
+    }
+  }
+`;
+
 export const updateGroupFragment = gql`
   fragment updateGroupFragment on Group {
     ...baseGroupFragment
+    ...usersGroupFragment
     permissions {
       ...permissionsFragment
     }
   }
   ${baseGroupFragment}
+  ${usersGroupFragment}
   ${permissionsFragment}
 `;

@@ -21,10 +21,10 @@ export const backLink = [
     },
   },
   {
-    condition: { path: "/configuration/permission-groups/:subUrl" },
+    condition: { path: "/configuration/groups/:subUrl" },
     backLink: {
       backLabel: "GROUPS",
-      backUrl: "/configuration/permission-groups",
+      backUrl: "/configuration/groups",
     },
   },
   {

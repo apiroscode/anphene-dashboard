@@ -2,7 +2,7 @@ import React from "react";
 
 import { PermissionEnum } from "@/config/enum";
 import StaffMembers from "@/components/icons/StaffMembers";
-import PermissionGroups from "@/components/icons/PermissionGroups";
+import Groups from "@/components/icons/Groups";
 import Attributes from "@/components/icons/Attributes";
 import ProductTypes from "@/components/icons/ProductTypes";
 
@@ -22,7 +22,7 @@ export const menuItems = [
         url: "product-types",
         label: "Product Types",
         description: "Defines types of products you sell",
-        permission: PermissionEnum.MANAGE_ATTRIBUTES,
+        permission: PermissionEnum.MANAGE_PRODUCT_TYPES,
       },
     ],
   },
@@ -37,10 +37,10 @@ export const menuItems = [
         permission: PermissionEnum.MANAGE_STAFF,
       },
       {
-        icon: <PermissionGroups fontSize="inherit" viewBox="0 0 44 44" />,
-        url: "permission-groups",
-        label: "Permission Groups",
-        description: "Manage your permission groups and their permissions",
+        icon: <Groups fontSize="inherit" viewBox="0 0 44 44" />,
+        url: "groups",
+        label: "Groups",
+        description: "Manage your groups and their permissions",
         permission: PermissionEnum.MANAGE_GROUPS,
       },
     ],

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { capitalize, IconButton, Tooltip, Button } from "@material-ui/core";
+import { Button, capitalize, IconButton, Tooltip } from "@material-ui/core";
 
 import { Dialog } from "@/components/Dialog";
 

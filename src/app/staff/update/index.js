@@ -14,7 +14,7 @@ import { DELETE_STAFF, UPDATE_STAFF } from "@/graphql/mutations/staff";
 import { getErrors, SaveButton } from "@/components/form";
 import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
 
-import { FormGroups, FormIdCard, FormUserInformation, FormDetail, schema } from "../components";
+import { FormDetail, FormGroups, FormIdCard, FormUserInformation, schema } from "../components";
 
 const Base = (props) => {
   const { user, groups: groupsData } = props;
@@ -36,7 +36,7 @@ const Base = (props) => {
       note: user.note,
       idCard: "",
       isActive: user.isActive,
-      groups: user.permissionGroups.map((item) => item.id),
+      groups: user.groups.map((item) => item.id),
     },
   });
 
@@ -86,7 +86,7 @@ const Base = (props) => {
         name: updatedUser.name,
         note: updatedUser.note,
         idCard: "",
-        groups: updatedUser.permissionGroups.map((item) => item.id),
+        groups: updatedUser.groups.map((item) => item.id),
       });
     }
   };
@@ -123,7 +123,7 @@ export default () => {
   return (
     <QueryWrapper query={GET_STAFF} id={id} fieldName="user">
       {(data) => {
-        const groups = data.permissionGroups.edges.map((item) => item.node);
+        const groups = data.groups.edges.map((item) => item.node);
         return <Base user={data.user} groups={groups} />;
       }}
     </QueryWrapper>

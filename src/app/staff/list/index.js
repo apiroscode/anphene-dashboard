@@ -61,7 +61,7 @@ export default () => {
         },
         {
           label: "Groups",
-          field: "permissionGroups",
+          field: "groups",
           align: "left",
           render: (value) => value.map((item) => item.name).join(", "),
         },
