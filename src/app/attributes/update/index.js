@@ -1,7 +1,7 @@
 import React from "react";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 
 import { yupResolver } from "@hookform/resolvers";
 
@@ -56,7 +56,7 @@ const Base = ({ attribute }) => {
     const result = await update({
       variables: {
         id: attribute.id,
-        ...data,
+        input: { ...data, inputType: undefined },
       },
     });
     if (result === undefined) return;

@@ -8,32 +8,8 @@ import {
 import { errorFragment } from "@/graphql/fragments/base";
 
 export const CREATE_ATTRIBUTE = gql`
-  mutation CREATE_ATTRIBUTE(
-    $name: String!
-    $slug: String
-    $valueRequired: Boolean
-    $visibleInStorefront: Boolean
-    $filterableInStorefront: Boolean
-    $filterableInDashboard: Boolean
-    $storefrontSearchPosition: Int
-    $availableInGrid: Boolean
-    $inputType: AttributeInputTypeEnum
-    $values: [AttributeValueCreateInput]
-  ) {
-    attributeCreate(
-      input: {
-        name: $name
-        slug: $slug
-        valueRequired: $valueRequired
-        visibleInStorefront: $visibleInStorefront
-        filterableInStorefront: $filterableInStorefront
-        filterableInDashboard: $filterableInDashboard
-        storefrontSearchPosition: $storefrontSearchPosition
-        availableInGrid: $availableInGrid
-        inputType: $inputType
-        values: $values
-      }
-    ) {
+  mutation CREATE_ATTRIBUTE($input: AttributeCreateInput!) {
+    attributeCreate(input: $input) {
       errors {
         ...errorFragment
       }
@@ -47,30 +23,8 @@ export const CREATE_ATTRIBUTE = gql`
 `;
 
 export const UPDATE_ATTRIBUTE = gql`
-  mutation UPDATE_ATTRIBUTE(
-    $id: ID!
-    $name: String!
-    $slug: String
-    $valueRequired: Boolean
-    $visibleInStorefront: Boolean
-    $filterableInStorefront: Boolean
-    $filterableInDashboard: Boolean
-    $storefrontSearchPosition: Int
-    $availableInGrid: Boolean
-  ) {
-    attributeUpdate(
-      id: $id
-      input: {
-        name: $name
-        slug: $slug
-        valueRequired: $valueRequired
-        visibleInStorefront: $visibleInStorefront
-        filterableInStorefront: $filterableInStorefront
-        filterableInDashboard: $filterableInDashboard
-        storefrontSearchPosition: $storefrontSearchPosition
-        availableInGrid: $availableInGrid
-      }
-    ) {
+  mutation UPDATE_ATTRIBUTE($id: ID!, $input: AttributeInput!) {
+    attributeUpdate(id: $id, input: $input) {
       errors {
         ...errorFragment
       }
@@ -106,8 +60,8 @@ export const BULK_DELETE_ATTRIBUTE = gql`
 `;
 
 export const CREATE_ATTRIBUTE_VALUE = gql`
-  mutation CREATE_ATTRIBUTE_VALUE($attributeId: ID!, $name: String!, $value: String) {
-    attributeValueCreate(attribute: $attributeId, input: { name: $name, value: $value }) {
+  mutation CREATE_ATTRIBUTE_VALUE($attributeId: ID!, $input: AttributeValueInput!) {
+    attributeValueCreate(attribute: $attributeId, input: $input) {
       errors {
         ...errorFragment
       }
@@ -121,8 +75,8 @@ export const CREATE_ATTRIBUTE_VALUE = gql`
 `;
 
 export const UPDATE_ATTRIBUTE_VALUE = gql`
-  mutation UPDATE_ATTRIBUTE_VALUE($id: ID!, $name: String!, $value: String) {
-    attributeValueUpdate(id: $id, input: { name: $name, value: $value }) {
+  mutation UPDATE_ATTRIBUTE_VALUE($id: ID!, $input: AttributeValueInput!) {
+    attributeValueUpdate(id: $id, input: $input) {
       errors {
         ...errorFragment
       }
@@ -151,11 +105,8 @@ export const DELETE_ATTRIBUTE_VALUE = gql`
 `;
 
 export const REORDER_ATTRIBUTE_VALUES = gql`
-  mutation ReorderAttributeValues($attributeId: ID!, $valueId: ID!, $sortOrder: Int!) {
-    attributeReorderValues(
-      attributeId: $attributeId
-      moves: { id: $valueId, sortOrder: $sortOrder }
-    ) {
+  mutation ReorderAttributeValues($attributeId: ID!, $moves: [ReorderInput]!) {
+    attributeReorderValues(attributeId: $attributeId, moves: $moves) {
       errors {
         ...errorFragment
       }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Header, QueryWrapper, RowGrid } from "@/components/Template";
 import { GET_PRODUCT_TYPE } from "@/graphql/queries/productTypes";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { DELETE_PRODUCT_TYPE, UPDATE_PRODUCT_TYPE } from "@/graphql/mutations/productTypes";
 import { useMutation } from "@/utils/hooks";
 import { useSnackbar } from "notistack";
@@ -41,7 +41,7 @@ const Base = ({ productType }) => {
     const result = await update({
       variables: {
         id: productType.id,
-        ...data,
+        input: data,
       },
     });
     if (result === undefined) return;

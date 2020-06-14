@@ -1,51 +1,28 @@
-import React, { useState } from "react";
-
-import { IconButton } from "@material-ui/core";
-import { Delete as DeleteIcon } from "@material-ui/icons";
+import React from "react";
 
 import { Dialog } from "@/components/Dialog";
 
+const ACTION = "delete-value";
 export const ValueDelete = (props) => {
-  const { setValue, values, name, idx } = props;
-  const [open, setOpen] = useState(false);
+  const { values, setValue, params, handleClose } = props;
+  const { action, id } = params;
+  const value = values[id];
 
-  const remove = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    const newData = [...values.slice(0, idx), ...values.slice(idx + 1)];
+  const remove = () => {
+    const newData = [...values.slice(0, id), ...values.slice(id + 1)];
     setValue("values", newData);
-    setOpen(false);
-  };
-
-  const handleOpen = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    setOpen(true);
-  };
-
-  const handleClose = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    setOpen(false);
+    handleClose();
   };
 
   return (
-    <>
-      <IconButton onClick={handleOpen}>
-        <DeleteIcon />
-      </IconButton>
-      <Dialog
-        open={open}
-        handleOk={remove}
-        handleClose={handleClose}
-        title={`Delete ${name}`}
-        content={`Are you sure you want to delete "${name}" value?`}
-        okText="DELETE"
-        okStyle="error"
-      />
-    </>
+    <Dialog
+      open={action === ACTION}
+      handleOk={remove}
+      handleClose={handleClose}
+      title={`Delete ${value?.name}`}
+      content={`Are you sure you want to delete "${value?.name}" value?`}
+      okText="DELETE"
+      okStyle="error"
+    />
   );
 };

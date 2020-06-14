@@ -46,7 +46,7 @@ export default () => {
   } = methods;
 
   const onSubmit = async (data) => {
-    const result = await create({ variables: data });
+    const result = await create({ variables: { input: data } });
     if (result === undefined) return;
 
     const {

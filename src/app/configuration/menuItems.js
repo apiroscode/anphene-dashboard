@@ -5,6 +5,7 @@ import StaffMembers from "@/components/icons/StaffMembers";
 import Groups from "@/components/icons/Groups";
 import Attributes from "@/components/icons/Attributes";
 import ProductTypes from "@/components/icons/ProductTypes";
+import Suppliers from "@/components/icons/Suppliers";
 
 export const menuItems = [
   {
@@ -23,6 +24,18 @@ export const menuItems = [
         label: "Product Types",
         description: "Defines types of products you sell",
         permission: PermissionEnum.MANAGE_PRODUCT_TYPES,
+      },
+    ],
+  },
+  {
+    description: "Product Settings",
+    children: [
+      {
+        icon: <Suppliers fontSize="inherit" viewBox="0 0 1024 1024" />,
+        url: "suppliers",
+        label: "Suppliers",
+        description: "Manage your product suppliers",
+        permission: PermissionEnum.MANAGE_SUPPLIERS,
       },
     ],
   },

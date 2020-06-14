@@ -17,7 +17,7 @@ export const Attributes = (props) => {
   );
 
   return (
-    <Card title={title} action={<AttributesAssign {...props} />} densePadding>
+    <Card title={title} action={<AttributesAssign {...props} />} useDense>
       <AttributesTable {...props} items={items} />
     </Card>
   );

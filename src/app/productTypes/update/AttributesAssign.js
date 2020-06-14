@@ -51,6 +51,7 @@ const DialogContent = (props) => {
   });
 
   const availableAttributes = maybe(() => data?.productType?.availableAttributes?.edges, []);
+
   const hasMore = maybe(
     () => data?.productType?.availableAttributes?.pageInfo?.hasNextPage,
     false

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
@@ -34,7 +34,7 @@ export default () => {
   } = methods;
 
   const onSubmit = async (data) => {
-    const result = await create({ variables: data });
+    const result = await create({ variables: { input: data } });
     if (result === undefined) return;
 
     const {

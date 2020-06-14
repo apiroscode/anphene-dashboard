@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { useStoreActions } from "easy-peasy";
-import { Navigate } from "react-router";
+import { Navigate } from "react-router-dom";
 
 import { maybe } from "@/utils";
 import { useQuery } from "@/utils/hooks";

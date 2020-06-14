@@ -5,15 +5,25 @@ import { Button, capitalize, IconButton, Tooltip } from "@material-ui/core";
 import { Dialog } from "@/components/Dialog";
 
 export const TableBulkMutation = (props) => {
-  const { item, selected, setSelected, appName, pluralAppName, variables, query } = props;
+  const {
+    item,
+    selected,
+    setSelected,
+    appName,
+    pluralAppName,
+    placeholder,
+    variables,
+    query,
+    vars,
+  } = props;
   const [open, setOpen] = useState(false);
   const labelCapitalize = capitalize(item.label);
   let textNumber = "this",
-    textAppName = appName.toLowerCase();
+    textAppName = placeholder ? placeholder : appName.toLowerCase();
 
   if (selected.length > 1) {
     textNumber = <strong>{selected.length}</strong>;
-    textAppName = pluralAppName.toLowerCase();
+    textAppName = placeholder ? placeholder : pluralAppName.toLowerCase();
   }
   const handleOpen = () => {
     setOpen(true);
@@ -22,10 +32,11 @@ export const TableBulkMutation = (props) => {
     setSelected([]);
     setOpen(false);
   };
+
   const handleMutation = () => {
     item.mutation({
       variables: { ids: selected },
-      refetchQueries: [{ query, variables }],
+      refetchQueries: [{ query, variables: { ...variables, ...vars } }],
     });
     handleClose();
   };
@@ -47,7 +58,7 @@ export const TableBulkMutation = (props) => {
         open={open}
         handleClose={handleClose}
         handleOk={handleMutation}
-        title={`${labelCapitalize} ${pluralAppName}`}
+        title={`${labelCapitalize} ${placeholder ? placeholder : pluralAppName}`}
         content={
           <span>
             Are you sure you want to {item.label.toLowerCase()} {textNumber} {textAppName} ?

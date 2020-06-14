@@ -37,7 +37,7 @@ export const ValueUpdate = (props) => {
   }, [reset, value]);
 
   const onUpdate = async (data) => {
-    const result = await update({ variables: { id: value.id, ...data } });
+    const result = await update({ variables: { id: value.id, input: data } });
     if (result === undefined) return;
 
     const {

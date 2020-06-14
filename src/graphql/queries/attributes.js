@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 import { attributeDetailFragment, attributeFragment } from "@/graphql/fragments/attributes";
-import { filterVariable } from "@/graphql/fragments/pageInfo";
+import { filterVariable, pageInfo } from "@/graphql/fragments/pageInfo";
 
 export const GET_ATTRIBUTES = gql`
   query GET_ATTRIBUTES(
@@ -24,6 +24,9 @@ export const GET_ATTRIBUTES = gql`
         availableInGrid: $availableInGrid 
       }
     ) {
+      pageInfo {
+        ...pageInfo
+      }
       edges {
         node {
           ...attributeFragment
@@ -31,6 +34,7 @@ export const GET_ATTRIBUTES = gql`
       }
     }
   }
+  ${pageInfo}
   ${attributeFragment}
 `;
 

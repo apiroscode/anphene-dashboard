@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import { yupResolver } from "@hookform/resolvers";
-import { Button } from "@material-ui/core";
 
 import { Dialog } from "@/components/Dialog";
 
@@ -15,13 +14,20 @@ export const schema = yup.object().shape({
   value: yup.string(),
 });
 
+const ACTION = "assign-value";
 export const ValueAssign = (props) => {
-  const { setValue, values } = props;
-  const [open, setOpen] = useState(false);
+  const { setValue, values, params, handleClose } = props;
+  const { action } = params;
   const { control, reset, handleSubmit, errors, setError } = useForm({
     defaultValues: { name: "", value: "" },
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    if (action !== ACTION) {
+      reset();
+    }
+  }, [reset, action]);
 
   const onAssign = (data) => {
     const { name } = data;
@@ -33,29 +39,15 @@ export const ValueAssign = (props) => {
     }
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    reset();
-  };
-
   return (
-    <>
-      <Button color="primary" onClick={handleOpen}>
-        Assign Value
-      </Button>
-      <Dialog
-        title="Assign Value"
-        open={open}
-        handleOk={handleSubmit(onAssign)}
-        handleClose={handleClose}
-        okText="Assign"
-      >
-        <AttributeValue control={control} errors={errors} />
-      </Dialog>
-    </>
+    <Dialog
+      title="Assign Value"
+      open={params.action === ACTION}
+      handleOk={handleSubmit(onAssign)}
+      handleClose={handleClose}
+      okText="Assign"
+    >
+      <AttributeValue control={control} errors={errors} />
+    </Dialog>
   );
 };

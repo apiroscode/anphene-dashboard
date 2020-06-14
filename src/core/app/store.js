@@ -7,12 +7,16 @@ import { LOGOUT } from "@/graphql/mutations/auth";
 export const app = {
   loading: false,
   appActionRef: undefined,
+  headerBackLabel: undefined,
   theme: localStorage.getItem("theme") || "light",
   setAppActionRef: action((state, payload) => {
     state.saveButtonRef = payload;
   }),
   toggleLoading: action((state, payload) => {
     state.loading = payload;
+  }),
+  setHeaderBackLabel: action((state, payload) => {
+    state.headerBackLabel = payload;
   }),
   updateTheme: action((state, payload) => {
     localStorage.setItem("theme", payload);

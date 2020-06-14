@@ -66,7 +66,12 @@ const Base = (props) => {
   }, [register, unregister]);
 
   const onSubmit = async (data) => {
-    const result = await update({ variables: { id: user.id, ...data } });
+    const result = await update({
+      variables: {
+        id: user.id,
+        input: { ...data, idCard: data.idCard ? data.idCard : undefined },
+      },
+    });
     if (result === undefined) return;
 
     const {

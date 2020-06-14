@@ -1,6 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import { TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@material-ui/core";
+import { Delete as DeleteIcon } from "@material-ui/icons";
+
+import { useQS } from "@/utils/hooks/useQS2";
 
 import { ErrorMessage } from "@/components/form";
 import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/Table";
@@ -13,12 +24,12 @@ import { ValueDelete } from "./ValueDelete";
 
 export const FormValues = (props) => {
   const { setValue, watch, register, unregister, errors } = props;
-  const classes = useAttributeValuesStyles();
-  const [edit, setEdit] = useState({
-    open: false,
-    index: null,
-    data: {},
+  const [params, setParams] = useQS({
+    action: undefined,
+    id: undefined,
   });
+
+  const classes = useAttributeValuesStyles();
   const values = watch("values");
 
   useEffect(() => {
@@ -37,19 +48,31 @@ export const FormValues = (props) => {
     setValue("values", newData);
   };
 
-  const openEditDialog = (data, index) => {
-    setEdit({
-      open: true,
-      index,
-      data,
-    });
+  const handleClose = () => setParams({ action: undefined, id: undefined });
+
+  const baseProps = {
+    values,
+    setValue,
+    params,
+    handleClose,
   };
 
   return (
     <Card
       title="Attribute Values"
-      action={<ValueAssign setValue={setValue} values={values} />}
-      densePadding
+      action={
+        <Button
+          color="primary"
+          onClick={() =>
+            setParams({
+              action: "assign-value",
+            })
+          }
+        >
+          Assign Value
+        </Button>
+      }
+      useDense
     >
       <ErrorMessage errors={errors} name="values" useMarginTop={false} useMarginBottom={false} />
       <ResponsiveTable>
@@ -69,14 +92,21 @@ export const FormValues = (props) => {
                 key={`field-${index}`}
                 index={index}
                 className={classes.tableBodyRow}
-                onClick={() => {
-                  openEditDialog(field, index);
-                }}
+                onClick={() => setParams({ action: "update-value", id: index })}
               >
                 <TableCell>{field.name}</TableCell>
                 <TableCell>{field.value ? field.value : "-"}</TableCell>
                 <TableCell padding="checkbox" align="center">
-                  <ValueDelete name={field.name} idx={index} values={values} setValue={setValue} />
+                  <IconButton
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      e.nativeEvent.stopImmediatePropagation();
+                      setParams({ action: "delete-value", id: index });
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                 </TableCell>
               </SortableTableRow>
             ))}
@@ -93,7 +123,9 @@ export const FormValues = (props) => {
           </TableBody>
         )}
       </ResponsiveTable>
-      <ValueUpdate edit={edit} setEdit={setEdit} values={values} setValue={setValue} />
+      <ValueAssign {...baseProps} />
+      <ValueDelete {...baseProps} />
+      <ValueUpdate {...baseProps} />
     </Card>
   );
 };

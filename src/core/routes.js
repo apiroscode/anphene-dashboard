@@ -33,6 +33,14 @@ const ProductTypeList = lazy(() => import("@/app/productTypes/list"));
 const ProductTypeCreate = lazy(() => import("@/app/productTypes/create"));
 const ProductTypeUpdate = lazy(() => import("@/app/productTypes/update"));
 
+const SupplierList = lazy(() => import("@/app/suppliers/list"));
+const SupplierCreate = lazy(() => import("@/app/suppliers/create"));
+const SupplierUpdate = lazy(() => import("@/app/suppliers/update"));
+
+const CategoryList = lazy(() => import("@/app/categories/list"));
+const CategoryCreate = lazy(() => import("@/app/categories/create"));
+const CategoryUpdate = lazy(() => import("@/app/categories/update"));
+
 export const Routes = () => (
   <Suspense fallback={<Loading />}>
     <ReactRoutes>
@@ -109,6 +117,43 @@ export const Routes = () => (
           path="configuration/product-types/:id"
           element={<ProductTypeUpdate />}
           permissions={[PermissionEnum.MANAGE_PRODUCT_TYPES]}
+        />
+
+        <Route
+          path="configuration/suppliers"
+          element={<SupplierList />}
+          permissions={[PermissionEnum.MANAGE_SUPPLIERS]}
+        />
+        <Route
+          path="configuration/suppliers/create"
+          element={<SupplierCreate />}
+          permissions={[PermissionEnum.MANAGE_SUPPLIERS]}
+        />
+        <Route
+          path="configuration/suppliers/:id"
+          element={<SupplierUpdate />}
+          permissions={[PermissionEnum.MANAGE_SUPPLIERS]}
+        />
+
+        <Route
+          path="categories"
+          element={<CategoryList />}
+          permissions={[PermissionEnum.MANAGE_CATEGORIES]}
+        />
+        <Route
+          path="categories/create"
+          element={<CategoryCreate />}
+          permissions={[PermissionEnum.MANAGE_CATEGORIES]}
+        />
+        <Route
+          path="categories/:id"
+          element={<CategoryUpdate />}
+          permissions={[PermissionEnum.MANAGE_CATEGORIES]}
+        />
+        <Route
+          path="categories/:id/create"
+          element={<CategoryCreate />}
+          permissions={[PermissionEnum.MANAGE_CATEGORIES]}
         />
 
         <Route path="403" element={<Exception code={403} />} />

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useStoreState } from "easy-peasy";
 import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 import { Box, Container, Portal } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";

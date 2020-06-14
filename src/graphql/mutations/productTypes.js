@@ -3,8 +3,8 @@ import { errorFragment } from "@/graphql/fragments/base";
 import { productTypeDetailFragment, productTypeFragment } from "@/graphql/fragments/productTypes";
 
 export const CREATE_PRODUCT_TYPE = gql`
-  mutation CREATE_PRODUCT_TYPE($name: String!, $hasVariants: Boolean) {
-    productTypeCreate(input: { name: $name, hasVariants: $hasVariants }) {
+  mutation CREATE_PRODUCT_TYPE($input: ProductTypeInput!) {
+    productTypeCreate(input: $input) {
       errors {
         ...errorFragment
       }
@@ -18,8 +18,8 @@ export const CREATE_PRODUCT_TYPE = gql`
 `;
 
 export const UPDATE_PRODUCT_TYPE = gql`
-  mutation UPDATE_PRODUCT_TYPE($id: ID!, $name: String!, $hasVariants: Boolean) {
-    productTypeUpdate(id: $id, input: { name: $name, hasVariants: $hasVariants }) {
+  mutation UPDATE_PRODUCT_TYPE($id: ID!, $input: ProductTypeInput!) {
+    productTypeUpdate(id: $id, input: $input) {
       errors {
         ...errorFragment
       }

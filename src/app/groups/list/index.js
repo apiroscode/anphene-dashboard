@@ -11,6 +11,7 @@ import { List } from "@/components/Template";
 
 export default () => {
   const [bulkDeleteMutation, { loading }] = useMutation(BULK_DELETE_GROUP);
+
   const props = {
     appName: "Group",
     query: GET_GROUPS,

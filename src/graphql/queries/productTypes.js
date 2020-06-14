@@ -5,7 +5,7 @@ import {
   productTypeDetailFragment,
   productTypeFragment,
 } from "@/graphql/fragments/productTypes";
-import { filterVariable } from "@/graphql/fragments/pageInfo";
+import { filterVariable, pageInfo } from "@/graphql/fragments/pageInfo";
 
 export const GET_PRODUCT_TYPES = gql`
   query GET_PRODUCT_TYPES(
@@ -17,6 +17,9 @@ export const GET_PRODUCT_TYPES = gql`
      ${filterVariable.vars}
     filter: { search: $search, configurable: $configurable }
     ) {
+      pageInfo {
+        ...pageInfo
+      }
       edges {
         node { 
           ...productTypeFragment
@@ -24,6 +27,7 @@ export const GET_PRODUCT_TYPES = gql`
       }
     }
   }
+  ${pageInfo}
   ${productTypeFragment}
 `;
 

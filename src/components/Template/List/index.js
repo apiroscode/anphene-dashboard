@@ -6,7 +6,7 @@ import pluralize from "pluralize";
 import { Card, Tab, Tabs } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { maybe, paginate, renameKeys } from "@/utils";
+import { renameKeys } from "@/utils";
 import { useLocalStorage, useQS, useQuery } from "@/utils/hooks";
 
 import { Header } from "../Header";
@@ -59,6 +59,7 @@ export const List = (props) => {
     appName,
     query,
     queryField,
+    vars = {},
     filters = [],
     table,
     isCreatable = true,
@@ -68,7 +69,7 @@ export const List = (props) => {
     bulkLoading = false,
     storageKey = queryField,
   } = props;
-  const classes = useStyles({ totalFilter: 0 });
+  const classes = useStyles();
   const pluralAppName = pluralize(appName);
   const toggleLoading = useStoreActions((actions) => actions.app.toggleLoading);
   const [storageFilter, setStorageFilter] = useLocalStorage(`${storageKey}`, []);
@@ -92,13 +93,10 @@ export const List = (props) => {
     ? renameKeys(params, { pageSize: params.before ? "last" : "first" })
     : params;
 
-  const { data, loading: queryLoading } = useQuery(query, { variables });
+  const { data, loading: queryLoading } = useQuery(query, {
+    variables: { ...variables, ...vars },
+  });
   const loading = bulkLoading || queryLoading;
-  const paginationInfo = paginate(
-    maybe(() => data?.[queryField]?.pageInfo),
-    params,
-    setParams
-  );
 
   const totalFilters = useMemo(
     () =>
@@ -129,6 +127,7 @@ export const List = (props) => {
     if (value !== "custom") {
       setTabValue(value);
     }
+    window.scrollTo({ behavior: "smooth", top: 0 });
   };
 
   useEffect(() => {
@@ -147,14 +146,13 @@ export const List = (props) => {
 
   const baseProps = {
     ...props,
-    data: maybe(() => data?.[queryField]?.edges, []),
+    data,
     pluralAppName,
     filterVariables,
     variables,
     params,
     setParams,
     loading,
-    paginationInfo,
     storageFilter,
     setStorageFilter,
     tabValue,

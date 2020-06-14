@@ -56,8 +56,12 @@ export const FormValues = (props) => {
     const sortOrder = newIndex - oldIndex;
     const variables = {
       attributeId,
-      valueId: element.id,
-      sortOrder,
+      moves: [
+        {
+          id: element.id,
+          sortOrder,
+        },
+      ],
     };
 
     const result = await reorder({ variables });
@@ -92,7 +96,7 @@ export const FormValues = (props) => {
   };
 
   return (
-    <Card title="Attribute Values" action={<ValueAssign attributeId={attributeId} />} densePadding>
+    <Card title="Attribute Values" action={<ValueAssign attributeId={attributeId} />} useDense>
       <ResponsiveTable>
         <TableHead>
           <TableRow>

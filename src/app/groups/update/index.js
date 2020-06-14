@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import * as yup from "yup";
 
 import { yupResolver } from "@hookform/resolvers";
@@ -72,7 +72,7 @@ const Base = ({ data }) => {
   };
 
   const onSubmit = async (data) => {
-    const result = await update({ variables: { id: group.id, ...data } });
+    const result = await update({ variables: { id: group.id, input: data } });
     if (result === undefined) return;
 
     const {

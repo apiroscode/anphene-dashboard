@@ -3,24 +3,8 @@ import gql from "graphql-tag";
 import { staffDetailFragment } from "@/graphql/fragments/staff";
 
 export const CREATE_STAFF = gql`
-  mutation CREATE_STAFF(
-    $email: String!
-    $note: String
-    $name: String!
-    $idCard: Upload
-    $groups: [ID!]
-    $redirectUrl: String!
-  ) {
-    staffCreate(
-      input: {
-        email: $email
-        note: $note
-        name: $name
-        idCard: $idCard
-        groups: $groups
-        redirectUrl: $redirectUrl
-      }
-    ) {
+  mutation CREATE_STAFF($input: StaffCreateInput!) {
+    staffCreate(input: $input) {
       errors {
         field
         message
@@ -34,18 +18,8 @@ export const CREATE_STAFF = gql`
 `;
 
 export const UPDATE_STAFF = gql`
-  mutation UPDATE_STAFF(
-    $id: ID!
-    $email: String!
-    $note: String
-    $name: String!
-    $idCard: Upload
-    $groups: [ID!]
-  ) {
-    staffUpdate(
-      id: $id
-      input: { email: $email, note: $note, name: $name, idCard: $idCard, groups: $groups }
-    ) {
+  mutation UPDATE_STAFF($id: ID!, $input: StaffInput!) {
+    staffUpdate(id: $id, input: $input) {
       errors {
         field
         message

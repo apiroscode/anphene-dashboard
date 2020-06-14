@@ -4,6 +4,10 @@ import { IconButton, MenuItem, Select, Typography } from "@material-ui/core";
 import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { maybe } from "@/utils";
+
+import { paginate } from "./utils";
+
 const useStyles = makeStyles(
   (theme) => ({
     root: {
@@ -36,9 +40,14 @@ const useStyles = makeStyles(
 );
 
 export const Pagination = (props) => {
-  const { params, setParams, paginationInfo, loading } = props;
-  const { loadNextPage, loadPreviousPage, pageInfo } = paginationInfo;
+  const { params, setParams, data, queryField, loading } = props;
   const classes = useStyles();
+
+  const { loadNextPage, loadPreviousPage, pageInfo } = paginate(
+    maybe(() => data?.[queryField]?.pageInfo),
+    params,
+    setParams
+  );
 
   const changePageSize = (e) => {
     const pageSize = e.target.value;

@@ -8,8 +8,8 @@ import {
 import { errorFragment } from "@/graphql/fragments/base";
 
 export const CREATE_GROUP = gql`
-  mutation CREATE_GROUP($name: String!, $permissions: [PermissionEnum!]!) {
-    groupCreate(input: { name: $name, permissions: $permissions }) {
+  mutation CREATE_GROUP($input: GroupInput!) {
+    groupCreate(input: $input) {
       errors {
         ...errorFragment
       }
@@ -23,8 +23,8 @@ export const CREATE_GROUP = gql`
 `;
 
 export const UPDATE_GROUP = gql`
-  mutation UPDATE_GROUP($id: ID!, $name: String!, $permissions: [PermissionEnum!]!) {
-    groupUpdate(id: $id, input: { name: $name, permissions: $permissions }) {
+  mutation UPDATE_GROUP($id: ID!, $input: GroupInput!) {
+    groupUpdate(id: $id, input: $input) {
       errors {
         ...errorFragment
       }

@@ -26,7 +26,7 @@ const useStyles = makeStyles(
 
 export const Card = (props) => {
   const classes = useStyles();
-  const { title, action, densePadding, useMargin, children } = props;
+  const { title, action, useDense, useMargin, children } = props;
 
   return (
     <CardMui>
@@ -52,7 +52,7 @@ export const Card = (props) => {
             <Divider />
           </>
         )}
-        <Box padding={densePadding ? 0 : 2} className={clsx({ [classes.content]: useMargin })}>
+        <Box padding={useDense ? 0 : 2} className={clsx({ [classes.content]: useMargin })}>
           {children}
         </Box>
       </Box>

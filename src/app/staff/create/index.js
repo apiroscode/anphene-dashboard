@@ -56,7 +56,15 @@ const Base = ({ groups: groupsData }) => {
   }, [register, unregister]);
 
   const onSubmit = async (data) => {
-    const result = await create({ variables: { ...data, redirectUrl: CONFIRM_PASSWORD_URI } });
+    const result = await create({
+      variables: {
+        input: {
+          ...data,
+          redirectUrl: CONFIRM_PASSWORD_URI,
+          idCard: data.idCard ? data.idCard : undefined,
+        },
+      },
+    });
     if (result === undefined) return;
 
     const {

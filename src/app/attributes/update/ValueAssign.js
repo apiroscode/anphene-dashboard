@@ -28,7 +28,7 @@ export const ValueAssign = (props) => {
   });
 
   const onAssign = async (data) => {
-    const result = await create({ variables: { attributeId, ...data } });
+    const result = await create({ variables: { attributeId, input: data } });
     if (result === undefined) return;
 
     const {

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+
+import { useStoreState } from "easy-peasy";
 import { matchPath, useLocation, useNavigate } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -30,32 +32,37 @@ const useStyles = makeStyles(
 );
 
 const getBackLink = (pathName) => {
-  const results = backLink.filter((item) => matchPath(item.condition, pathName));
+  const results = backLink.filter((item) => matchPath(`${item.link}/:subUrl`, pathName));
   if (results.length > 0) {
-    const result = results[0];
-    return result.backLink;
+    return results[0];
   }
-  return { backLabel: undefined, backUrl: undefined };
+  return { label: undefined, link: undefined };
 };
 
 export const HeaderBackMenu = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const classes = useStyles();
+  const headerBackLabel = useStoreState((state) => state.app.headerBackLabel);
+
   const [backLink, setBackLink] = useState({
-    backLabel: undefined,
-    backUrl: undefined,
+    label: undefined,
+    link: undefined,
   });
 
   useEffect(() => {
-    setBackLink(getBackLink(location.pathname));
-  }, [location]);
+    if (headerBackLabel) {
+      setBackLink(headerBackLabel);
+    } else {
+      setBackLink(getBackLink(location.pathname));
+    }
+  }, [location, headerBackLabel]);
 
-  if (backLink.backLabel !== undefined) {
+  if (backLink.label !== undefined) {
     return (
-      <div className={classes.wrapper} onClick={() => navigate(backLink.backUrl)}>
+      <div className={classes.wrapper} onClick={() => navigate(backLink.link)}>
         <ArrowBack />
-        <span>{backLink.backLabel}</span>
+        <span>{backLink.label}</span>
       </div>
     );
   } else {

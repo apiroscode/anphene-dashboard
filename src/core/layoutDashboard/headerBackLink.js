@@ -1,51 +1,30 @@
 export const backLink = [
   {
-    condition: { path: "/configuration/:subUrl" },
-    backLink: {
-      backLabel: "CONFIGURATION",
-      backUrl: "/configuration",
-    },
+    link: "/configuration",
+    label: "CONFIGURATION",
   },
   {
-    condition: { path: "/configuration/attributes/:subUrl" },
-    backLink: {
-      backLabel: "ATTRIBUTES",
-      backUrl: "/configuration/attributes",
-    },
+    link: "/configuration/attributes",
+    label: "ATTRIBUTES",
   },
   {
-    condition: { path: "/configuration/product-types/:subUrl" },
-    backLink: {
-      backLabel: "PRODUCT TYPES",
-      backUrl: "/configuration/product-types",
-    },
+    link: "/configuration/product-types",
+    label: "PRODUCT TYPES",
   },
   {
-    condition: { path: "/configuration/groups/:subUrl" },
-    backLink: {
-      backLabel: "GROUPS",
-      backUrl: "/configuration/groups",
-    },
+    link: "/configuration/staff",
+    label: "STAFF",
   },
   {
-    condition: { path: "/configuration/staff/:subUrl" },
-    backLink: {
-      backLabel: "STAFF",
-      backUrl: "/configuration/staff",
-    },
+    link: "/configuration/groups",
+    label: "GROUPS",
   },
   {
-    condition: { path: "/configuration/attributes/:subUrl" },
-    backLink: {
-      backLabel: "ATTRIBUTES",
-      backUrl: "/configuration/attributes",
-    },
+    link: "/configuration/suppliers",
+    label: "SUPPLIERS",
   },
   {
-    condition: { path: "/configuration/product-types/:subUrl" },
-    backLink: {
-      backLabel: "PRODUCT TYPES",
-      backUrl: "/configuration/product-types",
-    },
+    link: "/categories",
+    label: "CATEGORIES",
   },
 ];
