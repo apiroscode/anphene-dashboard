@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useStoreActions } from "easy-peasy";
 import pluralize from "pluralize";
@@ -6,9 +6,10 @@ import pluralize from "pluralize";
 import { Card, Tab, Tabs } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { renameKeys } from "@/utils";
 import { useLocalStorage, useQS, useQuery } from "@/utils/hooks";
 
+import { DEFAULT_PAGE_SIZE } from "../constants";
+import { renameKeys } from "../utils";
 import { Header } from "../Header";
 
 import { CreateButton } from "./CreateButton";
@@ -17,8 +18,6 @@ import { FilterSearch } from "./FilterSearch";
 import { FilterSave } from "./FilterSave";
 import { Table } from "./Table";
 import { Pagination } from "./Pagination";
-
-const DEFAULT_PAGE_SIZE = 25;
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -66,72 +65,89 @@ export const List = (props) => {
     useSearch = true,
     usePagination = true,
     actions = [],
+    bulkMutations = [],
     bulkLoading = false,
     storageKey = queryField,
   } = props;
+
   const classes = useStyles();
   const pluralAppName = pluralize(appName);
+
   const toggleLoading = useStoreActions((actions) => actions.app.toggleLoading);
   const [storageFilter, setStorageFilter] = useLocalStorage(`${storageKey}`, []);
   const [tabValue, setTabValue] = useState("all");
 
-  const filterVariables = [...(useSearch ? ["search"] : []), ...filters.map((item) => item.field)];
-  const [params, setParams] = useQS(
-    [
-      ...(table.defaultSort ? ["sortDirection", "sortField"] : []),
-      ...(usePagination ? ["before", "after", "pageSize"] : []),
-      ...filterVariables,
-    ],
-    {
-      ...(table.defaultSort
-        ? { sortDirection: table.defaultSort.direction, sortField: table.defaultSort.field }
-        : {}),
-      ...(usePagination ? { pageSize: DEFAULT_PAGE_SIZE } : {}),
-    }
+  const filterParams = {
+    search: undefined,
+    ...filters
+      .map((item) => item.field)
+      .reduce((obj, key) => {
+        return {
+          ...obj,
+          [key]: undefined,
+        };
+      }, {}),
+  };
+
+  const [params, setParams] = useQS({
+    before: undefined,
+    after: undefined,
+    pageSize: DEFAULT_PAGE_SIZE,
+    sortDirection: table?.defaultSort?.direction,
+    sortField: table?.defaultSort?.field,
+    ...filterParams,
+  });
+
+  const variables = useMemo(
+    () => renameKeys(params, { pageSize: params.before ? "last" : "first" }),
+    [params]
   );
-  const variables = usePagination
-    ? renameKeys(params, { pageSize: params.before ? "last" : "first" })
-    : params;
 
   const { data, loading: queryLoading } = useQuery(query, {
     variables: { ...variables, ...vars },
   });
+
   const loading = bulkLoading || queryLoading;
 
-  const totalFilters = useMemo(
-    () =>
-      Object.keys(params).filter(
-        (item) => filterVariables.includes(item) && params[item] !== undefined
-      ).length,
-    [params, filterVariables]
+  const totalFilters = useCallback(
+    (withSearch = true) => {
+      return Object.keys(params).filter((item) => {
+        if (!withSearch) {
+          return (
+            Object.keys(filterParams).includes(item) &&
+            params[item] !== undefined &&
+            item !== "search"
+          );
+        } else {
+          return Object.keys(filterParams).includes(item) && params[item] !== undefined;
+        }
+      }).length;
+    },
+    [params, filterParams]
   );
 
   const handleTabChange = (_, value) => {
     if (value === "all") {
-      const resetFilters = filterVariables.reduce((o, key) => ({ ...o, [key]: undefined }), {});
-      setParams({
-        ...params,
-        ...resetFilters,
-      });
+      const resetFilters = Object.keys(filterParams).reduce(
+        (o, key) => ({ ...o, [key]: undefined }),
+        {}
+      );
+      setParams(resetFilters);
     } else {
       const filterTabData = storageFilter.find((item) => item.name === value).data;
-      const newFilter = filterVariables.reduce(
+      const newFilter = Object.keys(filterParams).reduce(
         (o, key) => ({ ...o, [key]: filterTabData[key] }),
         {}
       );
-      setParams({
-        ...params,
-        ...newFilter,
-      });
+      setParams(newFilter);
     }
     if (value !== "custom") {
       setTabValue(value);
     }
-    window.scrollTo({ behavior: "smooth", top: 0 });
   };
 
   useEffect(() => {
-    if (totalFilters === 0) {
+    if (totalFilters() === 0) {
       setTabValue("all");
     } else {
       if (tabValue === "all") {
@@ -145,19 +161,26 @@ export const List = (props) => {
   }, [toggleLoading, loading]);
 
   const baseProps = {
-    ...props,
-    data,
-    pluralAppName,
-    filterVariables,
-    variables,
     params,
     setParams,
-    loading,
+    setTabValue,
+    filterParams,
+    filters,
+    totalFilters,
+    tabValue,
+    handleTabChange,
     storageFilter,
     setStorageFilter,
-    tabValue,
-    setTabValue,
-    handleTabChange,
+    appName,
+    loading,
+    data,
+    queryField,
+    table,
+    bulkMutations,
+    pluralAppName,
+    query,
+    variables,
+    vars,
   };
 
   return (
@@ -195,7 +218,7 @@ export const List = (props) => {
                 <FilterSearch {...baseProps} />
               </div>
             )}
-            {totalFilters > 0 && (
+            {totalFilters() > 0 && (
               <div>
                 <FilterSave {...baseProps} />
               </div>
@@ -203,7 +226,7 @@ export const List = (props) => {
           </div>
         ) : null}
         <Table {...baseProps} />
-        <Pagination {...baseProps} />
+        {usePagination && <Pagination {...baseProps} />}
       </Card>
     </>
   );

@@ -12,7 +12,7 @@ export const FilterSave = (props) => {
     storageFilter,
     setStorageFilter,
     params,
-    filterVariables,
+    filterParams,
   } = props;
   const [open, setOpen] = useState(false);
   const [newNameFilter, setNewNameFilter] = useState("");
@@ -34,7 +34,7 @@ export const FilterSave = (props) => {
         ...storageFilter,
         {
           name: newNameFilter,
-          data: filterVariables
+          data: Object.keys(filterParams)
             .filter((key) => params[key] !== undefined)
             .reduce((o, key) => ({ ...o, [key]: params[key] }), {}),
         },

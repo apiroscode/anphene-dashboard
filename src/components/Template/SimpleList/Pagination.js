@@ -6,7 +6,7 @@ import { ArrowBackIosOutlined, ArrowForwardIosOutlined } from "@material-ui/icon
 
 import { maybe } from "@/utils";
 
-import { paginate } from "./utils";
+import { paginate } from "../utils";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -24,12 +24,12 @@ const useStyles = makeStyles(
 );
 
 export const Pagination = (props) => {
-  const { data, queryField, loading, variables, setVariables } = props;
+  const { data, queryField, loading, params, setParams } = props;
   const classes = useStyles();
   const { loadNextPage, loadPreviousPage, pageInfo } = paginate(
     maybe(() => data?.[queryField]?.pageInfo),
-    variables,
-    setVariables
+    params,
+    setParams
   );
 
   return (

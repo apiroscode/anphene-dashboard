@@ -21,8 +21,9 @@ import { useMutation } from "@/utils/hooks";
 import { ATTRIBUTE_UNASSIGN, REORDER_ATTRIBUTE } from "@/graphql/mutations/productTypes";
 
 import { Checkbox } from "@/components/Checkbox";
-import { Dialog } from "@/components/Dialog";
 import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/Table";
+
+import { ACTION as UNASSIGN_ACTION, AttributesUnAssign } from "./AttributesUnAssign";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -37,95 +38,18 @@ const useStyles = makeStyles(
   { name: "Attributes" }
 );
 
-const UnAssignDialog = (props) => {
-  const {
-    open,
-    setOpen,
-    loading,
-    selected,
-    setSelected,
-    unAssign,
-    productTypeId,
-    productTypeName,
-    singleData,
-    setSingleData,
-  } = props;
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const handleUnAssign = async () => {
-    let unAssignId;
-    if (singleData) {
-      unAssignId = [singleData.id];
-    } else {
-      unAssignId = selected;
-    }
-
-    const result = await unAssign({ variables: { productTypeId, attributeIds: unAssignId } });
-    if (result === undefined) return;
-
-    const {
-      data: {
-        attributeUnassign: { errors },
-      },
-    } = result;
-
-    if (errors.length > 0) {
-      enqueueSnackbar(errors[0].message, {
-        variant: "error",
-      });
-    } else {
-      enqueueSnackbar(`${unAssignId.length} attributes unassign.`, {
-        variant: "success",
-      });
-      handleClose();
-    }
-  };
-
-  const handleClose = () => {
-    setSelected([]);
-    setOpen(false);
-    setSingleData(undefined);
-  };
-
-  return (
-    <Dialog
-      open={open}
-      handleOk={handleUnAssign}
-      handleClose={handleClose}
-      title="Unassign Attribute From Product Type"
-      okText="UNASSIGN"
-      okProps={{
-        loading: loading,
-      }}
-      cancelProps={{
-        disabled: loading,
-      }}
-      content={
-        <>
-          Are you sure you want to unassign{" "}
-          {singleData ? <strong>{singleData.name}</strong> : "these attributes"} from{" "}
-          <strong>{productTypeName}</strong>?
-        </>
-      }
-    />
-  );
-};
-
 export const AttributesTable = (props) => {
-  const { items, productType, type } = props;
+  const { params, handleClose, attributes, setParams, productType, type } = props;
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
-  const [values, setValues] = useState(items);
+  const [values, setValues] = useState(attributes);
   const [selected, setSelected] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [singleData, setSingleData] = useState(undefined);
   const [reorder, { loading: reorderLoading }] = useMutation(REORDER_ATTRIBUTE);
   const [unAssign, { loading: unAssignLoading }] = useMutation(ATTRIBUTE_UNASSIGN);
 
   useEffect(() => {
-    setValues(items);
-  }, [items]);
+    setValues(attributes);
+  }, [attributes]);
 
   const move = async ({ oldIndex, newIndex }) => {
     const rawData = [...values];
@@ -199,25 +123,17 @@ export const AttributesTable = (props) => {
   };
 
   const unAssignProps = {
-    open,
-    setOpen,
-    loading: unAssignLoading,
-    selected,
+    params,
+    handleClose,
+    attributes,
+    type,
     setSelected,
+    loading: unAssignLoading,
     unAssign,
     productTypeId: productType.id,
     productTypeName: productType.name,
-    singleData,
-    setSingleData,
   };
 
-  const handleSingleClick = (id, name) => {
-    setSingleData({
-      id,
-      name,
-    });
-    setOpen(true);
-  };
   return (
     <>
       <ResponsiveTable>
@@ -250,7 +166,7 @@ export const AttributesTable = (props) => {
                 <Button
                   color="primary"
                   onClick={() => {
-                    setOpen(true);
+                    setParams({ action: UNASSIGN_ACTION, ids: selected, type });
                   }}
                 >
                   UNASSIGN
@@ -279,7 +195,7 @@ export const AttributesTable = (props) => {
                     <IconButton
                       aria-label="delete"
                       onClick={() => {
-                        handleSingleClick(field.id, field.name);
+                        setParams({ action: UNASSIGN_ACTION, ids: [field.id], type });
                       }}
                     >
                       <DeleteIcon fontSize="small" />
@@ -301,7 +217,7 @@ export const AttributesTable = (props) => {
           </TableBody>
         )}
       </ResponsiveTable>
-      <UnAssignDialog {...unAssignProps} />
+      <AttributesUnAssign {...unAssignProps} />
     </>
   );
 };

@@ -79,7 +79,7 @@ export const TableComponent = (props) => {
               </TableCell>
             )}
             {numSelected > 0 ? (
-              <TableCell colSpan={table.tableColumn.length} align="left" padding="none">
+              <TableCell colSpan={table.column.length} align="left" padding="none">
                 <div className={classes.selectedRoot}>
                   <Typography
                     className={classes.rowToolbarTitle}
@@ -103,7 +103,7 @@ export const TableComponent = (props) => {
                 </div>
               </TableCell>
             ) : (
-              table.tableColumn.map((cell, idx) => (
+              table.column.map((cell, idx) => (
                 <TableCell
                   key={cell.field}
                   align={cell.align}
@@ -158,7 +158,7 @@ export const TableComponent = (props) => {
                       />
                     </TableCell>
                   )}
-                  {table.tableColumn.map((cell, idx) => {
+                  {table.column.map((cell, idx) => {
                     const cellField = cell.field.split(".").reduce((o, i) => o[i], node);
                     return (
                       <TableCell
@@ -178,11 +178,7 @@ export const TableComponent = (props) => {
             <TableRow>
               <TableCell
                 align="center"
-                colSpan={
-                  bulkMutations.length > 0
-                    ? table.tableColumn.length + 1
-                    : table.tableColumn.length
-                }
+                colSpan={bulkMutations.length > 0 ? table.column.length + 1 : table.column.length}
               >
                 <Typography variant="subtitle1" color="textSecondary">
                   No {notFoundName.toLowerCase()} found

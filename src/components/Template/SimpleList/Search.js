@@ -28,27 +28,24 @@ const useStyles = makeStyles(
 );
 
 export const Search = (props) => {
-  const { rawVariables, variables, setVariables, loading, placeholder } = props;
+  const { params, setParams, loading, placeholder } = props;
   const classes = useStyles();
 
   const [val, setVal] = useState("");
 
   const [searchDebounce] = useDebouncedCallback((value) => {
-    setVariables({
-      ...rawVariables,
-      sortDirection: variables.sortDirection,
-      sortField: variables.sortField,
+    setParams({
       search: value ? value : undefined,
     });
   }, DELAYED_TIMEOUT);
 
   useEffect(() => {
-    if (variables.search === undefined) {
+    if (params.search === undefined) {
       setVal("");
     } else {
-      setVal(variables.search);
+      setVal(params.search);
     }
-  }, [variables.search]);
+  }, [params.search]);
 
   return (
     <TextField

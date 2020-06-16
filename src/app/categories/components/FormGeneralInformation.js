@@ -1,8 +1,10 @@
 import React from "react";
-import { Card } from "@/components/Template";
 import { Controller } from "react-hook-form";
+
 import { TextField } from "@material-ui/core";
-import { RichTextEditor } from "@/components/form/RichTextEditor";
+
+import { Card } from "@/components/Template";
+import { RichTextEditor } from "@/components/form";
 
 export const FormGeneralInformation = (props) => {
   const { control, errors, category } = props;

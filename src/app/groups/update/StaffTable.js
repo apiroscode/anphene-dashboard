@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -21,8 +20,8 @@ import { useMutation } from "@/utils/hooks";
 import { UNASSIGN_STAFF } from "@/graphql/mutations/groups";
 
 import { Checkbox } from "@/components/Checkbox";
-import { Dialog } from "@/components/Dialog";
 import { ResponsiveTable } from "@/components/Table";
+import { ACTION as UNASSIGN_ACTION, StaffUnAssign } from "./StaffUnAssign";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -36,118 +35,21 @@ const useStyles = makeStyles(
   { name: "GroupStaff" }
 );
 
-const UnAssignDialog = (props) => {
-  const {
-    open,
-    setOpen,
-    loading,
-    selected,
-    setSelected,
-    unAssign,
-    groupId,
-    groupName,
-    singleData,
-    setSingleData,
-  } = props;
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const handleUnAssign = async () => {
-    let unAssignId;
-    if (singleData) {
-      unAssignId = [singleData.id];
-    } else {
-      unAssignId = selected;
-    }
-
-    const result = await unAssign({ variables: { groupId, staffIds: unAssignId } });
-    if (result === undefined) return;
-
-    const {
-      data: {
-        groupStaffUnassign: { errors },
-      },
-    } = result;
-
-    if (errors.length > 0) {
-      enqueueSnackbar(errors[0].message, {
-        variant: "error",
-      });
-    } else {
-      enqueueSnackbar(`${unAssignId.length} staff unassign`, {
-        variant: "success",
-      });
-      handleClose();
-    }
-  };
-
-  const handleClose = () => {
-    setSelected([]);
-    setOpen(false);
-    setSingleData(undefined);
-  };
-
-  return (
-    <Dialog
-      open={open}
-      handleOk={handleUnAssign}
-      handleClose={handleClose}
-      title="Unassign Group From Product Type"
-      okText="UNASSIGN"
-      okProps={{
-        loading: loading,
-      }}
-      cancelProps={{
-        disabled: loading,
-      }}
-      content={
-        <>
-          Are you sure you want to unassign{" "}
-          {singleData ? <strong>{singleData.name}</strong> : "these staff"} from{" "}
-          <strong>{groupName}</strong>?
-        </>
-      }
-    />
-  );
-};
-
-export const StaffTable = ({ group }) => {
-  const items = maybe(() => group.users, []);
+export const StaffTable = (props) => {
+  const { group, params, handleClose, setParams } = props;
+  const allStaff = maybe(() => group.users, []);
   const classes = useStyles();
   const navigate = useNavigate();
-  const [values, setValues] = useState(items);
+  const [values, setValues] = useState(allStaff);
   const [selected, setSelected] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [singleData, setSingleData] = useState(undefined);
   const [unAssign, { loading: unAssignLoading }] = useMutation(UNASSIGN_STAFF);
 
   useEffect(() => {
-    setValues(items);
-  }, [items]);
-
+    setValues(allStaff);
+  }, [allStaff]);
   const isSelected = (name) => selected.indexOf(name) !== -1;
   const dataCount = values.length;
   const numSelected = selected.length;
-  const unAssignProps = {
-    open,
-    setOpen,
-    loading: unAssignLoading,
-    selected,
-    setSelected,
-    unAssign,
-    groupId: group.id,
-    groupName: group.name,
-    singleData,
-    setSingleData,
-  };
-
-  const handleSingleClick = (id, name) => {
-    setSingleData({
-      id,
-      name,
-    });
-    setOpen(true);
-  };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -178,6 +80,19 @@ export const StaffTable = ({ group }) => {
 
     setSelected(newSelected);
   };
+
+  const unAssignProps = {
+    params,
+    handleClose,
+    allStaff,
+
+    loading: unAssignLoading,
+    setSelected,
+    unAssign,
+    groupId: group.id,
+    groupName: group.name,
+  };
+
   return (
     <>
       <ResponsiveTable>
@@ -206,7 +121,7 @@ export const StaffTable = ({ group }) => {
                 <Button
                   color="primary"
                   onClick={() => {
-                    setOpen(true);
+                    setParams({ action: UNASSIGN_ACTION, ids: selected });
                   }}
                 >
                   UNASSIGN
@@ -246,7 +161,7 @@ export const StaffTable = ({ group }) => {
                         e.preventDefault();
                         e.stopPropagation();
                         e.nativeEvent.stopImmediatePropagation();
-                        handleSingleClick(field.id, field.name);
+                        setParams({ action: UNASSIGN_ACTION, ids: [field.id] });
                       }}
                     >
                       <DeleteIcon fontSize="small" />
@@ -268,7 +183,7 @@ export const StaffTable = ({ group }) => {
           </TableBody>
         )}
       </ResponsiveTable>
-      <UnAssignDialog {...unAssignProps} />
+      <StaffUnAssign {...unAssignProps} />
     </>
   );
 };

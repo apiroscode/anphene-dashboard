@@ -2,22 +2,27 @@ import React from "react";
 
 import { maybe } from "@/utils";
 
-import { TableComponent } from "../List/TableComponent";
 import { useSelected } from "../utils";
+
+import { TableComponent } from "../List/TableComponent";
 
 export const Table = (props) => {
   const {
     table,
+    query,
     placeholder,
     bulkMutations = [],
     data: rawData,
     queryField,
-    variables,
-    setVariables,
+    params,
+    setParams,
     loading,
+    variables,
+    vars,
   } = props;
 
   const data = maybe(() => rawData?.[queryField]?.edges, []);
+
   const [
     selected,
     setSelected,
@@ -30,25 +35,21 @@ export const Table = (props) => {
   const dataCount = data.length;
 
   const sortHandler = (sortField) => {
-    const oldSort = variables.sortDirection;
+    const oldSort = params.sortDirection;
     let newSort;
-    if (variables.sortField === sortField) {
+    if (params.sortField === sortField) {
       newSort = oldSort === "ASC" ? "DESC" : "ASC";
     } else {
       newSort = "ASC";
     }
-    setVariables((prevState) => ({
-      ...prevState,
-      sortField,
-      sortDirection: newSort,
-    }));
+    setParams({ sortField, sortDirection: newSort });
   };
 
   const tableProps = {
-    ...props,
+    query,
     selected,
     setSelected,
-    params: variables,
+    params,
     sortHandler,
     data,
     isSelected,
@@ -59,6 +60,9 @@ export const Table = (props) => {
     loading,
     table,
     handleSingleClick,
+    placeholder,
+    variables,
+    vars,
     action: table.action,
     notFoundName: placeholder,
   };

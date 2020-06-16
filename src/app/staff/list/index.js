@@ -3,21 +3,17 @@ import React from "react";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { GET_STAFF_USERS } from "@/graphql/queries/staff";
-import {
-  BULK_ACTIVATE_STAFF,
-  BULK_DEACTIVATE_STAFF,
-  BULK_DELETE_STAFF,
-} from "@/graphql/mutations/staff";
+import { BULK_ACTIVATE_STAFF, BULK_DELETE_STAFF } from "@/graphql/mutations/staff";
 
 import { useMutation } from "@/utils/hooks";
 
 import { List } from "@/components/Template";
 import { FilterRadioBox } from "@/components/Template/List/Filters";
+import { StatusLabel } from "@/components/StatusLabel";
 
 export default () => {
   const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_STAFF);
   const [bulkActivate, { loading: activateLoading }] = useMutation(BULK_ACTIVATE_STAFF);
-  const [bulkDeactivate, { loading: deactivateLoading }] = useMutation(BULK_DEACTIVATE_STAFF);
 
   const props = {
     appName: "Staff Member",
@@ -27,7 +23,7 @@ export default () => {
       {
         component: <FilterRadioBox />,
         field: "status",
-        label: "Is staff still active",
+        label: "Staff status",
         defaultValue: "ACTIVE",
         items: [
           {
@@ -35,7 +31,7 @@ export default () => {
             value: "ACTIVE",
           },
           {
-            label: "Not Active",
+            label: "Disabled",
             value: "DEACTIVATED",
           },
         ],
@@ -46,7 +42,7 @@ export default () => {
         field: "NAME",
         direction: "ASC",
       },
-      tableColumn: [
+      column: [
         {
           label: "Name",
           field: "name",
@@ -66,24 +62,35 @@ export default () => {
           render: (value) => value.map((item) => item.name).join(", "),
         },
         {
-          label: "Active ?",
+          label: "Status",
           field: "isActive",
           align: "center",
-          render: (value) => (value ? "Active" : "Not Active"),
+          render: (isActive) => (
+            <StatusLabel
+              status={isActive ? "success" : "error"}
+              label={isActive ? "Active" : "Disabled"}
+            />
+          ),
         },
       ],
     },
-    bulkLoading: deleteLoading || activateLoading || deactivateLoading,
+    bulkLoading: deleteLoading || activateLoading,
     bulkMutations: [
       {
         mutation: bulkActivate,
         type: "text",
         label: "activate",
+        vars: {
+          isActive: true,
+        },
       },
       {
-        mutation: bulkDeactivate,
+        mutation: bulkActivate,
         type: "text",
         label: "deactivate",
+        vars: {
+          isActive: false,
+        },
       },
       {
         mutation: bulkDelete,

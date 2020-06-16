@@ -1,11 +1,16 @@
 import React from "react";
+
 import { useNavigate } from "react-router-dom";
-import { Card, SimpleList } from "@/components/Template";
+
 import { Button } from "@material-ui/core";
-import { BULK_DELETE_CATEGORY } from "@/graphql/mutations/categories";
-import { useMutation } from "@/utils/hooks";
-import { GET_CATEGORIES } from "@/graphql/queries/categories";
 import { Delete as DeleteIcon } from "@material-ui/icons";
+
+import { useMutation } from "@/utils/hooks";
+
+import { BULK_DELETE_CATEGORY } from "@/graphql/mutations/categories";
+import { GET_CATEGORIES } from "@/graphql/queries/categories";
+
+import { Card, SimpleList } from "@/components/Template";
 
 export const SubCategories = ({ category }) => {
   const navigate = useNavigate();
@@ -28,7 +33,7 @@ export const SubCategories = ({ category }) => {
         field: "NAME",
         direction: "ASC",
       },
-      tableColumn: [
+      column: [
         {
           label: "Category Name",
           field: "name",

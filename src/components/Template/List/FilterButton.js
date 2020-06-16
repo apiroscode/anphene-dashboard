@@ -1,7 +1,6 @@
 import React, { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 
 import clsx from "clsx";
-
 import {
   Button,
   Divider,
@@ -14,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { lighten, makeStyles } from "@material-ui/core/styles";
 
+import { useObjectState } from "@/utils/hooks";
 import { Checkbox } from "@/components/Checkbox";
 
 const useStyles = makeStyles(
@@ -60,58 +60,47 @@ const useStyles = makeStyles(
 );
 
 export const FilterButton = (props) => {
-  const { params, setParams, setTabValue, filterVariables, filters } = props;
+  const { params, setParams, setTabValue, filterParams, filters, totalFilters } = props;
   const anchor = useRef();
   const classes = useStyles();
-  const [openFilter, setOpenFilter] = useState(false);
-  const [tempFilter, setTempFilter] = useState({});
+  const [open, setOpen] = useState(false);
+  const [tempFilter, setTempFilter] = useObjectState();
   const paramsFilters = useMemo(
     () =>
       Object.keys(params)
-        .filter((key) => filterVariables.includes(key) && key !== "search")
+        .filter((key) => Object.keys(filterParams).includes(key) && key !== "search")
         .reduce((obj, key) => {
           obj[key] = params[key];
           return obj;
         }, {}),
-    [params, filterVariables]
+    [params, filterParams]
   );
 
   useEffect(() => {
     setTempFilter(paramsFilters);
-  }, [paramsFilters]);
+  }, [setTempFilter, paramsFilters]);
 
-  const totalFilters = useMemo(
-    () =>
-      Object.keys(params).filter(
-        (item) => filterVariables.includes(item) && item !== "search" && params[item] !== undefined
-      ).length,
-    [params, filterVariables]
-  );
-
-  const handleClose = () => setOpenFilter(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChecked = (e, filter) => {
     if (e.target.checked) {
       setTempFilter({
-        ...tempFilter,
         [filter.field]: paramsFilters[filter.field] || filter.defaultValue,
       });
     } else {
       setTempFilter({
-        ...tempFilter,
         [filter.field]: undefined,
       });
     }
   };
   const onClear = () => {
-    setTempFilter({ ...paramsFilters });
+    setTempFilter(paramsFilters);
   };
 
   const onFilters = () => {
-    setParams({
-      ...params,
-      ...tempFilter,
-    });
+    setParams(tempFilter);
     setTabValue("custom");
     handleClose();
   };
@@ -127,20 +116,20 @@ export const FilterButton = (props) => {
       <Button
         variant="outlined"
         color="primary"
-        className={clsx({ [classes.rootButton]: totalFilters > 0 })}
+        className={clsx({ [classes.rootButton]: totalFilters(false) > 0 })}
         ref={anchor}
-        onClick={() => setOpenFilter(!openFilter)}
+        onClick={() => setOpen(!open)}
       >
         <span>FILTERS</span>
-        {totalFilters > 0 && (
+        {totalFilters(false) > 0 && (
           <>
             <Divider orientation="vertical" flexItem className={classes.divider} />
-            <span>{totalFilters}</span>
+            <span>{totalFilters(false)}</span>
           </>
         )}
       </Button>
       <Popover
-        open={openFilter}
+        open={open}
         onClose={handleClose}
         anchorEl={anchor.current}
         anchorOrigin={{

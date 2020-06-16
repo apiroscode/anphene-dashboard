@@ -4,3 +4,5 @@ export { getErrors } from "./utils";
 export { ErrorMessage } from "./ErrorMessage";
 export { RichTextEditor } from "./RichTextEditor";
 export { SeoForm } from "./SeoForm";
+export { PublishForm } from "./PublishForm";
+export { BackgroundImageForm } from "./BackgroundImageForm";

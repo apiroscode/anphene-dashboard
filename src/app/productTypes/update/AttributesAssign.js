@@ -6,7 +6,6 @@ import InfiniteScroll from "react-infinite-scroller";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import {
   Box,
-  Button,
   CircularProgress,
   TableBody,
   TableCell,
@@ -156,14 +155,18 @@ const DialogContent = (props) => {
   );
 };
 
+export const ACTION = "assign-attributes";
 export const AttributesAssign = (props) => {
-  const { productType, type } = props;
+  const {
+    productType,
+    type,
+    params: { action, type: typeParams },
+    handleClose,
+  } = props;
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [assign, { loading }] = useMutation(ATTRIBUTE_ASSIGN);
-  const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState([]);
-
   const handleAssign = async () => {
     const variables = {
       productTypeId: productType.id,
@@ -187,42 +190,24 @@ export const AttributesAssign = (props) => {
         variant: "error",
       });
     } else {
+      setSelected([]);
       handleClose();
     }
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setSelected([]);
-  };
-
   return (
-    <>
-      <Button color="primary" onClick={handleOpen}>
-        ASSIGN ATTRIBUTE
-      </Button>
-      <Dialog
-        open={open}
-        title="Assign Attribute"
-        handleOk={handleAssign}
-        handleClose={handleClose}
-        okText="ASSIGN ATTRIBUTES"
-        okProps={{
-          disabled: selected.length === 0 || loading,
-        }}
-        contentClass={classes.rootContent}
-      >
-        <DialogContent
-          loading={loading}
-          selected={selected}
-          setSelected={setSelected}
-          {...props}
-        />
-      </Dialog>
-    </>
+    <Dialog
+      open={action === ACTION && type === typeParams}
+      title="Assign Attribute"
+      handleOk={handleAssign}
+      handleClose={handleClose}
+      okText="ASSIGN ATTRIBUTES"
+      okProps={{
+        disabled: selected.length === 0 || loading,
+      }}
+      contentClass={classes.rootContent}
+    >
+      <DialogContent loading={loading} selected={selected} setSelected={setSelected} {...props} />
+    </Dialog>
   );
 };

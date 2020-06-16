@@ -35,3 +35,37 @@ export const useSelected = (data) => {
 
   return [selected, setSelected, isSelected, numSelected, handleAllClick, handleSingleClick];
 };
+
+export const paginate = (pageInfo, params, setParams) => {
+  const loadNextPage = () => {
+    setParams({
+      after: pageInfo.endCursor,
+      before: undefined,
+    });
+  };
+
+  const loadPreviousPage = () => {
+    setParams({
+      after: undefined,
+      before: pageInfo.startCursor,
+    });
+  };
+
+  const newPageInfo = pageInfo
+    ? {
+        ...pageInfo,
+        hasNextPage: !!params.before || pageInfo.hasNextPage,
+        hasPreviousPage: !!params.after || pageInfo.hasPreviousPage,
+      }
+    : undefined;
+
+  return { loadNextPage, loadPreviousPage, pageInfo: newPageInfo };
+};
+
+export const renameKeys = (obj, newKeys) => {
+  const keyValues = Object.keys(obj).map((key) => {
+    const newKey = newKeys[key] || key;
+    return { [newKey]: obj[key] };
+  });
+  return Object.assign({}, ...keyValues);
+};

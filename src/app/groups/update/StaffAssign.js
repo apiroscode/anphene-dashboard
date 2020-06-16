@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 import InfiniteScroll from "react-infinite-scroller";
 
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import { Button, CircularProgress, TableBody, TableCell, TableRow } from "@material-ui/core";
+import { CircularProgress, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { maybe } from "@/utils";
@@ -136,13 +136,14 @@ const DialogContent = (props) => {
   );
 };
 
+export const ACTION = "assign-staff";
 export const StaffAssign = (props) => {
-  const { group } = props;
+  const { group, params, handleClose } = props;
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [assign, { loading }] = useMutation(ASSIGN_STAFF);
-  const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState([]);
+  const { action } = params;
 
   const handleAssign = async () => {
     const variables = {
@@ -164,42 +165,24 @@ export const StaffAssign = (props) => {
         variant: "error",
       });
     } else {
+      setSelected([]);
       handleClose();
     }
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setSelected([]);
-  };
-
   return (
-    <>
-      <Button color="primary" onClick={handleOpen}>
-        ASSIGN STAFF
-      </Button>
-      <Dialog
-        open={open}
-        title="Assign Staff"
-        handleOk={handleAssign}
-        handleClose={handleClose}
-        okText="ASSIGN STAFF"
-        okProps={{
-          disabled: selected.length === 0 || loading,
-        }}
-        contentClass={classes.rootContent}
-      >
-        <DialogContent
-          loading={loading}
-          selected={selected}
-          setSelected={setSelected}
-          {...props}
-        />
-      </Dialog>
-    </>
+    <Dialog
+      open={action === ACTION}
+      title="Assign Staff"
+      handleOk={handleAssign}
+      handleClose={handleClose}
+      okText="ASSIGN STAFF"
+      okProps={{
+        disabled: selected.length === 0 || loading,
+      }}
+      contentClass={classes.rootContent}
+    >
+      <DialogContent loading={loading} selected={selected} setSelected={setSelected} {...props} />
+    </Dialog>
   );
 };

@@ -72,7 +72,7 @@ export default () => {
         field: "NAME",
         direction: "ASC",
       },
-      tableColumn: [
+      column: [
         {
           label: "Attribute Code",
           field: "slug",

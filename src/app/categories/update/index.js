@@ -26,16 +26,6 @@ const Base = ({ category }) => {
   const setHeaderBackLabel = useStoreActions((actions) => actions.app.setHeaderBackLabel);
   const [tabValue, setTabValue] = useState(0);
 
-  useEffect(() => {
-    if (category.parent) {
-      setHeaderBackLabel({
-        label: category.parent.name,
-        link: `/categories/${category.parent.id}`,
-      });
-    }
-    return () => setHeaderBackLabel(undefined);
-  }, [category.parent, setHeaderBackLabel]);
-
   const deleteProps = {
     mutation: DELETE_CATEGORY,
     id: category.id,
@@ -61,6 +51,28 @@ const Base = ({ category }) => {
     handleSubmit,
     reset,
   } = methods;
+
+  useEffect(() => {
+    if (category.parent) {
+      setHeaderBackLabel({
+        label: category.parent.name,
+        link: `/categories/${category.parent.id}`,
+      });
+    }
+    return () => setHeaderBackLabel(undefined);
+  }, [category.parent, setHeaderBackLabel]);
+
+  useEffect(() => {
+    reset({
+      name: category.name,
+      description: category.description,
+      seo: {
+        title: category.seoTitle,
+        description: category.seoDescription,
+      },
+      backgroundImageAlt: category?.backgroundImage?.alt || "",
+    });
+  }, [category, reset]);
 
   const onSubmit = async (data) => {
     const result = await update({ variables: { id: category.id, input: data } });
@@ -102,7 +114,8 @@ const Base = ({ category }) => {
         <FormGeneralInformation {...methods} category={category} />
         <BackgroundImage
           {...methods}
-          category={category}
+          id={category.id}
+          image={category.backgroundImage}
           update={update}
           enqueueSnackbar={enqueueSnackbar}
         />

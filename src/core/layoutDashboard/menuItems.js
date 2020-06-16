@@ -20,7 +20,12 @@ export const menuItems = [
       {
         label: "Categories",
         url: "/categories",
-        permission: PermissionEnum.MANAGE_STAFF,
+        permission: PermissionEnum.MANAGE_CATEGORIES,
+      },
+      {
+        label: "Collections",
+        url: "/collections",
+        permission: PermissionEnum.MANAGE_COLLECTIONS,
       },
     ],
   },

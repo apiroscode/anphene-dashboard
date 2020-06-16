@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
@@ -19,8 +19,12 @@ const schema = yup.object().shape({
   oldPassword: yup.string().required(),
 });
 
+const ACTION = "change-password";
 export const HeaderChangePassword = (props) => {
-  const { open, onClose } = props;
+  const {
+    params: { action },
+    handleClose,
+  } = props;
 
   const [changePassword] = useMutation(CHANGE_PASSWORD);
   const { enqueueSnackbar } = useSnackbar();
@@ -35,6 +39,10 @@ export const HeaderChangePassword = (props) => {
     defaultValues: { newPassword: "", oldPassword: "" },
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    reset();
+  }, [action, reset]);
 
   const onSubmit = async (data) => {
     const result = await changePassword({ variables: data });
@@ -51,48 +59,49 @@ export const HeaderChangePassword = (props) => {
       enqueueSnackbar(`${user.email} password has been changed.`, {
         variant: "success",
       });
-      reset();
-      onClose();
+      handleClose();
     }
   };
 
   return (
     <Dialog
-      open={open}
+      open={action === ACTION}
       handleOk={handleSubmit(onSubmit)}
-      handleClose={onClose}
+      handleClose={handleClose}
       title="Change Password"
       okText="CHANGE PASSWORD"
       okProps={{ loading: isSubmitting, disabled: !isDirty }}
     >
-      <Grid container direction="column" justify="center" alignItems="stretch" spacing={2}>
-        <Grid item>
-          <Controller
-            as={PasswordField}
-            control={control}
-            InputLabelProps={{ variant: "filled" }}
-            label="Old Password"
-            name="oldPassword"
-            autoComplete="off"
-            fullWidth
-            error={!!errors.oldPassword}
-            helperText={errors.oldPassword?.message}
-          />
+      <form>
+        <Grid container direction="column" justify="center" alignItems="stretch" spacing={2}>
+          <Grid item>
+            <Controller
+              as={PasswordField}
+              control={control}
+              InputLabelProps={{ variant: "filled" }}
+              label="Old Password"
+              name="oldPassword"
+              autoComplete="off"
+              fullWidth
+              error={!!errors.oldPassword}
+              helperText={errors.oldPassword?.message}
+            />
+          </Grid>
+          <Grid item>
+            <Controller
+              as={PasswordField}
+              control={control}
+              InputLabelProps={{ variant: "filled" }}
+              label="New Password"
+              name="newPassword"
+              autoComplete="off"
+              fullWidth
+              error={!!errors.newPassword}
+              helperText={errors.newPassword?.message}
+            />
+          </Grid>
         </Grid>
-        <Grid item>
-          <Controller
-            as={PasswordField}
-            control={control}
-            InputLabelProps={{ variant: "filled" }}
-            label="New Password"
-            name="newPassword"
-            autoComplete="off"
-            fullWidth
-            error={!!errors.newPassword}
-            helperText={errors.newPassword?.message}
-          />
-        </Grid>
-      </Grid>
+      </form>
     </Dialog>
   );
 };

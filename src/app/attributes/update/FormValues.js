@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 
 import {
+  Button,
   IconButton,
   TableBody,
   TableCell,
@@ -12,7 +13,7 @@ import {
 } from "@material-ui/core";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
-import { useMutation } from "@/utils/hooks";
+import { useMutation, useQS } from "@/utils/hooks";
 
 import { REORDER_ATTRIBUTE_VALUES } from "@/graphql/mutations/attributes";
 
@@ -30,16 +31,9 @@ export const FormValues = (props) => {
   const classes = useAttributeValuesStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [values, setValues] = useState([]);
-
-  const [updateValue, setUpdateValue] = useState({
-    open: false,
-    value: {},
-  });
-
-  const [deleteValue, setDeleteValue] = useState({
-    open: false,
-    valueId: null,
-    name: "",
+  const [params, setParams] = useQS({
+    action: undefined,
+    id: undefined,
   });
 
   useEffect(() => setValues(attributeValues), [attributeValues]);
@@ -80,23 +74,30 @@ export const FormValues = (props) => {
     }
   };
 
-  const openEditDialog = (data) => {
-    setUpdateValue({
-      open: true,
-      value: data,
+  const handleClose = () => {
+    setParams({
+      action: undefined,
+      id: undefined,
     });
   };
 
-  const openDeleteDialog = (data) => {
-    setDeleteValue({
-      open: true,
-      valueId: data.id,
-      name: data.name,
-    });
+  const baseProps = {
+    attributeId,
+    attributeValues,
+    params,
+    handleClose,
   };
 
   return (
-    <Card title="Attribute Values" action={<ValueAssign attributeId={attributeId} />} useDense>
+    <Card
+      title="Attribute Values"
+      action={
+        <Button color="primary" onClick={() => setParams({ action: "assign-value" })}>
+          Assign Value
+        </Button>
+      }
+      useDense
+    >
       <ResponsiveTable>
         <TableHead>
           <TableRow>
@@ -115,7 +116,10 @@ export const FormValues = (props) => {
                 index={index}
                 className={classes.tableBodyRow}
                 onClick={() => {
-                  openEditDialog(field);
+                  setParams({
+                    action: "update-value",
+                    id: field.id,
+                  });
                 }}
               >
                 <TableCell>{field.name}</TableCell>
@@ -126,7 +130,10 @@ export const FormValues = (props) => {
                       e.preventDefault();
                       e.stopPropagation();
                       e.nativeEvent.stopImmediatePropagation();
-                      openDeleteDialog(field);
+                      setParams({
+                        action: "delete-value",
+                        id: field.id,
+                      });
                     }}
                   >
                     <DeleteIcon />
@@ -147,8 +154,9 @@ export const FormValues = (props) => {
           </TableBody>
         )}
       </ResponsiveTable>
-      <ValueUpdate updateValue={updateValue} setUpdateValue={setUpdateValue} />
-      <ValueDelete deleteValue={deleteValue} setDeleteValue={setDeleteValue} />
+      <ValueAssign {...baseProps} />
+      <ValueUpdate {...baseProps} />
+      <ValueDelete {...baseProps} />
     </Card>
   );
 };

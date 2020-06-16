@@ -52,7 +52,7 @@ export const Card = (props) => {
             <Divider />
           </>
         )}
-        <Box padding={useDense ? 0 : 2} className={clsx({ [classes.content]: useMargin })}>
+        <Box padding={useDense ? 0 : 3} className={clsx({ [classes.content]: useMargin })}>
           {children}
         </Box>
       </Box>

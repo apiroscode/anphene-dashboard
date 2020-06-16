@@ -13,8 +13,9 @@ import {
   Popper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
 import { Face } from "@material-ui/icons";
+
+import { useQS } from "@/utils/hooks";
 
 import ArrowDropdown from "@/components/icons/ArrowDropdown";
 
@@ -60,19 +61,19 @@ export const HeaderUserMenu = () => {
   const classes = useStyles();
   const anchor = useRef();
   const [isMenuOpened, setMenuState] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [params, setParams] = useQS({ action: undefined });
 
   const handleLogout = () => {
     setMenuState(false);
     logout();
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpen = () => {
+    setParams({ action: "change-password" });
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setParams({ action: undefined });
   };
 
   return (
@@ -110,7 +111,7 @@ export const HeaderUserMenu = () => {
             <Paper>
               <ClickAwayListener onClickAway={() => setMenuState(false)} mouseEvent="onClick">
                 <Menu>
-                  <MenuItem className={classes.userMenuItem} onClick={handleClickOpen}>
+                  <MenuItem className={classes.userMenuItem} onClick={handleOpen}>
                     Change Password
                   </MenuItem>
                   <MenuItem className={classes.userMenuItem} onClick={handleLogout}>
@@ -122,7 +123,7 @@ export const HeaderUserMenu = () => {
           </Grow>
         )}
       </Popper>
-      <HeaderChangePassword open={open} onClose={handleClose} />
+      <HeaderChangePassword params={params} handleClose={handleClose} />
     </div>
   );
 };

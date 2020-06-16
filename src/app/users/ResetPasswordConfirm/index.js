@@ -23,7 +23,10 @@ const schema = yup.object().shape({
 
 export default () => {
   const [confirmPassword] = useMutation(PASSWORD_RESET_CONFIRM);
-  const [params] = useQS(["email", "token"]);
+  const [params] = useQS({
+    email: undefined,
+    token: undefined,
+  });
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 

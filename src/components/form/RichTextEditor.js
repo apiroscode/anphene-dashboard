@@ -186,6 +186,7 @@ export const RichTextEditor = (props) => {
   if (initial) {
     contentState = JSON.parse(initial);
   }
+
   return (
     <div
       className={clsx({
@@ -204,7 +205,7 @@ export const RichTextEditor = (props) => {
           }
           onSave={(data) => {
             if (!equal(data, JSON.parse(value))) {
-              onChange(data === null ? undefined : JSON.stringify(data));
+              onChange(data === null ? "{}" : JSON.stringify(data));
             }
           }}
           blockTypes={[

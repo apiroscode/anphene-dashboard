@@ -15,14 +15,14 @@ import { Dialog } from "@/components/Dialog";
 import { AttributeValue } from "../components";
 import { valueSchema } from "./valueSchema";
 
+const ACTION = "update-value";
 export const ValueUpdate = (props) => {
-  const {
-    updateValue: { open, value },
-    setUpdateValue,
-  } = props;
-
+  const { attributeValues, params, handleClose } = props;
   const [update, { loading }] = useMutation(UPDATE_ATTRIBUTE_VALUE);
   const { enqueueSnackbar } = useSnackbar();
+
+  const { action, id } = params;
+  const value = attributeValues.find((x) => x.id === id);
 
   const { control, reset, handleSubmit, errors, setError } = useForm({
     defaultValues: { name: "", value: "" },
@@ -30,14 +30,21 @@ export const ValueUpdate = (props) => {
   });
 
   useEffect(() => {
-    reset({
-      name: value.name,
-      value: value.value,
-    });
+    if (value) {
+      reset({
+        name: value.name,
+        value: value.value,
+      });
+    } else {
+      reset({
+        name: "",
+        value: "",
+      });
+    }
   }, [reset, value]);
 
   const onUpdate = async (data) => {
-    const result = await update({ variables: { id: value.id, input: data } });
+    const result = await update({ variables: { id, input: data } });
     if (result === undefined) return;
 
     const {
@@ -56,18 +63,10 @@ export const ValueUpdate = (props) => {
     }
   };
 
-  const handleClose = () => {
-    setUpdateValue({
-      open: false,
-      value: {},
-    });
-    reset({ name: "", value: "" });
-  };
-
   return (
     <Dialog
-      title={`Update Value ${value.name}`}
-      open={open}
+      title={`Update Value ${value?.name}`}
+      open={action === ACTION}
       handleOk={handleSubmit(onUpdate)}
       handleClose={handleClose}
       okText="Update"

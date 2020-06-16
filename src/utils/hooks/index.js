@@ -4,3 +4,4 @@ export { useLocalStorage } from "./useLocalStorage";
 export { useQuery } from "./useQuery";
 export { useMutation } from "./useMutation";
 export { usePermissions } from "./usePermissions";
+export { useObjectState } from "./useObjectState";

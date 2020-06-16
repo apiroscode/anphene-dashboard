@@ -1,12 +1,12 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useMemo } from "react";
 
-import { useQuery } from "@/utils/hooks";
+import { useObjectState, useQuery } from "@/utils/hooks";
 
+import { DEFAULT_PAGE_SIZE } from "../constants";
+import { renameKeys } from "../utils";
 import { Search } from "./Search";
 import { Pagination } from "./Pagination";
 import { Table } from "./Table";
-
-const DEFAULT_PAGE_SIZE = 25;
 
 export const SimpleList = (props) => {
   const {
@@ -15,43 +15,42 @@ export const SimpleList = (props) => {
     vars = {},
     useSearch = true,
     usePagination = true,
+    bulkMutations = [],
     bulkLoading = false,
+    placeholder,
+    queryField,
   } = props;
-  const rawVariables = useMemo(
-    () => ({
-      ...vars,
-      ...(table.defaultSort
-        ? { sortDirection: table.defaultSort.direction, sortField: table.defaultSort.field }
-        : {}),
-      ...(useSearch ? { search: undefined } : {}),
-      ...(usePagination
-        ? {
-            first: DEFAULT_PAGE_SIZE,
-            last: undefined,
-            before: undefined,
-            after: undefined,
-          }
-        : {}),
-    }),
-    [vars, table, useSearch, usePagination]
-  );
-  const [variables, setVariables] = useState(rawVariables);
-  const { data, loading: queryLoading } = useQuery(query, { variables });
 
-  useEffect(() => {
-    setVariables((prevState) => ({
-      ...prevState,
-      ...vars,
-    }));
-  }, [vars]);
+  const [params, setParams] = useObjectState({
+    search: undefined,
+    before: undefined,
+    after: undefined,
+    pageSize: DEFAULT_PAGE_SIZE,
+    sortDirection: table?.defaultSort?.direction,
+    sortField: table?.defaultSort?.field,
+  });
+
+  const variables = useMemo(
+    () => renameKeys(params, { pageSize: params.before ? "last" : "first" }),
+    [params]
+  );
+
+  const { data, loading: queryLoading } = useQuery(query, {
+    variables: { ...variables, ...vars },
+  });
 
   const baseProps = {
-    ...props,
+    params,
+    setParams,
     loading: bulkLoading || queryLoading,
-    rawVariables,
-    variables,
-    setVariables,
+    placeholder,
     data,
+    query,
+    queryField,
+    table,
+    bulkMutations,
+    variables,
+    vars,
   };
 
   return (

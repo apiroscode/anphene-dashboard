@@ -1,43 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-import { Button, Divider, TextField } from "@material-ui/core";
-
-import { Card } from "@/components/Template";
-import { ImageTile, ImageUpload } from "@/components/image";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles(
-  () => ({
-    input: {
-      display: "none",
-    },
-  }),
-  { name: "BackgroundImageCategories" }
-);
+import { BackgroundImageForm } from "@/components/form";
 
 export const BackgroundImage = (props) => {
-  const {
-    category: { id, backgroundImage: image },
-    update,
-    handleSubmit,
-    enqueueSnackbar,
-    setValue,
-    errors,
-    watch,
-    register,
-    unregister,
-    reset,
-  } = props;
-  const backgroundImageAlt = watch("backgroundImageAlt");
-  const classes = useStyles();
-
-  useEffect(() => {
-    register("backgroundImageAlt");
-
-    return () => {
-      unregister("backgroundImageAlt");
-    };
-  }, [register, unregister]);
+  const { id, update, enqueueSnackbar, reset } = props;
 
   const submitUpload = async (backgroundImage) => {
     const result = await update({
@@ -80,62 +46,5 @@ export const BackgroundImage = (props) => {
     }
   };
 
-  const handleUpload = (files) => {
-    const backgroundImage = files[0];
-    handleSubmit(() => submitUpload(backgroundImage))();
-  };
-
-  const handleImageDelete = () => {
-    handleSubmit(() => submitUpload(null))();
-  };
-
-  const handleImageButton = (e) => {
-    e.preventDefault();
-    const backgroundImage = e.target.files[0];
-    handleSubmit(() => submitUpload(backgroundImage))();
-  };
-
-  return (
-    <Card
-      title="Background Image (optional)"
-      useMargin
-      useDense={image === null}
-      action={
-        <>
-          <input
-            accept="image/*"
-            onChange={handleImageButton}
-            className={classes.input}
-            id="button-file"
-            multiple
-            type="file"
-          />
-          <label htmlFor="button-file">
-            <Button color="primary" component="span">
-              UPLOAD IMAGE
-            </Button>
-          </label>
-        </>
-      }
-    >
-      {image === null ? (
-        <ImageUpload onImageUpload={handleUpload} />
-      ) : (
-        <>
-          <ImageTile image={image} onImageDelete={handleImageDelete} />
-          <Divider />
-          <TextField
-            label="Description"
-            fullWidth
-            error={!!errors.backgroundImageAlt}
-            value={backgroundImageAlt}
-            onChange={(e) => setValue("backgroundImageAlt", e.target.value.slice(0, 299))}
-            helperText={
-              !!errors.backgroundImageAlt ? errors.backgroundImageAlt?.message : "(Optional)"
-            }
-          />
-        </>
-      )}
-    </Card>
-  );
+  return <BackgroundImageForm {...props} submitUpload={submitUpload} />;
 };

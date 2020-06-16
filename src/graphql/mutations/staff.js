@@ -59,19 +59,8 @@ export const BULK_DELETE_STAFF = gql`
 `;
 
 export const BULK_ACTIVATE_STAFF = gql`
-  mutation BULK_ACTIVATE_STAFF($ids: [ID]!) {
-    staffBulkActivate(ids: $ids) {
-      errors {
-        field
-        message
-      }
-    }
-  }
-`;
-
-export const BULK_DEACTIVATE_STAFF = gql`
-  mutation BULK_DEACTIVATE_STAFF($ids: [ID]!) {
-    staffBulkDeactivate(ids: $ids) {
+  mutation BULK_ACTIVATE_STAFF($ids: [ID]!, $isActive: Boolean!) {
+    staffBulkActivate(ids: $ids, isActive: $isActive) {
       errors {
         field
         message

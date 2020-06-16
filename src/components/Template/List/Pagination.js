@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { maybe } from "@/utils";
 
-import { paginate } from "./utils";
+import { paginate } from "../utils";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -52,7 +52,6 @@ export const Pagination = (props) => {
   const changePageSize = (e) => {
     const pageSize = e.target.value;
     setParams({
-      ...params,
       pageSize,
       after: undefined,
       before: undefined,

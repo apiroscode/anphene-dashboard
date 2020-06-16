@@ -8,19 +8,16 @@ import { DELETE_ATTRIBUTE_VALUE } from "@/graphql/mutations/attributes";
 
 import { Dialog } from "@/components/Dialog";
 
+const ACTION = "delete-value";
 export const ValueDelete = (props) => {
-  const {
-    deleteValue: { open, valueId, name },
-    setDeleteValue,
-  } = props;
+  const { attributeValues, params, handleClose } = props;
   const { enqueueSnackbar } = useSnackbar();
   const [deleteMutation, { loading }] = useMutation(DELETE_ATTRIBUTE_VALUE);
+  const { action, id } = params;
+  const value = attributeValues.find((x) => x.id === id);
 
-  const remove = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    const result = await deleteMutation({ variables: { id: valueId } });
+  const remove = async () => {
+    const result = await deleteMutation({ variables: { id } });
     if (result === undefined) return;
 
     const {
@@ -33,35 +30,20 @@ export const ValueDelete = (props) => {
         variant: "error",
       });
     } else {
-      enqueueSnackbar(`Value ${name} successfully deleted.`, {
+      enqueueSnackbar(`Value ${value?.name} successfully deleted.`, {
         variant: "success",
       });
-      setDeleteValue({
-        open: false,
-        valueId: null,
-        name: "",
-      });
+      handleClose();
     }
-  };
-
-  const handleClose = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    setDeleteValue({
-      open: false,
-      valueId: null,
-      name: "",
-    });
   };
 
   return (
     <Dialog
-      open={open}
+      open={action === ACTION}
       handleOk={remove}
       handleClose={handleClose}
-      title={`Delete ${name}`}
-      content={`Are you sure you want to delete "${name}" value?`}
+      title={`Delete ${value?.name}`}
+      content={`Are you sure you want to delete "${value?.name}" value?`}
       okText="DELETE"
       okStyle="error"
       okProps={{ loading }}

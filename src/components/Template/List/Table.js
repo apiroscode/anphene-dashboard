@@ -17,6 +17,7 @@ export const Table = (props) => {
     setParams,
     pluralAppName,
     loading,
+    vars,
   } = props;
   const navigate = useNavigate();
 
@@ -41,7 +42,6 @@ export const Table = (props) => {
       newSort = "ASC";
     }
     setParams({
-      ...params,
       sortField,
       sortDirection: newSort,
     });
@@ -62,6 +62,7 @@ export const Table = (props) => {
     loading,
     table,
     handleSingleClick,
+    vars,
     action: (node) => navigate(node.id),
     notFoundName: pluralAppName,
   };

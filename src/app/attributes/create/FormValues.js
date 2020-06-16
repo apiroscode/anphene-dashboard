@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
-import { useQS } from "@/utils/hooks/useQS2";
+import { useQS } from "@/utils/hooks";
 
 import { ErrorMessage } from "@/components/form";
 import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/Table";

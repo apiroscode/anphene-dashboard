@@ -40,7 +40,7 @@ export default () => {
         field: "NAME",
         direction: "ASC",
       },
-      tableColumn: [
+      column: [
         {
           label: "Type Name",
           field: "name",

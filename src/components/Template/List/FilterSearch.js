@@ -31,10 +31,7 @@ export const FilterSearch = (props) => {
   const [val, setVal] = useState("");
 
   const [searchDebounce] = useDebouncedCallback((value) => {
-    setParams({
-      ...params,
-      search: value ? value : undefined,
-    });
+    setParams({ search: value ? value : undefined });
     setTabValue("custom");
   }, DELAYED_TIMEOUT);
 

@@ -9,7 +9,7 @@ export const FilterRadioBox = (props) => {
     const value = ["true", "false"].includes(e.target.value)
       ? e.target.value === "true"
       : e.target.value;
-    setTempFilter({ ...tempFilter, [filter.field]: value });
+    setTempFilter({ [filter.field]: value });
   };
 
   return (
