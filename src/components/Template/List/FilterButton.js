@@ -50,6 +50,7 @@ const useStyles = makeStyles(
       "& > ul": {
         padding: 0,
         width: "100%",
+        maxHeight: 480,
       },
     },
     filterComponent: {
@@ -85,14 +86,28 @@ export const FilterButton = (props) => {
   };
 
   const handleChecked = (e, filter) => {
-    if (e.target.checked) {
-      setTempFilter({
-        [filter.field]: paramsFilters[filter.field] || filter.defaultValue,
-      });
+    if (filter.type === "range") {
+      if (e.target.checked) {
+        setTempFilter({
+          [`${filter.field}From`]: paramsFilters[`${filter.field}From`] || "",
+          [`${filter.field}To`]: paramsFilters[`${filter.field}To`] || "",
+        });
+      } else {
+        setTempFilter({
+          [`${filter.field}From`]: undefined,
+          [`${filter.field}To`]: undefined,
+        });
+      }
     } else {
-      setTempFilter({
-        [filter.field]: undefined,
-      });
+      if (e.target.checked) {
+        setTempFilter({
+          [filter.field]: paramsFilters[filter.field] || filter.defaultValue,
+        });
+      } else {
+        setTempFilter({
+          [filter.field]: undefined,
+        });
+      }
     }
   };
   const onClear = () => {
@@ -159,21 +174,23 @@ export const FilterButton = (props) => {
           <ListItem className={classes.body}>
             <List>
               {filters.map((filter, idx) => {
+                const checked =
+                  filter.type === "range"
+                    ? tempFilter[`${filter.field}From`] !== undefined ||
+                      tempFilter[`${filter.field}To`] !== undefined
+                    : tempFilter[filter.field] !== undefined;
                 return (
                   <React.Fragment key={idx}>
                     <ListItem>
                       <ListItemIcon>
-                        <Checkbox
-                          checked={tempFilter[filter.field] !== undefined}
-                          onClick={(e) => handleChecked(e, filter)}
-                        />
+                        <Checkbox checked={checked} onClick={(e) => handleChecked(e, filter)} />
                       </ListItemIcon>
                       <ListItemText>
                         <Typography variant="body1">{filter.label}</Typography>
                       </ListItemText>
                     </ListItem>
                     <Divider />
-                    {tempFilter[filter.field] !== undefined && (
+                    {checked && (
                       <>
                         <ListItem className={classes.filterComponent}>
                           {cloneElement(filter.component, {

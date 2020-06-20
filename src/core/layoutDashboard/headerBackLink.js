@@ -27,4 +27,12 @@ export const backLink = [
     link: "/categories",
     label: "CATEGORIES",
   },
+  {
+    link: "/collections",
+    label: "Collections",
+  },
+  {
+    link: "/sales",
+    label: "Sales",
+  },
 ];

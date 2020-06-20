@@ -17,8 +17,7 @@ export const AttributesUnAssign = (props) => {
   } = props;
   const { enqueueSnackbar } = useSnackbar();
 
-  const { action, ids: paramIds, type: typeParams } = params;
-  const ids = paramIds && (Array.isArray(paramIds) ? paramIds : [paramIds]);
+  const { action, ids, type: typeParams } = params;
 
   const handleUnAssign = async () => {
     const result = await unAssign({ variables: { productTypeId, attributeIds: ids } });

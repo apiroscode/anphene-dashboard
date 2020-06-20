@@ -278,6 +278,11 @@ export const theme = (appTheme) => {
           // width: "133%",
         },
       },
+      MuiInputAdornment: {
+        positionStart: {
+          marginTop: 11,
+        },
+      },
       // MuiList: {
       //   root: {
       //     display: "grid",

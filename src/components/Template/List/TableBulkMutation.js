@@ -32,7 +32,6 @@ export const TableBulkMutation = (props) => {
     setSelected([]);
     setOpen(false);
   };
-  console.log(variables, vars);
   const handleMutation = () => {
     item.mutation({
       variables: { ids: selected, ...(item.vars ? item.vars : {}) },

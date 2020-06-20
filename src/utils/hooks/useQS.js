@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 
 const qsOptions = {
-  arrayFormat: "comma",
+  arrayFormat: "bracket",
   parseBooleans: true,
   parseNumbers: true,
 };

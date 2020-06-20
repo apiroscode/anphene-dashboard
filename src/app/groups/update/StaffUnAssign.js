@@ -17,8 +17,7 @@ export const StaffUnAssign = (props) => {
     groupId,
     groupName,
   } = props;
-  const { action, ids: paramIds } = params;
-  const ids = paramIds && (Array.isArray(paramIds) ? paramIds : [paramIds]);
+  const { action, ids } = params;
   const { enqueueSnackbar } = useSnackbar();
 
   const handleUnAssign = async () => {

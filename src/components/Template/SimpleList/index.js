@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { useObjectState, useQuery } from "@/utils/hooks";
 
 import { DEFAULT_PAGE_SIZE } from "../constants";
-import { renameKeys } from "../utils";
+import { optimizeParams } from "../utils";
 import { Search } from "./Search";
 import { Pagination } from "./Pagination";
 import { Table } from "./Table";
@@ -31,7 +31,7 @@ export const SimpleList = (props) => {
   });
 
   const variables = useMemo(
-    () => renameKeys(params, { pageSize: params.before ? "last" : "first" }),
+    () => optimizeParams(params, { pageSize: params.before ? "last" : "first" }, []),
     [params]
   );
 

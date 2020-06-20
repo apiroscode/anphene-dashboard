@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useLocalStorage, useQS, useQuery } from "@/utils/hooks";
 
 import { DEFAULT_PAGE_SIZE } from "../constants";
-import { renameKeys } from "../utils";
+import { optimizeParams } from "../utils";
 import { Header } from "../Header";
 
 import { CreateButton } from "./CreateButton";
@@ -79,15 +79,20 @@ export const List = (props) => {
 
   const filterParams = {
     search: undefined,
-    ...filters
-      .map((item) => item.field)
-      .reduce((obj, key) => {
-        return {
-          ...obj,
-          [key]: undefined,
-        };
-      }, {}),
+    ...filters.reduce((obj, item) => {
+      const { field, type } = item;
+      return {
+        ...obj,
+        ...(type === "range"
+          ? {
+              [`${field}From`]: undefined,
+              [`${field}To`]: undefined,
+            }
+          : { [field]: undefined }),
+      };
+    }, {}),
   };
+  const rangeKeys = filters.filter((item) => item.type === "range").map((item) => item.field);
 
   const [params, setParams] = useQS({
     before: undefined,
@@ -99,19 +104,18 @@ export const List = (props) => {
   });
 
   const variables = useMemo(
-    () => renameKeys(params, { pageSize: params.before ? "last" : "first" }),
-    [params]
+    () => optimizeParams(params, { pageSize: params.before ? "last" : "first" }, rangeKeys),
+    [params, rangeKeys]
   );
 
   const { data, loading: queryLoading } = useQuery(query, {
     variables: { ...variables, ...vars },
   });
-
   const loading = bulkLoading || queryLoading;
 
   const totalFilters = useCallback(
     (withSearch = true) => {
-      return Object.keys(params).filter((item) => {
+      let total = Object.keys(params).filter((item) => {
         if (!withSearch) {
           return (
             Object.keys(filterParams).includes(item) &&
@@ -122,8 +126,18 @@ export const List = (props) => {
           return Object.keys(filterParams).includes(item) && params[item] !== undefined;
         }
       }).length;
+
+      if (rangeKeys.length > 0) {
+        for (let key of rangeKeys) {
+          if (params[`${key}From`] !== undefined && params[`${key}To`] !== undefined) {
+            total = total - 1;
+          }
+        }
+      }
+
+      return total;
     },
-    [params, filterParams]
+    [params, filterParams, rangeKeys]
   );
 
   const handleTabChange = (_, value) => {
@@ -133,15 +147,14 @@ export const List = (props) => {
         {}
       );
       setParams(resetFilters);
-    } else {
+      setTabValue(value);
+    } else if (value !== "custom") {
       const filterTabData = storageFilter.find((item) => item.name === value).data;
       const newFilter = Object.keys(filterParams).reduce(
         (o, key) => ({ ...o, [key]: filterTabData[key] }),
         {}
       );
       setParams(newFilter);
-    }
-    if (value !== "custom") {
       setTabValue(value);
     }
   };

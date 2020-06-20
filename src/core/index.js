@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import { ApolloProvider } from "@apollo/react-hooks";
 
+import "@/config/dayjs";
 import { client } from "@/config/apollo";
 import { store } from "@/config/store";
 

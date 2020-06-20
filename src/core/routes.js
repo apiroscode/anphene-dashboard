@@ -45,6 +45,10 @@ const CollectionList = lazy(() => import("@/app/collections/list"));
 const CollectionCreate = lazy(() => import("@/app/collections/create"));
 const CollectionUpdate = lazy(() => import("@/app/collections/update"));
 
+const SaleList = lazy(() => import("@/app/sales/list"));
+const SaleCreate = lazy(() => import("@/app/sales/create"));
+const SaleUpdate = lazy(() => import("@/app/sales/update"));
+
 export const Routes = () => (
   <Suspense fallback={<Loading />}>
     <ReactRoutes>
@@ -174,6 +178,22 @@ export const Routes = () => (
           path="collections/:id"
           element={<CollectionUpdate />}
           permissions={[PermissionEnum.MANAGE_COLLECTIONS]}
+        />
+
+        <Route
+          path="sales"
+          element={<SaleList />}
+          permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
+        />
+        <Route
+          path="sales/create"
+          element={<SaleCreate />}
+          permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
+        />
+        <Route
+          path="sales/:id"
+          element={<SaleUpdate />}
+          permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
         />
 
         <Route path="403" element={<Exception code={403} />} />

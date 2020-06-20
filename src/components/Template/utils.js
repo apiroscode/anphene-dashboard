@@ -62,10 +62,25 @@ export const paginate = (pageInfo, params, setParams) => {
   return { loadNextPage, loadPreviousPage, pageInfo: newPageInfo };
 };
 
-export const renameKeys = (obj, newKeys) => {
+export const optimizeParams = (obj, newKeys, rangeKeys) => {
   const keyValues = Object.keys(obj).map((key) => {
     const newKey = newKeys[key] || key;
     return { [newKey]: obj[key] };
   });
-  return Object.assign({}, ...keyValues);
+  const newObj = Object.assign({}, ...keyValues);
+
+  if (rangeKeys.length > 0) {
+    for (let key of rangeKeys) {
+      if (newObj[`${key}From`] !== undefined && newObj[`${key}To`] !== undefined) {
+        newObj[key] = {
+          gte: newObj[`${key}From`],
+          lte: newObj[`${key}To`],
+        };
+      }
+      delete newObj[`${key}From`];
+      delete newObj[`${key}To`];
+    }
+  }
+
+  return newObj;
 };

@@ -27,7 +27,9 @@ export const FilterSave = (props) => {
 
   const handleSave = () => {
     const checkKeys = storageFilter.map((item) => item.name.toLowerCase());
-    if (checkKeys.includes(newNameFilter.toLowerCase())) {
+    if (!!checkKeys) {
+      setError("Name is required.!!");
+    } else if (checkKeys.includes(newNameFilter.toLowerCase())) {
       setError("Duplicate name.");
     } else {
       setStorageFilter([
@@ -45,9 +47,9 @@ export const FilterSave = (props) => {
   };
 
   const handleDelete = () => {
-    setStorageFilter(storageFilter.filter((item) => item.name !== tabValue));
     handleClose();
     handleTabChange(null, "all");
+    setStorageFilter(storageFilter.filter((item) => item.name !== tabValue));
   };
 
   return (

@@ -16,7 +16,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
-import { useMutation } from "@/utils/hooks";
+import { useMutation, usePermissions } from "@/utils/hooks";
 
 import { ATTRIBUTE_UNASSIGN, REORDER_ATTRIBUTE } from "@/graphql/mutations/productTypes";
 
@@ -24,9 +24,14 @@ import { Checkbox } from "@/components/Checkbox";
 import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/Table";
 
 import { ACTION as UNASSIGN_ACTION, AttributesUnAssign } from "./AttributesUnAssign";
+import { useNavigate } from "react-router-dom";
+import { PermissionEnum } from "@/config/enum";
 
 const useStyles = makeStyles(
   (theme) => ({
+    tableBodyRow: {
+      cursor: "pointer",
+    },
     rowSelectedHighlight: {
       color: theme.palette.secondary.main,
       backgroundColor: fade(theme.palette.primary.main, 0.05),
@@ -39,8 +44,10 @@ const useStyles = makeStyles(
 );
 
 export const AttributesTable = (props) => {
+  const [gotPermission] = usePermissions(PermissionEnum.MANAGE_ATTRIBUTES);
   const { params, handleClose, attributes, setParams, productType, type } = props;
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
   const classes = useStyles();
   const [values, setValues] = useState(attributes);
   const [selected, setSelected] = useState([]);
@@ -122,6 +129,11 @@ export const AttributesTable = (props) => {
     setSelected(newSelected);
   };
 
+  const handleNavigate = (attributeId) => {
+    if (gotPermission) {
+      navigate(`/configuration/attributes/${attributeId}`);
+    }
+  };
   const unAssignProps = {
     params,
     handleClose,
@@ -180,7 +192,13 @@ export const AttributesTable = (props) => {
             {values.map((field, index) => {
               const isItemSelected = isSelected(field.id);
               return (
-                <SortableTableRow hover key={field.id} index={index}>
+                <SortableTableRow
+                  hover
+                  key={field.id}
+                  className={classes.tableBodyRow}
+                  index={index}
+                  onClick={() => handleNavigate(field.id)}
+                >
                   <TableCell padding="checkbox" align="center">
                     <Checkbox
                       checked={isItemSelected}
