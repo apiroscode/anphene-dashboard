@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Card } from "@/components/Template";
+
 import { Controller } from "react-hook-form";
+
 import { FormControlLabel, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
 import { Checkbox } from "@/components/Checkbox";
+import { Card } from "@/components/Template";
 
 const useStyles = makeStyles(
   (theme) => ({

@@ -2,7 +2,7 @@ import React from "react";
 
 import dayjs from "dayjs";
 
-import { Typography, Divider } from "@material-ui/core";
+import { Divider, Typography } from "@material-ui/core";
 
 import { Card } from "@/components/Template";
 
@@ -28,7 +28,7 @@ export const Summary = (props) => {
       <div>
         <Typography variant="caption">Value</Typography>
         <Typography variant="body1">
-          {value ? (type === "PERCENTAGE" ? `${value} %` : `Rp ${value}`) : "-"}
+          {value ? (type === "PERCENTAGE" ? `${value} %` : `Rp ${value}`) : "0"}
         </Typography>
       </div>
       <Divider />

@@ -4,25 +4,44 @@ import dayjs from "dayjs";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
-
-import { GET_SALES } from "@/graphql/queries/sales";
-import { BULK_DELETE_SALE } from "@/graphql/mutations/sales";
+import { GET_VOUCHERS } from "@/graphql/queries/vouchers";
+import { BULK_DELETE_VOUCHER } from "@/graphql/mutations/vouchers";
 
 import { List } from "@/components/Template";
 
 import { FilterCheckBox, FilterRadioBox, FilterRange } from "@/components/Template/List/Filters";
 
 export default () => {
-  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_SALE);
+  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_VOUCHER);
 
   const props = {
-    appName: "Sale",
-    query: GET_SALES,
-    queryField: "sales",
+    appName: "Voucher",
+    query: GET_VOUCHERS,
+    queryField: "vouchers",
     filters: [
       {
         component: <FilterRadioBox />,
-        field: "saleType",
+        field: "voucherType",
+        label: "Voucher Type",
+        defaultValue: "ENTIRE_ORDER",
+        items: [
+          {
+            label: "Entire Order",
+            value: "ENTIRE_ORDER",
+          },
+          {
+            label: "Specific Product",
+            value: "SPECIFIC_PRODUCT",
+          },
+          {
+            label: "Free Shipping",
+            value: "SHIPPING",
+          },
+        ],
+      },
+      {
+        component: <FilterRadioBox />,
+        field: "discountType",
         label: "Discount Type",
         defaultValue: "PERCENTAGE",
         items: [
@@ -40,6 +59,12 @@ export default () => {
         component: <FilterRange filterType="date" />,
         field: "started",
         label: "Started",
+        type: "range",
+      },
+      {
+        component: <FilterRange filterType="number" />,
+        field: "timesUsed",
+        label: "Times used",
         type: "range",
       },
       {
@@ -65,15 +90,22 @@ export default () => {
     ],
     table: {
       defaultSort: {
-        field: "NAME",
+        field: "CODE",
         direction: "ASC",
       },
       column: [
         {
-          label: "Name",
-          field: "name",
+          label: "Code",
+          field: "code",
           align: "left",
-          sortField: "NAME",
+          sortField: "CODE",
+        },
+        {
+          label: "Min. Spent",
+          field: "minSpentAmount",
+          align: "right",
+          sortField: "MINIMUM_SPENT_AMOUNT",
+          render: (value) => (value ? value : "-"),
         },
         {
           label: "Starts",
@@ -91,11 +123,22 @@ export default () => {
         },
         {
           label: "Value",
-          field: "value",
+          field: "discountValue",
           align: "right",
           sortField: "VALUE",
           render: (value, { type }) =>
             value ? (type === "PERCENTAGE" ? `${value} %` : `Rp ${value}`) : "0",
+        },
+        {
+          label: "Voucher Type",
+          field: "type",
+          align: "right",
+          render: (value) =>
+            value === "SHIPPING"
+              ? "FREE SHIPPING"
+              : value === "ENTIRE_ORDER"
+              ? "ENTIRE ORDER"
+              : "SPECIFIC PRODUCT",
         },
       ],
     },

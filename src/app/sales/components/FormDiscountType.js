@@ -1,7 +1,10 @@
 import React from "react";
-import { RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
-import { Card } from "@/components/Template";
+
 import { Controller } from "react-hook-form";
+
+import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+
+import { Card } from "@/components/Template";
 
 export const FormDiscountType = (props) => {
   const { control } = props;

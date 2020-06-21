@@ -1,13 +1,18 @@
 import React from "react";
-import { GET_COLLECTION } from "@/graphql/queries/collections";
-import { useParams } from "react-router";
-import { useMutation } from "@/utils/hooks";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
-import { DELETE_COLLECTION, UPDATE_COLLECTION } from "@/graphql/mutations/collections";
+
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
+
+import { useMutation } from "@/utils/hooks";
+
+import { GET_COLLECTION } from "@/graphql/queries/collections";
+import { DELETE_COLLECTION, UPDATE_COLLECTION } from "@/graphql/mutations/collections";
+
 import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
-import { FormGeneralInformation } from "@/app/collections/components";
+import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+
+import { FormGeneralInformation } from "../components";
 import { BackgroundImage } from "./BackgroundImage";
 
 const Base = ({ collection }) => {

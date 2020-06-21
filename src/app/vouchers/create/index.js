@@ -1,67 +1,78 @@
 import React from "react";
+
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { yupResolver } from "@hookform/resolvers";
-
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_SALE } from "@/graphql/mutations/sales";
+import { CREATE_VOUCHER } from "@/graphql/mutations/vouchers";
 
 import { getErrors, SaveButton } from "@/components/form";
 import { ColGrid, Header, RowGrid } from "@/components/Template";
 
-import { getOptimizeDate } from "@/app/utils";
+import { FormActiveDates } from "@/app/sales/components";
 
 import {
-  FormActiveDates,
-  FormDiscountType,
   FormGeneralInformation,
+  FormMinimumRequirements,
+  FormUsageLimit,
   FormValue,
+  FormVoucherType,
+  getOptimizeData,
   schema,
   Summary,
 } from "../components";
 
 export default () => {
-  const [create] = useMutation(CREATE_SALE);
+  const [create] = useMutation(CREATE_VOUCHER);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const methods = useForm({
+    resolver: yupResolver(schema),
     defaultValues: {
-      name: "",
-      type: "PERCENTAGE",
-      value: 0,
+      type: "ENTIRE_ORDER",
+      code: "",
+      usageLimit: 0,
+
+      applyOncePerOrder: false,
+      applyOncePerCustomer: false,
+
+      discountType: "FIXED",
+      discountValue: 0,
+
+      minSpentAmount: 0,
+      minCheckoutItemsQuantity: 0,
+
       startDate: "",
       endDate: "",
       startHour: "",
       endHour: "",
     },
-    resolver: yupResolver(schema),
   });
   const {
     setError,
     handleSubmit,
     formState: { isSubmitting, isDirty },
   } = methods;
-
   const onSubmit = async (data) => {
-    const result = await create({ variables: { input: getOptimizeDate(data) } });
+    const result = await create({ variables: { input: getOptimizeData(data) } });
     if (result === undefined) return;
 
     const {
       data: {
-        saleCreate: { sale, errors },
+        voucherCreate: { voucher, errors },
       },
     } = result;
 
     if (errors.length > 0) {
       setError(getErrors(errors));
     } else {
-      enqueueSnackbar(`Sale ${data.name} successfully created.`, {
+      enqueueSnackbar(`Voucher ${data.name} successfully created.`, {
         variant: "success",
       });
-      navigate(`../${sale.id}`);
+      navigate(`../${voucher.id}`);
     }
   };
 
@@ -70,9 +81,11 @@ export default () => {
       <Header title="Create sale" />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
-          <FormDiscountType {...methods} />
+          <FormGeneralInformation {...methods} isCreate />
+          <FormVoucherType {...methods} isCreate />
           <FormValue {...methods} />
+          <FormMinimumRequirements {...methods} />
+          <FormUsageLimit {...methods} />
           <FormActiveDates {...methods} />
         </RowGrid>
         <Summary {...methods} />

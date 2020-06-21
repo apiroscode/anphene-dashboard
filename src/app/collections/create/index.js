@@ -3,6 +3,7 @@ import React from "react";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+
 import { useMutation } from "@/utils/hooks";
 
 import { CREATE_COLLECTION } from "@/graphql/mutations/collections";

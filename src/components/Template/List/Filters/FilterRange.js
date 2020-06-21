@@ -1,46 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 import { MenuItem, Select, TextField, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import createSvgIcon from "@material-ui/icons/utils/createSvgIcon";
 
-const useStyles = makeStyles(
-  (theme) => ({
-    root: {
-      display: "flex",
-      flexDirection: "column",
-      width: "100%",
-      "&>*:first-child": {
-        marginBottom: theme.spacing(1),
-      },
-    },
-    rootDate: {
-      display: "flex",
-      alignItems: "center",
-      "&>:not(:last-child)": {
-        marginRight: theme.spacing(1),
-      },
-    },
-    input: {
-      padding: "10px 12px 10px 12px",
-    },
-  }),
-  { name: "FilterDateRange" }
-);
+import { Arrow } from "./Arrow";
+import { rangeStyles } from "./styles";
 
-const Arrow = createSvgIcon(
-  <path
-    fillRule="evenodd"
-    clipRule="evenodd"
-    d="M13.5858 17.1357L-1.37065e-07 17.1357L-1.37065e-07 15L-1.37064e-07 0L2 -8.74228e-08L2 15.1357L13.5858 15.1357L11.8643 13.4142L13.2785 12L17.4142 16.1357L13.2785 20.2714L11.8643 18.8571L13.5858 17.1357Z"
-    fill="#3D3D3D"
-  />,
-  "Arrow"
-);
-
-export const FilterDateRange = (props) => {
-  const { filter, tempFilter, setTempFilter } = props;
-  const classes = useStyles();
+export const FilterRange = (props) => {
+  const { filter, tempFilter, setTempFilter, filterType } = props;
+  const classes = rangeStyles();
   const [state, setState] = useState("equal");
   const fromValue = tempFilter[`${filter.field}From`];
   const toValue = tempFilter[`${filter.field}To`];
@@ -53,7 +20,7 @@ export const FilterDateRange = (props) => {
     }
   }, [fromValue, toValue]);
 
-  const handleDateChange = (value, field) => {
+  const handleRangeChange = (value, field) => {
     if (state === "equal") {
       setTempFilter({
         [`${filter.field}From`]: value,
@@ -88,15 +55,12 @@ export const FilterDateRange = (props) => {
         <MenuItem value="equal">equal to</MenuItem>
         <MenuItem value="between">between</MenuItem>
       </Select>
-      <div className={classes.rootDate}>
+      <div className={classes.wrapper}>
         <Arrow />
         <TextField
-          type="date"
+          type={filterType}
           value={fromValue}
-          onChange={(e) => handleDateChange(e.target.value, "From")}
-          InputLabelProps={{
-            shrink: true,
-          }}
+          onChange={(e) => handleRangeChange(e.target.value, "From")}
           InputProps={{
             classes: {
               input: classes.input,
@@ -107,12 +71,9 @@ export const FilterDateRange = (props) => {
           <>
             <Typography>and</Typography>
             <TextField
-              type="date"
+              type={filterType}
               value={toValue}
-              onChange={(e) => handleDateChange(e.target.value, "To")}
-              InputLabelProps={{
-                shrink: true,
-              }}
+              onChange={(e) => handleRangeChange(e.target.value, "To")}
               InputProps={{
                 classes: {
                   input: classes.input,

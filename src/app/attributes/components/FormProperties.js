@@ -2,15 +2,7 @@ import React from "react";
 
 import { Controller } from "react-hook-form";
 
-import {
-  Box,
-  Divider,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Box, Divider, FormControlLabel, TextField, Typography } from "@material-ui/core";
 
 import { Checkbox } from "@/components/Checkbox";
 import { Card } from "@/components/Template";
@@ -64,40 +56,44 @@ export const FormProperties = (props) => {
         </Typography>
         <Divider />
       </Box>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Controller
-              as={Checkbox}
-              control={control}
-              name="filterableInDashboard"
-              type="checkbox"
-              size="small"
-            />
-          }
-          label="Use in Filtering"
-        />
-        <FormHelperText>
-          If enabled, you’ll be able to use this attribute to filter products in product list.
-        </FormHelperText>
-      </FormGroup>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Controller
-              as={Checkbox}
-              control={control}
-              name="availableInGrid"
-              type="checkbox"
-              size="small"
-            />
-          }
-          label="Add to Column Options"
-        />
-        <FormHelperText>
-          If enabled this attribute can be used as a column in product table.
-        </FormHelperText>
-      </FormGroup>
+      <FormControlLabel
+        control={
+          <Controller
+            as={Checkbox}
+            control={control}
+            name="filterableInDashboard"
+            type="checkbox"
+            size="small"
+          />
+        }
+        label={
+          <>
+            Use in Filtering{" "}
+            <Typography variant="caption">
+              If enabled, you’ll be able to use this attribute to filter products in product list.
+            </Typography>
+          </>
+        }
+      />
+      <FormControlLabel
+        control={
+          <Controller
+            as={Checkbox}
+            control={control}
+            name="availableInGrid"
+            type="checkbox"
+            size="small"
+          />
+        }
+        label={
+          <>
+            Add to Column Options{" "}
+            <Typography variant="caption">
+              If enabled this attribute can be used as a column in product table.
+            </Typography>
+          </>
+        }
+      />
     </Card>
   );
 };

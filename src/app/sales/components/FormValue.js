@@ -16,7 +16,7 @@ export const FormValue = (props) => {
         as={TextField}
         control={control}
         name="value"
-        type="tel"
+        type="number"
         label="Discount Value"
         fullWidth
         error={!!errors.value}
