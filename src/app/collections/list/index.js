@@ -5,7 +5,7 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 import { useMutation } from "@/utils/hooks";
 
 import { GET_COLLECTIONS } from "@/graphql/queries/collections";
-import { BULK_DELETE_COLLECTION } from "@/graphql/mutations/collections";
+import { BULK_DELETE_COLLECTION, BULK_PUBLISH_COLLECTION } from "@/graphql/mutations/collections";
 
 import { StatusLabel } from "@/components/StatusLabel";
 import { FilterRadioBox } from "@/components/Template/List/Filters";
@@ -13,7 +13,7 @@ import { List } from "@/components/Template";
 
 export default () => {
   const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_COLLECTION);
-  const [bulkPublish, { loading: publishLoading }] = useMutation(BULK_DELETE_COLLECTION);
+  const [bulkPublish, { loading: publishLoading }] = useMutation(BULK_PUBLISH_COLLECTION);
 
   const props = {
     appName: "Collection",

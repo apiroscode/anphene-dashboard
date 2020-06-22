@@ -21,7 +21,7 @@ export default () => {
       {
         component: <FilterRadioBox />,
         field: "visibleInStorefront",
-        label: "Visible on Product Page ",
+        label: "Visible on Product Page",
         defaultValue: true,
         items: [
           {
