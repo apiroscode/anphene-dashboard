@@ -8,15 +8,15 @@ import { RichTextEditor } from "@/components/form";
 import { Card } from "@/components/Template";
 
 export const FormGeneralInformation = (props) => {
-  const { control, errors, collection } = props;
-
+  const { control, errors, product } = props;
   return (
     <Card title="General Information" useMargin>
       <Controller
         as={TextField}
         control={control}
         name="name"
-        label="Collection Name"
+        type="text"
+        label="Name"
         fullWidth
         error={!!errors.name}
         helperText={errors.name?.message}
@@ -24,7 +24,7 @@ export const FormGeneralInformation = (props) => {
       <Controller
         as={RichTextEditor}
         control={control}
-        initial={collection?.description}
+        initial={product?.description}
         name="description"
         label="Description"
         fullWidth

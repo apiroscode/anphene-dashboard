@@ -1,16 +1,16 @@
 import React from "react";
 
-import { List, QueryWrapper } from "@/components/Template";
+import { Delete as DeleteIcon } from "@material-ui/icons";
+import { useMutation } from "@/utils/hooks";
 import { INITIALIZE_PRODUCT_FILTER_DATA, GET_PRODUCTS } from "@/graphql/queries/products";
 import { BULK_PUBLISH_PRODUCT, BULK_DELETE_PRODUCT } from "@/graphql/mutations/products";
-import { useMutation } from "@/utils/hooks";
-import { Delete as DeleteIcon } from "@material-ui/icons";
-import { StatusLabel } from "@/components/StatusLabel";
+
 import { AvatarThumb } from "@/components/AvatarThumb";
+import { StatusLabel } from "@/components/StatusLabel";
+import { List, QueryWrapper } from "@/components/Template";
 import { FilterCheckBox, FilterRadioBox, FilterRange } from "@/components/Template/List/Filters";
 
 const Base = ({ collections, categories, productTypes }) => {
-  console.log(collections, categories, productTypes);
   const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_PRODUCT);
   const [bulkPublish, { loading: publishLoading }] = useMutation(BULK_PUBLISH_PRODUCT);
 

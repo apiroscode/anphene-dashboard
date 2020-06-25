@@ -2,7 +2,7 @@ import React from "react";
 
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 
 import { useMutation } from "@/utils/hooks";
 
@@ -81,7 +81,7 @@ const Base = ({ collection }) => {
       <Header title={collection.name} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
+          <FormGeneralInformation {...methods} collection={collection} />
           <BackgroundImage
             {...methods}
             id={collection.id}
