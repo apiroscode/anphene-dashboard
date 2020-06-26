@@ -23,7 +23,7 @@ export const AttributeValue = (props) => {
         as={TextField}
         control={control}
         name="value"
-        label="Additional Info"
+        label="Additional Information"
         helperText="If you want add color you can add hex code like #EOEOEO"
         fullWidth
       />

@@ -16,12 +16,12 @@ import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
 import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
 
 import {
+  FormAttributes,
   FormGeneralInformation,
-  FormOrganizeProduct,
   FormInventory,
+  FormOrganizeProduct,
   FormPricing,
   FormWeight,
-  FormAttributes,
 } from "../components";
 
 const schema = yup.object().shape({

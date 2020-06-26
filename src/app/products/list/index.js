@@ -2,8 +2,8 @@ import React from "react";
 
 import { Delete as DeleteIcon } from "@material-ui/icons";
 import { useMutation } from "@/utils/hooks";
-import { INITIALIZE_PRODUCT_FILTER_DATA, GET_PRODUCTS } from "@/graphql/queries/products";
-import { BULK_PUBLISH_PRODUCT, BULK_DELETE_PRODUCT } from "@/graphql/mutations/products";
+import { GET_PRODUCTS, INITIALIZE_PRODUCT_FILTER_DATA } from "@/graphql/queries/products";
+import { BULK_DELETE_PRODUCT, BULK_PUBLISH_PRODUCT } from "@/graphql/mutations/products";
 
 import { AvatarThumb } from "@/components/AvatarThumb";
 import { StatusLabel } from "@/components/StatusLabel";

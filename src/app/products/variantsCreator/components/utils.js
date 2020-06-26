@@ -7,6 +7,7 @@ export const cartesianProduct = (arr) => {
             return x.concat([
               {
                 id: b.id,
+                name: b.displayValues[y],
                 values: [y],
               },
             ]);

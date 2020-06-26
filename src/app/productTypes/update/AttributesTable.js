@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
+import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
 import {
@@ -15,7 +16,9 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
-import { useMutation, usePermissions } from "@/utils/hooks";
+import { PermissionEnum } from "@/config/enum";
+import { move } from "@/utils/lists";
+import { useMutation, usePermissions, useSelected } from "@/utils/hooks";
 
 import { ATTRIBUTE_UNASSIGN, REORDER_ATTRIBUTE } from "@/graphql/mutations/productTypes";
 
@@ -23,9 +26,6 @@ import { Checkbox } from "@/components/Checkbox";
 import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/Table";
 
 import { ACTION as UNASSIGN_ACTION, AttributesUnAssign } from "./AttributesUnAssign";
-import { useNavigate } from "react-router-dom";
-import { PermissionEnum } from "@/config/enum";
-import { move } from "@/utils/lists";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -40,7 +40,7 @@ const useStyles = makeStyles(
       width: theme.spacing(12),
     },
   }),
-  { name: "Attributes" }
+  { name: "ProductTypesAttributes" }
 );
 
 export const AttributesTable = (props) => {
@@ -48,9 +48,17 @@ export const AttributesTable = (props) => {
   const { params, handleClose, attributes, setParams, productType, type } = props;
   const navigate = useNavigate();
   const classes = useStyles();
-  const [selected, setSelected] = useState([]);
   const [reorder, { loading: reorderLoading }] = useMutation(REORDER_ATTRIBUTE);
   const [unAssign, { loading: unAssignLoading }] = useMutation(ATTRIBUTE_UNASSIGN);
+  const [
+    selected,
+    setSelected,
+    isSelected,
+    numSelected,
+    handleAllClick,
+    handleSingleClick,
+  ] = useSelected(attributes);
+  const dataCount = attributes.length;
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const variables = {
@@ -95,45 +103,12 @@ export const AttributesTable = (props) => {
     reorder({ variables, optimisticResponse });
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
-  const dataCount = attributes.length;
-  const numSelected = selected.length;
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = attributes.map((field) => field.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClickCheckBox = (event, id) => {
-    event.stopPropagation();
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
   const handleNavigate = (attributeId) => {
     if (gotPermission) {
       navigate(`/configuration/attributes/${attributeId}`);
     }
   };
+
   const unAssignProps = {
     params,
     handleClose,
@@ -160,7 +135,7 @@ export const AttributesTable = (props) => {
               <Checkbox
                 indeterminate={numSelected > 0 && numSelected < dataCount}
                 checked={dataCount > 0 && numSelected === dataCount}
-                onChange={handleSelectAllClick}
+                onChange={handleAllClick}
                 disabled={reorderLoading || unAssignLoading}
                 size="small"
               />
@@ -202,7 +177,7 @@ export const AttributesTable = (props) => {
                   <TableCell padding="checkbox" align="center">
                     <Checkbox
                       checked={isItemSelected}
-                      onClick={(e) => handleClickCheckBox(e, field.id)}
+                      onClick={(e) => handleSingleClick(e, field.id)}
                       disabled={reorderLoading || unAssignLoading}
                       size="small"
                     />

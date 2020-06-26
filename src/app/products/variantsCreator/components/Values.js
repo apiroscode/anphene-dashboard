@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
-
-import { useDebouncedCallback } from "use-debounce";
+import React, { useEffect } from "react";
 
 import { FormControlLabel } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { DELAYED_TIMEOUT } from "@/config/constants";
 import { Checkbox } from "@/components/Checkbox";
 import { Card } from "@/components/Template";
 
@@ -27,7 +24,9 @@ const useStyles = makeStyles(
 
 export const Values = (props) => {
   const {
-    activeStep,
+    values,
+    info,
+    setValues,
     product: {
       getUniqueSku,
       productType: { variantAttributes },
@@ -35,49 +34,39 @@ export const Values = (props) => {
     setVariants,
   } = props;
   const classes = useStyles();
-  const [tempValues, setTempValues] = useState([]);
-  const [mutateVariants] = useDebouncedCallback((tempVariants) => {
-    if (tempVariants.every((item) => item.values.length > 0)) {
-      const cartesian = cartesianProduct(tempVariants);
-      const allSku = findDuplicateValues(
-        cartesian.map((item) =>
-          [getUniqueSku, ...item.map((val) => val.values[0].substr(0, 3).toUpperCase())].join("-")
-        )
-      );
-      const flatten = cartesian.map((item, idx) => {
-        return {
-          attributes: item.map((val) => ({ id: val.id, values: val.values })),
-          sku: allSku[idx],
-          weight: "",
-          cost: 0,
-          price: 0,
-          quantity: 0,
-        };
-      });
-      setVariants(flatten);
-    } else {
-      setVariants([]);
-    }
-  }, DELAYED_TIMEOUT);
 
   useEffect(() => {
-    const defaultTempValues = variantAttributes.map((attribute) => ({
-      id: attribute.id,
-      values: [],
-      sortingValues: attribute.values.map((value) => value.slug),
-    }));
+    const mutateVariants = (values) => {
+      if (values.every((item) => item.values.length > 0)) {
+        const cartesian = cartesianProduct(values);
+        const allSku = findDuplicateValues(
+          cartesian.map((item) =>
+            [getUniqueSku, ...item.map((val) => val.values[0].substr(0, 3).toUpperCase())].join(
+              "-"
+            )
+          )
+        );
+        const flatten = cartesian.map((item, idx) => {
+          return {
+            attributes: item.map((val) => ({ id: val.id, values: val.values, name: val.name })),
+            sku: allSku[idx],
+            weight: info.weight,
+            cost: info.cost,
+            price: info.price,
+            quantity: info.quantity,
+          };
+        });
+        setVariants(flatten);
+      } else {
+        setVariants([]);
+      }
+    };
 
-    if (activeStep === 0) {
-      setTempValues(defaultTempValues);
-    }
-  }, [activeStep, variantAttributes]);
-
-  useEffect(() => {
-    mutateVariants(tempValues);
-  }, [mutateVariants, tempValues]);
+    mutateVariants(values);
+  }, [values, getUniqueSku, setVariants, info]);
 
   const handleCheck = (slug, idx, checked) => {
-    const attribute = tempValues[idx];
+    const attribute = values[idx];
     let rawValues;
     if (checked) {
       rawValues = [...attribute.values, slug];
@@ -86,21 +75,20 @@ export const Values = (props) => {
     }
 
     const newValues = attribute.sortingValues.filter((item) => rawValues.includes(item));
-    const rawTemp = [...tempValues];
+    const rawTemp = [...values];
     rawTemp[idx].values = newValues;
-    setTempValues(rawTemp);
+    setValues(rawTemp);
   };
 
   return (
     <>
-      {tempValues.length > 0 &&
+      {values.length > 0 &&
         variantAttributes.map((attribute, idx) => {
           return (
             <Card key={attribute.id} title={attribute.name}>
               <div className={classes.valueContainer}>
                 {attribute.values.map((value) => {
-                  const attributeValues = tempValues.find((item) => item.id === attribute.id)
-                    .values;
+                  const attributeValues = values.find((item) => item.id === attribute.id).values;
                   const checked = attributeValues.includes(value.slug);
 
                   return (

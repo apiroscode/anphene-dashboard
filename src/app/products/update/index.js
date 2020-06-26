@@ -16,6 +16,7 @@ import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
 import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
 
 import { Images } from "./Images";
+import { Variants } from "./Variants";
 
 import {
   FormAttributes,
@@ -127,7 +128,6 @@ const Base = (props) => {
       reset(getDefaultValues(updatedProduct));
     }
   };
-
   return hasVariants && variants.length === 0 ? (
     <Navigate to="variants-creator" />
   ) : (
@@ -137,13 +137,15 @@ const Base = (props) => {
         <RowGrid>
           <FormGeneralInformation {...methods} product={product} />
           <Images product={product} handleSubmit={handleSubmit} />
-          {!hasVariants && (
+          {!hasVariants ? (
             <>
               <FormAttributes {...props} {...methods} />
               <FormPricing {...methods} />
               <FormWeight {...methods} />
               <FormInventory {...props} {...methods} />
             </>
+          ) : (
+            <Variants {...props} />
           )}
           <SeoForm {...methods} />
         </RowGrid>
@@ -166,7 +168,14 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={GET_PRODUCT} id={id} fieldName="product">
+    <QueryWrapper
+      query={GET_PRODUCT}
+      id={id}
+      fieldName="product"
+      queryOptions={{
+        fetchPolicy: "network-only",
+      }}
+    >
       {(data) => (
         <Base
           product={data?.product}

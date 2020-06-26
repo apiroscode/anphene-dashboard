@@ -1,7 +1,15 @@
 import React from "react";
 
-import { Typography, Divider, Button } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
+
+import { Divider, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+import { useMutation } from "@/utils/hooks";
+
+import { BULK_CREATE_VARIANT } from "@/graphql/mutations/productVariants";
+import { Button } from "@/components/Button";
 
 const descriptions = {
   0: {
@@ -9,10 +17,10 @@ const descriptions = {
     description: "Selected values will be used to create variants for the configurable product.",
   },
   1: {
-    label: "Price and Weight",
+    label: "Base Information",
     description: (totalVariants) =>
       `Based on your selections we will create ${totalVariants} variants. 
-      Use this step to customize base price and weight for your new products.`,
+      Use this step to customize base attributes for your new product.`,
   },
   2: {
     label: "Summary",
@@ -20,6 +28,7 @@ const descriptions = {
       You can change prices, weight, sku, quantity for each one created.`,
   },
 };
+
 const useStyles = makeStyles(
   (theme) => ({
     root: {
@@ -46,8 +55,12 @@ const useStyles = makeStyles(
 );
 
 export const Header = (props) => {
-  const { activeStep, setActiveStep, variants } = props;
+  const { activeStep, setActiveStep, variants, product } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
   const classes = useStyles();
+
+  const [create, { loading }] = useMutation(BULK_CREATE_VARIANT);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -57,10 +70,41 @@ export const Header = (props) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleCreate = () => {};
+  const handleCreate = async () => {
+    const normalizeVariants = variants.map((variant) => ({
+      ...variant,
+      attributes: variant.attributes.map((attribute) => ({
+        id: attribute.id,
+        values: attribute.values,
+      })),
+    }));
+
+    const result = await create({
+      variables: { product: product.id, variants: normalizeVariants },
+    });
+    if (result === undefined) return;
+
+    const {
+      data: {
+        productVariantBulkCreate: { errors },
+      },
+    } = result;
+
+    if (errors.length > 0) {
+      enqueueSnackbar(errors[0].message, {
+        variant: "error",
+      });
+    } else {
+      enqueueSnackbar(`Variants for product ${product.name} successfully created.`, {
+        variant: "success",
+      });
+      navigate("..");
+    }
+  };
 
   const isNextDisabled = variants.length === 0;
-
+  const isCreateDisabled =
+    variants.length > 0 && variants.map((item) => item.sku).every((item) => !item);
   return (
     <>
       <div className={classes.root}>
@@ -74,7 +118,7 @@ export const Header = (props) => {
         </div>
         <div className={classes.buttonRoot}>
           {activeStep !== 0 && (
-            <Button color="primary" onClick={handleBack}>
+            <Button color="primary" onClick={handleBack} loading={loading}>
               Previous
             </Button>
           )}
@@ -84,12 +128,19 @@ export const Header = (props) => {
               variant="contained"
               onClick={handleNext}
               disabled={isNextDisabled}
+              loading={loading}
             >
               Next
             </Button>
           )}
           {activeStep === 2 && (
-            <Button color="primary" variant="contained" onClick={handleCreate}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleCreate}
+              disabled={isCreateDisabled}
+              loading={loading}
+            >
               Create
             </Button>
           )}
