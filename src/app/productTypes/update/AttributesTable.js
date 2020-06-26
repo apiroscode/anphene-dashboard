@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import clsx from "clsx";
-import { useSnackbar } from "notistack";
 
 import {
   Button,
@@ -26,6 +25,7 @@ import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/componen
 import { ACTION as UNASSIGN_ACTION, AttributesUnAssign } from "./AttributesUnAssign";
 import { useNavigate } from "react-router-dom";
 import { PermissionEnum } from "@/config/enum";
+import { move } from "@/utils/lists";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -46,62 +46,62 @@ const useStyles = makeStyles(
 export const AttributesTable = (props) => {
   const [gotPermission] = usePermissions(PermissionEnum.MANAGE_ATTRIBUTES);
   const { params, handleClose, attributes, setParams, productType, type } = props;
-  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const classes = useStyles();
-  const [values, setValues] = useState(attributes);
   const [selected, setSelected] = useState([]);
   const [reorder, { loading: reorderLoading }] = useMutation(REORDER_ATTRIBUTE);
   const [unAssign, { loading: unAssignLoading }] = useMutation(ATTRIBUTE_UNASSIGN);
 
-  useEffect(() => {
-    setValues(attributes);
-  }, [attributes]);
-
-  const move = async ({ oldIndex, newIndex }) => {
-    const rawData = [...values];
-    const newData = [...values];
-    const element = newData[oldIndex];
-
-    newData.splice(oldIndex, 1);
-    newData.splice(newIndex, 0, element);
-    setValues(newData);
-
-    const sortOrder = newIndex - oldIndex;
+  const onSortEnd = ({ oldIndex, newIndex }) => {
     const variables = {
       productTypeId: productType.id,
       type,
       moves: [
         {
-          id: element.id,
-          sortOrder,
+          id: attributes[oldIndex].id,
+          sortOrder: newIndex - oldIndex,
         },
       ],
     };
 
-    const result = await reorder({ variables });
-    if (result === undefined) return;
-
-    const {
-      data: {
-        productTypeReorderAttribute: { errors },
+    const optimisticResponse = {
+      productTypeReorderAttribute: {
+        __typename: "ProductTypeReorderAttribute",
+        errors: [],
+        productType: {
+          ...productType,
+          productAttributes:
+            type === "PRODUCT"
+              ? move(
+                  productType.productAttributes[oldIndex],
+                  productType.productAttributes,
+                  (a, b) => a.id === b.id,
+                  newIndex
+                )
+              : productType.productAttributes,
+          variantAttributes:
+            type === "VARIANT"
+              ? move(
+                  productType.variantAttributes[oldIndex],
+                  productType.variantAttributes,
+                  (a, b) => a.id === b.id,
+                  newIndex
+                )
+              : productType.variantAttributes,
+        },
       },
-    } = result;
+    };
 
-    if (errors.length > 1) {
-      enqueueSnackbar(errors[0].message, {
-        variant: "error",
-      });
-      setValues(rawData);
-    }
+    reorder({ variables, optimisticResponse });
   };
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
-  const dataCount = values.length;
+  const dataCount = attributes.length;
   const numSelected = selected.length;
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = values.map((field) => field.id);
+      const newSelected = attributes.map((field) => field.id);
       setSelected(newSelected);
       return;
     }
@@ -187,9 +187,9 @@ export const AttributesTable = (props) => {
             </TableCell>
           </TableRow>
         </TableHead>
-        {values.length > 0 ? (
-          <SortableTableBody onSortEnd={move}>
-            {values.map((field, index) => {
+        {attributes.length > 0 ? (
+          <SortableTableBody onSortEnd={onSortEnd}>
+            {attributes.map((field, index) => {
               const isItemSelected = isSelected(field.id);
               return (
                 <SortableTableRow

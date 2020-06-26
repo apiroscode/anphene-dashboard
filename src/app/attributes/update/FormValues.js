@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-
-import { useSnackbar } from "notistack";
+import React from "react";
 
 import {
   Button,
@@ -13,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
+import { move } from "@/utils/lists";
 import { useMutation, useQS } from "@/utils/hooks";
 
 import { REORDER_ATTRIBUTE_VALUES } from "@/graphql/mutations/attributes";
@@ -26,52 +25,42 @@ import { ValueUpdate } from "./ValueUpdate";
 import { ValueAssign } from "./ValueAssign";
 
 export const FormValues = (props) => {
-  const { attributeId, attributeValues } = props;
+  const { attribute } = props;
   const [reorder] = useMutation(REORDER_ATTRIBUTE_VALUES);
   const classes = useAttributeValuesStyles();
-  const { enqueueSnackbar } = useSnackbar();
-  const [values, setValues] = useState([]);
   const [params, setParams] = useQS({
     action: undefined,
     id: undefined,
   });
 
-  useEffect(() => setValues(attributeValues), [attributeValues]);
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    const optimisticResponse = {
+      attributeReorderValues: {
+        __typename: "AttributeReorderValues",
+        attribute: {
+          ...attribute,
+          values: move(
+            attribute.values[oldIndex],
+            attribute.values,
+            (a, b) => a.id === b.id,
+            newIndex
+          ),
+        },
+        errors: [],
+      },
+    };
 
-  const move = async ({ oldIndex, newIndex }) => {
-    const oldValues = [...values];
-    const newValues = [...values];
-    const element = newValues[oldIndex];
-
-    newValues.splice(oldIndex, 1);
-    newValues.splice(newIndex, 0, element);
-    setValues(newValues);
-
-    const sortOrder = newIndex - oldIndex;
     const variables = {
-      attributeId,
+      attributeId: attribute.id,
       moves: [
         {
-          id: element.id,
-          sortOrder,
+          id: attribute.values[oldIndex].id,
+          sortOrder: newIndex - oldIndex,
         },
       ],
     };
 
-    const result = await reorder({ variables });
-    if (result === undefined) return;
-
-    const {
-      data: {
-        attributeReorderValues: { errors },
-      },
-    } = result;
-    if (errors.length > 1) {
-      enqueueSnackbar(errors[0].message, {
-        variant: "error",
-      });
-      setValues(oldValues);
-    }
+    reorder({ variables, optimisticResponse });
   };
 
   const handleClose = () => {
@@ -82,8 +71,8 @@ export const FormValues = (props) => {
   };
 
   const baseProps = {
-    attributeId,
-    attributeValues,
+    attributeId: attribute.id,
+    attributeValues: attribute.values,
     params,
     handleClose,
   };
@@ -107,9 +96,9 @@ export const FormValues = (props) => {
             <TableCell padding="checkbox" align="center" />
           </TableRow>
         </TableHead>
-        {values.length > 0 ? (
-          <SortableTableBody onSortEnd={move}>
-            {values.map((field, index) => (
+        {attribute.values.length > 0 ? (
+          <SortableTableBody onSortEnd={onSortEnd}>
+            {attribute.values.map((field, index) => (
               <SortableTableRow
                 hover
                 key={field.id}

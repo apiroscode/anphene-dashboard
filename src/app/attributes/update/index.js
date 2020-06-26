@@ -93,7 +93,7 @@ const Base = ({ attribute }) => {
       <ColGrid>
         <RowGrid>
           <FormGeneralInformation control={control} errors={errors} watch={watch} />
-          <FormValues attributeValues={attribute.values} attributeId={attribute.id} />
+          <FormValues attribute={attribute} />
         </RowGrid>
         <FormProperties control={control} errors={errors} />
       </ColGrid>

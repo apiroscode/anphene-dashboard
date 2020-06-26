@@ -55,7 +55,7 @@ const Base = ({ product }) => {
     reset({
       alt: mainImage.alt,
     });
-  }, [mainImage, reset]);
+  }, [mainImage.alt, reset]);
 
   const onSubmit = async (data) => {
     const result = await update({

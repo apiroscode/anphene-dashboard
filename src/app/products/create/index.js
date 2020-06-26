@@ -110,9 +110,11 @@ const Base = (props) => {
       <ColGrid>
         <RowGrid>
           <FormGeneralInformation {...methods} />
+          {productType && productType?.node?.productAttributes && (
+            <FormAttributes {...props} {...methods} />
+          )}
           {productType && !productType?.node?.hasVariants && (
             <>
-              <FormAttributes {...props} {...methods} />
               <FormPricing {...methods} />
               <FormWeight {...methods} />
               <FormInventory {...methods} />
