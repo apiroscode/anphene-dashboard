@@ -36,11 +36,11 @@ const GenerateSku = (props) => {
 };
 
 export const FormInventory = (props) => {
-  const { control, errors, product, variant } = props;
-  const quantityAllocated = product ? `${product.quantityAllocated} allocated` : "";
+  const { control, errors, useGenerator, variant } = props;
+  const quantityAllocated = variant ? `${variant.quantityAllocated} allocated` : "";
 
   return (
-    <Card title="Inventory" useMargin action={!product && !variant && <GenerateSku {...props} />}>
+    <Card title="Inventory" useMargin action={useGenerator && <GenerateSku {...props} />}>
       <ColGrid align="start">
         <Controller
           as={TextField}

@@ -117,7 +117,7 @@ const Base = (props) => {
             <>
               <FormPricing {...methods} />
               <FormWeight {...methods} />
-              <FormInventory {...methods} />
+              <FormInventory {...methods} useGenerator />
             </>
           )}
           <SeoForm {...methods} />

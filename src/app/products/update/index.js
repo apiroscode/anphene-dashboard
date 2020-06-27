@@ -128,6 +128,7 @@ const Base = (props) => {
       reset(getDefaultValues(updatedProduct));
     }
   };
+
   return hasVariants && variants.length === 0 ? (
     <Navigate to="variants-creator" />
   ) : (

@@ -20,6 +20,16 @@ import { FormGeneralInformation, schema } from "../components";
 import { BackgroundImage } from "./BackgroundImage";
 import { SubCategories } from "./SubCategories";
 
+const getDefaultValues = (category) => ({
+  name: category.name,
+  description: category.description,
+  seo: {
+    title: category.seoTitle,
+    description: category.seoDescription,
+  },
+  backgroundImageAlt: category?.backgroundImage?.alt || "",
+});
+
 const Base = ({ category }) => {
   const [update] = useMutation(UPDATE_CATEGORY);
   const { enqueueSnackbar } = useSnackbar();
@@ -34,15 +44,7 @@ const Base = ({ category }) => {
   };
 
   const methods = useForm({
-    defaultValues: {
-      name: category.name,
-      description: category.description,
-      seo: {
-        title: category.seoTitle,
-        description: category.seoDescription,
-      },
-      backgroundImageAlt: category?.backgroundImage?.alt || "",
-    },
+    defaultValues: getDefaultValues(category),
     resolver: yupResolver(schema),
   });
   const {
@@ -63,15 +65,7 @@ const Base = ({ category }) => {
   }, [category.parent, setHeaderBackLabel]);
 
   useEffect(() => {
-    reset({
-      name: category.name,
-      description: category.description,
-      seo: {
-        title: category.seoTitle,
-        description: category.seoDescription,
-      },
-      backgroundImageAlt: category?.backgroundImage?.alt || "",
-    });
+    reset(getDefaultValues(category));
   }, [category, reset]);
 
   const onSubmit = async (data) => {
@@ -90,15 +84,7 @@ const Base = ({ category }) => {
       enqueueSnackbar(`Category ${data.name} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        name: updatedCategory.name,
-        description: updatedCategory.description,
-        seo: {
-          title: updatedCategory.seoTitle,
-          description: updatedCategory.seoDescription,
-        },
-        backgroundImageAlt: updatedCategory?.backgroundImage?.alt,
-      });
+      reset(getDefaultValues(updatedCategory));
     }
   };
 

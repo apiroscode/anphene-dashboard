@@ -22,7 +22,7 @@ export const FormAttributes = (props) => {
   }
 
   return productAttributes ? (
-    <Card title="Attributes" useMargin>
+    <Card title="FormAttributes" useMargin>
       <ErrorMessage errors={errors} name="attributes" useMarginTop={false} />
       {productAttributes.map((item, idx) => (
         <React.Fragment key={item.id}>

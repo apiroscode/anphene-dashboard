@@ -9,7 +9,7 @@ import Suppliers from "@/components/icons/Suppliers";
 
 export const menuItems = [
   {
-    description: "Attributes and Product Types",
+    description: "FormAttributes and Product Types",
     children: [
       {
         icon: <Attributes fontSize="inherit" viewBox="0 0 44 44" />,
