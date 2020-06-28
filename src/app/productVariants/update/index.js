@@ -1,24 +1,30 @@
 import React, { useEffect } from "react";
-import { GET_VARIANT } from "@/graphql/queries/productVariants";
-import { useParams } from "react-router-dom";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+
 import { useStoreActions } from "easy-peasy";
-import { VariantNavigation, FormAttributes } from "../components";
+import { useSnackbar } from "notistack";
+import { useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
+import { yupResolver } from "@hookform/resolvers";
+
 import { maybe } from "@/utils";
+import { useMutation } from "@/utils/hooks";
+
+import { GET_VARIANT } from "@/graphql/queries/productVariants";
 import {
   DELETE_VARIANT,
   UPDATE_VARIANT,
   VARIANT_IMAGE_ASSIGN,
   VARIANT_IMAGE_UNASSIGN,
 } from "@/graphql/mutations/productVariants";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers";
-import * as yup from "yup";
-import { useMutation } from "@/utils/hooks";
-import { useSnackbar } from "notistack";
+
 import { getErrors, SaveButton } from "@/components/form";
+import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+
 import { FormInventory, FormPricing, FormWeight } from "@/app/products/components";
+import { FormAttributes, VariantNavigation, schema } from "../components";
 import { Images } from "./Images";
+
 const getDefaultValues = (variant) => ({
   attributes: variant.attributes.map((attribute) => ({
     id: attribute.attribute.id,
@@ -32,22 +38,13 @@ const getDefaultValues = (variant) => ({
   quantity: variant.quantity,
 });
 
-const schema = yup.object().shape({
-  sku: yup.string().required(),
-  price: yup.number().required(),
-  cost: yup.number().required(),
-  weight: yup.number().required(),
-  quantity: yup.number().required(),
-});
-
 const Base = ({ variant }) => {
   const { product, name } = variant;
+  const setHeaderBackLabel = useStoreActions((actions) => actions.app.setHeaderBackLabel);
+  const { enqueueSnackbar } = useSnackbar();
   const [update] = useMutation(UPDATE_VARIANT);
   const [assignImage, { loading: assignLoading }] = useMutation(VARIANT_IMAGE_ASSIGN);
   const [unAssignImage, { loading: unAssignLoading }] = useMutation(VARIANT_IMAGE_UNASSIGN);
-
-  const { enqueueSnackbar } = useSnackbar();
-  const setHeaderBackLabel = useStoreActions((actions) => actions.app.setHeaderBackLabel);
 
   const deleteProps = {
     mutation: DELETE_VARIANT,
@@ -124,7 +121,7 @@ const Base = ({ variant }) => {
           fallbackThumbnail={maybe(() => product.thumbnail.url)}
         />
         <RowGrid>
-          <FormAttributes {...methods} variant={variant} />
+          <FormAttributes {...methods} attributes={variant.attributes} />
           <Images variant={variant} assignImage={assignImage} unAssignImage={unAssignImage} />
           <FormPricing {...methods} />
           <FormWeight {...methods} />

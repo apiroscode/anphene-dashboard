@@ -2,8 +2,7 @@ import React from "react";
 
 import { InputAdornment, TextField } from "@material-ui/core";
 
-import { Card } from "@/components/Template";
-import { ColGrid } from "@/app/products/components/components";
+import { Card, SimpleColGrid } from "@/components/Template";
 
 export const Information = (props) => {
   const { variants, setVariants, info, setInfo } = props;
@@ -25,7 +24,7 @@ export const Information = (props) => {
   return (
     <>
       <Card title="Product Base Information">
-        <ColGrid>
+        <SimpleColGrid>
           <TextField
             name="price"
             type="number"
@@ -69,7 +68,7 @@ export const Information = (props) => {
             value={info.quantity}
             onChange={handleChange}
           />
-        </ColGrid>
+        </SimpleColGrid>
       </Card>
     </>
   );

@@ -50,14 +50,14 @@ export const AttributesTable = (props) => {
   const classes = useStyles();
   const [reorder, { loading: reorderLoading }] = useMutation(REORDER_ATTRIBUTE);
   const [unAssign, { loading: unAssignLoading }] = useMutation(ATTRIBUTE_UNASSIGN);
-  const [
+  const {
     selected,
     setSelected,
     isSelected,
     numSelected,
     handleAllClick,
     handleSingleClick,
-  ] = useSelected(attributes);
+  } = useSelected(attributes);
   const dataCount = attributes.length;
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -187,7 +187,10 @@ export const AttributesTable = (props) => {
                   <TableCell align="center" className={classes.action}>
                     <IconButton
                       aria-label="delete"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.nativeEvent.stopImmediatePropagation();
                         setParams({ action: UNASSIGN_ACTION, ids: [field.id], type });
                       }}
                     >

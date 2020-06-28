@@ -1,10 +1,11 @@
 import React from "react";
-import { ErrorMessage } from "@/components/form";
-import { Card } from "@/components/Template";
-import { ColGrid } from "@/app/products/components/components";
+
+import { TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Autocomplete } from "@material-ui/lab";
-import { TextField } from "@material-ui/core";
+
+import { Card, SimpleColGrid } from "@/components/Template";
+import { ErrorMessage } from "@/components/form";
 
 export const useStyles = makeStyles(
   () => ({
@@ -34,7 +35,6 @@ export const Attribute = (props) => {
       getOptionLabel={(item) => item.name}
       getOptionSelected={(option) => option.slug === value}
       onChange={(_, value) => {
-        console.log(value);
         const oldAttributes = [...attributes];
         oldAttributes[idx].values = value?.slug ? [value.slug] : [];
         setValue("attributes", oldAttributes);
@@ -45,23 +45,25 @@ export const Attribute = (props) => {
 };
 
 export const FormAttributes = (props) => {
-  const { variant, watch, setValue, errors } = props;
-  const { attributes } = variant;
-
+  const { attributes, watch, setValue, errors } = props;
   return (
     <Card title="Attributes" useMargin>
       <ErrorMessage errors={errors} name="attributes" useMarginTop={false} />
-      <ColGrid>
-        {attributes.map(({ attribute }, idx) => (
-          <Attribute
-            key={attribute.id}
-            attribute={attribute}
-            watch={watch}
-            setValue={setValue}
-            idx={idx}
-          />
-        ))}
-      </ColGrid>
+      <SimpleColGrid>
+        {attributes.map((item, idx) => {
+          const attribute = item?.attribute || item;
+
+          return (
+            <Attribute
+              key={attribute.id}
+              attribute={attribute}
+              watch={watch}
+              setValue={setValue}
+              idx={idx}
+            />
+          );
+        })}
+      </SimpleColGrid>
     </Card>
   );
 };

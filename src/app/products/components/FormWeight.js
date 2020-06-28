@@ -4,15 +4,13 @@ import { Controller } from "react-hook-form";
 
 import { InputAdornment, TextField } from "@material-ui/core";
 
-import { Card } from "@/components/Template";
-
-import { ColGrid } from "./components";
+import { Card, SimpleColGrid } from "@/components/Template";
 
 export const FormWeight = (props) => {
   const { control, errors } = props;
   return (
     <Card title="Weight">
-      <ColGrid>
+      <SimpleColGrid>
         <Controller
           as={TextField}
           control={control}
@@ -26,7 +24,7 @@ export const FormWeight = (props) => {
             endAdornment: <InputAdornment position="end">gr</InputAdornment>,
           }}
         />
-      </ColGrid>
+      </SimpleColGrid>
     </Card>
   );
 };

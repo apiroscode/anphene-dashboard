@@ -1,44 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
-import { useMutation } from "@/utils/hooks";
+import { Button } from "@material-ui/core";
+import { Delete as DeleteIcon } from "@material-ui/icons";
+import { useMutation, useQS } from "@/utils/hooks";
 
+import { GET_PRODUCTS } from "@/graphql/queries/products";
 import { GET_COLLECTION } from "@/graphql/queries/collections";
-import { DELETE_COLLECTION, UPDATE_COLLECTION } from "@/graphql/mutations/collections";
+import {
+  COLLECTION_ADD_PRODUCTS,
+  COLLECTION_REMOVE_PRODUCTS,
+  DELETE_COLLECTION,
+  UPDATE_COLLECTION,
+} from "@/graphql/mutations/collections";
 
 import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
 import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
 
+import { ACTION, AssignProducts } from "@/app/components/AssignProducts";
+import { ProductSimpleList } from "@/app/components/ProductSimpleList";
 import { FormGeneralInformation } from "../components";
 import { BackgroundImage } from "./BackgroundImage";
 
-const Base = ({ collection }) => {
-  const [update] = useMutation(UPDATE_COLLECTION);
-  const { enqueueSnackbar } = useSnackbar();
+const getDefaultValues = (collection) => ({
+  name: collection.name,
+  description: collection.description,
+  seo: {
+    title: collection.seoTitle,
+    description: collection.seoDescription,
+  },
+  isPublished: collection.isPublished,
+  publicationDate: collection.publicationDate,
+  backgroundImageAlt: collection?.backgroundImage?.alt || "",
+});
 
-  const deleteProps = {
-    mutation: DELETE_COLLECTION,
-    id: collection.id,
-    name: collection.name,
-    field: "collectionDelete",
-  };
+const Base = ({ collection }) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [params, setParams] = useQS({ action: undefined });
+  const [update] = useMutation(UPDATE_COLLECTION);
+  const [addProducts, { loading: addLoading }] = useMutation(COLLECTION_ADD_PRODUCTS);
+  const [removeProducts, { loading: removeLoading }] = useMutation(COLLECTION_REMOVE_PRODUCTS);
+  const [listProps, setListProps] = useState();
+
+  const action = (
+    <Button color="primary" onClick={() => setParams({ action: ACTION })}>
+      ASSIGN PRODUCT
+    </Button>
+  );
 
   const methods = useForm({
-    defaultValues: {
-      name: collection.name,
-      description: collection.description,
-      seo: {
-        title: collection.seoTitle,
-        description: collection.seoDescription,
-      },
-      isPublished: collection.isPublished,
-      publicationDate: collection.publicationDate,
-      backgroundImageAlt: collection?.backgroundImage?.alt || "",
-    },
+    defaultValues: getDefaultValues(collection),
   });
+
   const {
     setError,
     formState: { isDirty, isSubmitting },
@@ -62,20 +78,80 @@ const Base = ({ collection }) => {
       enqueueSnackbar(`Collection ${data.name} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        name: updatedCollection.name,
-        description: updatedCollection.description,
-        seo: {
-          title: updatedCollection.seoTitle,
-          description: updatedCollection.seoDescription,
-        },
-        backgroundImageAlt: updatedCollection?.backgroundImage?.alt || "",
-        isPublished: updatedCollection.isPublished,
-        publicationDate: updatedCollection.publicationDate,
-      });
+      reset(getDefaultValues(updatedCollection));
     }
   };
 
+  const onCloseDialog = () => {
+    setParams({ action: undefined });
+  };
+
+  const onAssignProduct = async (selected) => {
+    const result = await addProducts({
+      variables: { collectionId: collection.id, products: selected },
+      refetchQueries: [
+        {
+          query: GET_PRODUCTS,
+          variables: {
+            ...listProps,
+          },
+        },
+      ],
+    });
+    if (result === undefined) return;
+
+    const {
+      data: {
+        collectionAddProducts: { errors },
+      },
+    } = result;
+
+    if (errors.length > 0) {
+    } else {
+      enqueueSnackbar(`The products has been added successfully.`, {
+        variant: "success",
+      });
+      onCloseDialog();
+    }
+  };
+
+  const deleteProps = {
+    mutation: DELETE_COLLECTION,
+    id: collection.id,
+    name: collection.name,
+    field: "collectionDelete",
+  };
+
+  const assignProductProps = {
+    params,
+    title: "Assign ProductSimpleList",
+    onClose: onCloseDialog,
+    onAssign: onAssignProduct,
+    loading: addLoading,
+    vars: {
+      notInCollections: [collection.id],
+    },
+  };
+
+  const productsProps = {
+    setListProps,
+    title: `Products in ${collection.name}`,
+    action,
+    vars: { collections: [collection.id] },
+    bulkLoading: removeLoading,
+    bulkMutations: [
+      {
+        mutation: removeProducts,
+        type: "icon",
+        icon: <DeleteIcon />,
+        label: "delete",
+        selector: "products",
+        vars: {
+          collectionId: collection.id,
+        },
+      },
+    ],
+  };
   return (
     <>
       <Header title={collection.name} />
@@ -89,6 +165,7 @@ const Base = ({ collection }) => {
             update={update}
             enqueueSnackbar={enqueueSnackbar}
           />
+          <ProductSimpleList {...productsProps} />
           <SeoForm {...methods} />
         </RowGrid>
         <RowGrid>
@@ -101,6 +178,7 @@ const Base = ({ collection }) => {
         loading={isSubmitting}
         disabled={!isDirty}
       />
+      <AssignProducts {...assignProductProps} />
     </>
   );
 };

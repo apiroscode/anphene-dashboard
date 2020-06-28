@@ -89,6 +89,7 @@ const Base = ({ collections, categories, productTypes }) => {
           label: "",
           field: "thumbnail",
           align: "center",
+          width: 32,
           render: (value) => <AvatarThumb thumbnail={value?.url} />,
         },
         {

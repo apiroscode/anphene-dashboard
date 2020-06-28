@@ -44,7 +44,6 @@ const useStyles = makeStyles(
 
 export const ImageSelectDialog = (props) => {
   const { images, open, selectedImages, onClose, onImageSelect } = props;
-
   const classes = useStyles(props);
 
   return (
@@ -55,13 +54,13 @@ export const ImageSelectDialog = (props) => {
           {images
             .sort((prev, next) => (prev.sortOrder > next.sortOrder ? 1 : -1))
             .map((tile) => {
-              const selectedIds = selectedImages.map((image) => image.id);
               return (
                 <div
                   className={clsx([
                     classes.imageContainer,
                     {
-                      [classes.selectedImageContainer]: selectedIds.includes(tile.id),
+                      [classes.selectedImageContainer]:
+                        selectedImages.filter((item) => item.id === tile.id).length > 0,
                     },
                   ])}
                   onClick={() => onImageSelect(tile.id)}

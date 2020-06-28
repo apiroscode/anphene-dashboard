@@ -53,14 +53,14 @@ export const Variants = ({ product }) => {
   const classes = useStyles();
   const [bulkDelete, { loading }] = useMutation(BULK_DELETE_VARIANT);
 
-  const [
+  const {
     selected,
     setSelected,
     isSelected,
     numSelected,
     handleAllClick,
     handleSingleClick,
-  ] = useSelected(variants);
+  } = useSelected(variants);
   const dataCount = variants.length;
   const handleClose = () => {
     setParams({
@@ -156,7 +156,10 @@ export const Variants = ({ product }) => {
                   <TableCell align="center" className={classes.action}>
                     <IconButton
                       aria-label="delete"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.nativeEvent.stopImmediatePropagation();
                         setParams({ action: ACTION, ids: [field.id] });
                       }}
                     >

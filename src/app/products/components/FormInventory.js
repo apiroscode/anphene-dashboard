@@ -9,9 +9,7 @@ import { useMutation } from "@/utils/hooks";
 import { GENERATE_SKU } from "@/graphql/mutations/products";
 
 import { Checkbox } from "@/components/Checkbox";
-import { Card } from "@/components/Template";
-
-import { ColGrid } from "./components";
+import { Card, SimpleColGrid } from "@/components/Template";
 
 const GenerateSku = (props) => {
   const { watch, setValue } = props;
@@ -41,7 +39,7 @@ export const FormInventory = (props) => {
 
   return (
     <Card title="Inventory" useMargin action={useGenerator && <GenerateSku {...props} />}>
-      <ColGrid align="start">
+      <SimpleColGrid align="start">
         <Controller
           as={TextField}
           control={control}
@@ -62,7 +60,7 @@ export const FormInventory = (props) => {
           error={!!errors.quantity}
           helperText={!!errors.quantity ? errors.quantity?.message : quantityAllocated}
         />
-      </ColGrid>
+      </SimpleColGrid>
       <FormControlLabel
         control={
           <Controller

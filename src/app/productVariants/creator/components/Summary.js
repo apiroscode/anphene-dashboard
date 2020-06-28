@@ -4,8 +4,7 @@ import { IconButton, InputAdornment, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
-import { Card } from "@/components/Template";
-import { ColGrid } from "@/app/products/components/components";
+import { Card, SimpleColGrid } from "@/components/Template";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -54,7 +53,7 @@ export const Summary = (props) => {
           const variantName = variant.attributes.map((attribute) => attribute.name).join("/");
           return (
             <div className={classes.row} key={idx}>
-              <ColGrid>
+              <SimpleColGrid>
                 <TextField label="Variant" disabled value={variantName} />
                 <TextField
                   name="sku"
@@ -107,7 +106,7 @@ export const Summary = (props) => {
                   value={variant.quantity}
                   onChange={handleChange}
                 />
-              </ColGrid>
+              </SimpleColGrid>
               <div className={classes.button}>
                 <IconButton aria-label="delete" onClick={() => handleDelete(idx)}>
                   <DeleteIcon />

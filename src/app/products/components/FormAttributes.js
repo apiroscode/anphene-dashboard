@@ -3,9 +3,9 @@ import React from "react";
 import { Divider, Typography } from "@material-ui/core";
 
 import { ErrorMessage } from "@/components/form";
-import { Card } from "@/components/Template";
+import { Card, SimpleColGrid } from "@/components/Template";
 
-import { AttributeDropDown, AttributeMultiSelect, ColGrid } from "./components";
+import { AttributeDropDown, AttributeMultiSelect } from "./components";
 
 export const FormAttributes = (props) => {
   const { productTypes, watch, product, errors } = props;
@@ -20,13 +20,12 @@ export const FormAttributes = (props) => {
     const productType = productTypeNode ? productTypeNode.node : undefined;
     productAttributes = productType?.productAttributes;
   }
-
-  return productAttributes ? (
+  return productAttributes.length > 0 ? (
     <Card title="FormAttributes" useMargin>
       <ErrorMessage errors={errors} name="attributes" useMarginTop={false} />
       {productAttributes.map((item, idx) => (
         <React.Fragment key={item.id}>
-          <ColGrid>
+          <SimpleColGrid>
             <Typography variant="body1">
               {item.name}
               {item.valueRequired ? "*" : ""}
@@ -46,7 +45,7 @@ export const FormAttributes = (props) => {
                 values={item.values}
               />
             )}
-          </ColGrid>
+          </SimpleColGrid>
           {productAttributes.length !== idx + 1 && <Divider />}
         </React.Fragment>
       ))}

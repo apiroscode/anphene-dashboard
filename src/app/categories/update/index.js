@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { useStoreActions } from "easy-peasy";
 import { useForm } from "react-hook-form";
@@ -8,13 +8,15 @@ import { useSnackbar } from "notistack";
 import { yupResolver } from "@hookform/resolvers";
 import { Tab, Tabs } from "@material-ui/core";
 
-import { useMutation } from "@/utils/hooks";
+import { useMutation, useQS } from "@/utils/hooks";
 
 import { GET_CATEGORY } from "@/graphql/queries/categories";
 import { DELETE_CATEGORY, UPDATE_CATEGORY } from "@/graphql/mutations/categories";
 
 import { getErrors, SaveButton, SeoForm } from "@/components/form";
 import { Header, QueryWrapper, RowGrid } from "@/components/Template";
+
+import { ProductSimpleList } from "@/app/components/ProductSimpleList";
 
 import { FormGeneralInformation, schema } from "../components";
 import { BackgroundImage } from "./BackgroundImage";
@@ -34,7 +36,7 @@ const Base = ({ category }) => {
   const [update] = useMutation(UPDATE_CATEGORY);
   const { enqueueSnackbar } = useSnackbar();
   const setHeaderBackLabel = useStoreActions((actions) => actions.app.setHeaderBackLabel);
-  const [tabValue, setTabValue] = useState(0);
+  const [params, setParams] = useQS({ activeTab: 0 });
 
   const deleteProps = {
     mutation: DELETE_CATEGORY,
@@ -47,6 +49,7 @@ const Base = ({ category }) => {
     defaultValues: getDefaultValues(category),
     resolver: yupResolver(schema),
   });
+
   const {
     setError,
     formState: { isDirty, isSubmitting },
@@ -89,8 +92,7 @@ const Base = ({ category }) => {
   };
 
   const handleTabChange = (_, newValue) => {
-    setTabValue(newValue);
-    window.scrollTo({ behavior: "smooth", top: 0 });
+    setParams({ activeTab: newValue });
   };
 
   return (
@@ -112,15 +114,17 @@ const Base = ({ category }) => {
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
-          value={tabValue}
+          value={params.activeTab}
           onChange={handleTabChange}
         >
           <Tab label="Subcategories" />
-          <Tab label="All Products" />
+          <Tab label="All ProductSimpleList" />
         </Tabs>
-        {tabValue === 0 && <SubCategories category={category} />}
+        {params.activeTab === 0 && <SubCategories category={category} />}
         {/*TODO: after products finish*/}
-        {tabValue === 1 && <div>ganteng</div>}
+        {params.activeTab === 1 && (
+          <ProductSimpleList title="All ProductSimpleList" vars={{ categories: [category.id] }} />
+        )}
       </RowGrid>
       <SaveButton
         deleteProps={deleteProps}
