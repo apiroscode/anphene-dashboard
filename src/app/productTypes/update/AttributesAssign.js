@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { useSnackbar } from "notistack";
 import InfiniteScroll from "react-infinite-scroller";
@@ -15,6 +15,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 
 import { maybe } from "@/utils";
+import { useSelected } from "@/utils/hooks";
 
 import { GET_AVAILABLE_ATTRIBUTES } from "@/graphql/queries/productTypes";
 import { ATTRIBUTE_ASSIGN } from "@/graphql/mutations/productTypes";
@@ -41,7 +42,7 @@ const useStyles = makeStyles(
 );
 
 const DialogContent = (props) => {
-  const { productType, type, selected, setSelected, loading } = props;
+  const { productType, type, handleSingleClick, loading } = props;
   const classes = useStyles();
   const queryVariables = { id: productType.id, inputType: type };
   const { data, fetchMore } = useQuery(GET_AVAILABLE_ATTRIBUTES, {
@@ -49,47 +50,20 @@ const DialogContent = (props) => {
     fetchPolicy: "network-only",
   });
 
-  const availableAttributes = maybe(() => data?.productType?.availableAttributes?.edges, []);
-
-  const hasMore = maybe(
-    () => data?.productType?.availableAttributes?.pageInfo?.hasNextPage,
-    false
-  );
-
-  const handleClickCheckBox = (event, id) => {
-    event.stopPropagation();
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
+  const availableAttributes = maybe(() => data.productType.availableAttributes.edges, []);
+  const hasMore = maybe(() => data.productType.availableAttributes.pageInfo.hasNextPage, false);
 
   const onFetchMore = () => {
-    const endCursor = maybe(
-      () => data?.productType?.availableAttributes?.pageInfo?.endCursor,
-      false
-    );
+    const endCursor = maybe(() => data.productType.availableAttributes.pageInfo.endCursor, false);
+
     fetchMore({
       variables: {
         ...queryVariables,
         after: endCursor,
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        const newEdges = fetchMoreResult?.productType?.availableAttributes?.edges;
-        const pageInfo = fetchMoreResult.productType?.availableAttributes?.pageInfo;
+        const newEdges = fetchMoreResult.productType.availableAttributes.edges;
+        const pageInfo = fetchMoreResult.productType.availableAttributes.pageInfo;
         return newEdges.length
           ? {
               productType: {
@@ -129,7 +103,7 @@ const DialogContent = (props) => {
                   <TableCell padding="checkbox">
                     <Checkbox
                       disabled={loading}
-                      onClick={(e) => handleClickCheckBox(e, item.node.id)}
+                      onClick={(e) => handleSingleClick(e, item.node.id)}
                       size="small"
                     />
                   </TableCell>
@@ -166,7 +140,8 @@ export const AttributesAssign = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [assign, { loading }] = useMutation(ATTRIBUTE_ASSIGN);
-  const [selected, setSelected] = useState([]);
+  const { selected, setSelected, handleSingleClick } = useSelected();
+
   const handleAssign = async () => {
     const variables = {
       productTypeId: productType.id,
@@ -207,7 +182,7 @@ export const AttributesAssign = (props) => {
       }}
       contentClass={classes.rootContent}
     >
-      <DialogContent loading={loading} selected={selected} setSelected={setSelected} {...props} />
+      <DialogContent loading={loading} handleSingleClick={handleSingleClick} {...props} />
     </Dialog>
   );
 };

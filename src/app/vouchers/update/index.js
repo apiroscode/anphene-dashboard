@@ -16,6 +16,7 @@ import { getErrors, SaveButton } from "@/components/form";
 import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
 
 import { FormActiveDates } from "@/app/sales/components";
+
 import {
   FormGeneralInformation,
   FormMinimumRequirements,
@@ -26,6 +27,8 @@ import {
   schema,
   Summary,
 } from "../components";
+
+import { SpecificProduct } from "./SpecificProduct";
 
 const Base = ({ voucher }) => {
   const [update] = useMutation(UPDATE_VOUCHER);
@@ -113,6 +116,7 @@ const Base = ({ voucher }) => {
         <RowGrid>
           <FormGeneralInformation {...methods} />
           <FormVoucherType {...methods} />
+          {voucher.type === "SPECIFIC_PRODUCT" && <SpecificProduct voucher={voucher} />}
           <FormValue {...methods} />
           <FormMinimumRequirements {...methods} voucher={voucher} />
           <FormUsageLimit {...methods} voucher={voucher} />

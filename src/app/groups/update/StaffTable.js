@@ -15,7 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { maybe } from "@/utils";
-import { useMutation } from "@/utils/hooks";
+import { useMutation, useSelected } from "@/utils/hooks";
 
 import { UNASSIGN_STAFF } from "@/graphql/mutations/groups";
 
@@ -41,7 +41,8 @@ export const StaffTable = (props) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [values, setValues] = useState(allStaff);
-  const [selected, setSelected] = useState([]);
+  const { selected, setSelected, handleSingleClick } = useSelected();
+
   const [unAssign, { loading: unAssignLoading }] = useMutation(UNASSIGN_STAFF);
 
   useEffect(() => {
@@ -58,27 +59,6 @@ export const StaffTable = (props) => {
       return;
     }
     setSelected([]);
-  };
-
-  const handleClickCheckBox = (event, id) => {
-    event.stopPropagation();
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
   };
 
   const unAssignProps = {
@@ -146,7 +126,7 @@ export const StaffTable = (props) => {
                   <TableCell padding="checkbox" align="center">
                     <Checkbox
                       checked={isItemSelected}
-                      onClick={(e) => handleClickCheckBox(e, field.id)}
+                      onClick={(e) => handleSingleClick(e, field.id)}
                       disabled={unAssignLoading}
                       size="small"
                     />

@@ -10,11 +10,11 @@ import { DELAYED_TIMEOUT } from "@/config/constants";
 import { maybe } from "@/utils";
 import { useQuery } from "@/utils/hooks";
 
-import { GET_PRODUCTS } from "@/graphql/queries/products";
+import { GET_SIMPLE_COLLECTIONS } from "@/graphql/queries/collections";
 
 import { Checkbox } from "@/components/Checkbox";
 import { Dialog } from "@/components/Dialog";
-import { ResponsiveTable, TableCellAvatar } from "@/components/Table";
+import { ResponsiveTable } from "@/components/Table";
 
 import { useStyles } from "./styles";
 
@@ -24,7 +24,7 @@ const Base = (props) => {
   const [search, setSearch] = useState("");
   const [searchParam, setSearchParam] = useState(undefined);
 
-  const { data, fetchMore } = useQuery(GET_PRODUCTS, {
+  const { data, fetchMore } = useQuery(GET_SIMPLE_COLLECTIONS, {
     variables: {
       search: searchParam,
       sortDirection: "ASC",
@@ -35,15 +35,15 @@ const Base = (props) => {
     fetchPolicy: "network-only",
   });
 
-  const availableProducts = maybe(() => data.products.edges, []);
-  const hasMore = maybe(() => data.products.pageInfo.hasNextPage, false);
+  const availableCollections = maybe(() => data.collections.edges, []);
+  const hasMore = maybe(() => data.collections.pageInfo.hasNextPage, false);
 
   const [searchDebounce] = useDebouncedCallback((value) => {
     setSearchParam(value ? value : undefined);
   }, DELAYED_TIMEOUT);
 
   const onFetchMore = () => {
-    const endCursor = maybe(() => data.products.pageInfo.endCursor, false);
+    const endCursor = maybe(() => data.collections.pageInfo.endCursor, false);
 
     fetchMore({
       variables: {
@@ -52,14 +52,14 @@ const Base = (props) => {
         after: endCursor,
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        const newEdges = fetchMoreResult.products.edges;
-        const pageInfo = fetchMoreResult.products.pageInfo;
+        const newEdges = fetchMoreResult.collections.edges;
+        const pageInfo = fetchMoreResult.collections.pageInfo;
         return newEdges.length
           ? {
-              products: {
-                ...previousResult.products,
+              collections: {
+                ...previousResult.collections,
                 pageInfo,
-                edges: [...previousResult.products.edges, ...newEdges],
+                edges: [...previousResult.collections.edges, ...newEdges],
               },
             }
           : previousResult;
@@ -71,7 +71,7 @@ const Base = (props) => {
     <>
       <TextField
         fullWidth
-        placeholder="Search Product"
+        placeholder="Search Collection"
         className={classes.search}
         value={search}
         onChange={(e) => {
@@ -96,8 +96,8 @@ const Base = (props) => {
         >
           <ResponsiveTable key="table">
             <TableBody>
-              {availableProducts.length > 0 ? (
-                availableProducts.map((item) => {
+              {availableCollections.length > 0 ? (
+                availableCollections.map((item) => {
                   const node = item.node;
 
                   return (
@@ -109,14 +109,13 @@ const Base = (props) => {
                           size="small"
                         />
                       </TableCell>
-                      <TableCellAvatar align="center" thumbnail={node.thumbnail?.url} />
                       <TableCell>{node.name}</TableCell>
                     </TableRow>
                   );
                 })
               ) : (
                 <TableRow>
-                  <TableCell>All products assigned</TableCell>
+                  <TableCell>All collections assigned</TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -127,8 +126,8 @@ const Base = (props) => {
   );
 };
 
-export const ACTION = "assign-products";
-export const AssignProducts = (props) => {
+export const ACTION = "assign-collections";
+export const AssignCollections = (props) => {
   const {
     params,
     title,

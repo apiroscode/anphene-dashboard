@@ -26,6 +26,8 @@ import {
   Summary,
 } from "../components";
 
+import { SpecificProduct } from "./SpecificProduct";
+
 const Base = ({ sale }) => {
   const [update] = useMutation(UPDATE_SALE);
   const { enqueueSnackbar } = useSnackbar();
@@ -92,6 +94,7 @@ const Base = ({ sale }) => {
           <FormGeneralInformation {...methods} />
           <FormDiscountType {...methods} />
           <FormValue {...methods} />
+          <SpecificProduct sale={sale} />
           <FormActiveDates {...methods} sale={sale} />
         </RowGrid>
         <Summary {...methods} />

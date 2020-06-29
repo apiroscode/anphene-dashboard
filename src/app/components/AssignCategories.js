@@ -10,11 +10,11 @@ import { DELAYED_TIMEOUT } from "@/config/constants";
 import { maybe } from "@/utils";
 import { useQuery } from "@/utils/hooks";
 
-import { GET_PRODUCTS } from "@/graphql/queries/products";
+import { GET_SIMPLE_CATEGORIES } from "@/graphql/queries/categories";
 
 import { Checkbox } from "@/components/Checkbox";
 import { Dialog } from "@/components/Dialog";
-import { ResponsiveTable, TableCellAvatar } from "@/components/Table";
+import { ResponsiveTable } from "@/components/Table";
 
 import { useStyles } from "./styles";
 
@@ -24,26 +24,24 @@ const Base = (props) => {
   const [search, setSearch] = useState("");
   const [searchParam, setSearchParam] = useState(undefined);
 
-  const { data, fetchMore } = useQuery(GET_PRODUCTS, {
+  const { data, fetchMore } = useQuery(GET_SIMPLE_CATEGORIES, {
     variables: {
       search: searchParam,
-      sortDirection: "ASC",
-      sortField: "NAME",
       first: 10,
       ...vars,
     },
     fetchPolicy: "network-only",
   });
 
-  const availableProducts = maybe(() => data.products.edges, []);
-  const hasMore = maybe(() => data.products.pageInfo.hasNextPage, false);
+  const availableCategories = maybe(() => data.categories.edges, []);
+  const hasMore = maybe(() => data.categories.pageInfo.hasNextPage, false);
 
   const [searchDebounce] = useDebouncedCallback((value) => {
     setSearchParam(value ? value : undefined);
   }, DELAYED_TIMEOUT);
 
   const onFetchMore = () => {
-    const endCursor = maybe(() => data.products.pageInfo.endCursor, false);
+    const endCursor = maybe(() => data.categories.pageInfo.endCursor, false);
 
     fetchMore({
       variables: {
@@ -52,14 +50,14 @@ const Base = (props) => {
         after: endCursor,
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
-        const newEdges = fetchMoreResult.products.edges;
-        const pageInfo = fetchMoreResult.products.pageInfo;
+        const newEdges = fetchMoreResult.categories.edges;
+        const pageInfo = fetchMoreResult.categories.pageInfo;
         return newEdges.length
           ? {
-              products: {
-                ...previousResult.products,
+              categories: {
+                ...previousResult.categories,
                 pageInfo,
-                edges: [...previousResult.products.edges, ...newEdges],
+                edges: [...previousResult.categories.edges, ...newEdges],
               },
             }
           : previousResult;
@@ -71,7 +69,7 @@ const Base = (props) => {
     <>
       <TextField
         fullWidth
-        placeholder="Search Product"
+        placeholder="Search Category"
         className={classes.search}
         value={search}
         onChange={(e) => {
@@ -96,8 +94,8 @@ const Base = (props) => {
         >
           <ResponsiveTable key="table">
             <TableBody>
-              {availableProducts.length > 0 ? (
-                availableProducts.map((item) => {
+              {availableCategories.length > 0 ? (
+                availableCategories.map((item) => {
                   const node = item.node;
 
                   return (
@@ -109,14 +107,13 @@ const Base = (props) => {
                           size="small"
                         />
                       </TableCell>
-                      <TableCellAvatar align="center" thumbnail={node.thumbnail?.url} />
-                      <TableCell>{node.name}</TableCell>
+                      <TableCell>{`${"-".repeat(node?.level)}${node?.name}`}</TableCell>
                     </TableRow>
                   );
                 })
               ) : (
                 <TableRow>
-                  <TableCell>All products assigned</TableCell>
+                  <TableCell>All categories assigned</TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -127,8 +124,8 @@ const Base = (props) => {
   );
 };
 
-export const ACTION = "assign-products";
-export const AssignProducts = (props) => {
+export const ACTION = "assign-categories";
+export const AssignCategories = (props) => {
   const {
     params,
     title,

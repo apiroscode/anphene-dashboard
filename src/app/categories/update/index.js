@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 import { yupResolver } from "@hookform/resolvers";
-import { Tab, Tabs } from "@material-ui/core";
+import { Tab } from "@material-ui/core";
 
 import { useMutation, useQS } from "@/utils/hooks";
 
@@ -14,6 +14,7 @@ import { GET_CATEGORY } from "@/graphql/queries/categories";
 import { DELETE_CATEGORY, UPDATE_CATEGORY } from "@/graphql/mutations/categories";
 
 import { getErrors, SaveButton, SeoForm } from "@/components/form";
+import { Tabs } from "@/components/Tabs";
 import { Header, QueryWrapper, RowGrid } from "@/components/Template";
 
 import { ProductSimpleList } from "@/app/components/ProductSimpleList";
@@ -108,22 +109,14 @@ const Base = ({ category }) => {
           enqueueSnackbar={enqueueSnackbar}
         />
         <SeoForm {...methods} />
-        <Tabs
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-          aria-label="scrollable auto tabs example"
-          value={params.activeTab}
-          onChange={handleTabChange}
-        >
+        <Tabs value={params.activeTab} onChange={handleTabChange}>
           <Tab label="Subcategories" />
-          <Tab label="All ProductSimpleList" />
+          <Tab label="All Products" />
         </Tabs>
         {params.activeTab === 0 && <SubCategories category={category} />}
         {/*TODO: after products finish*/}
         {params.activeTab === 1 && (
-          <ProductSimpleList title="All ProductSimpleList" vars={{ categories: [category.id] }} />
+          <ProductSimpleList title="All Products" vars={{ categories: [category.id] }} />
         )}
       </RowGrid>
       <SaveButton

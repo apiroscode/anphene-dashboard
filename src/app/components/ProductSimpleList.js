@@ -25,7 +25,7 @@ export const ProductSimpleList = (props) => {
   const navigate = useNavigate();
 
   const listProps = {
-    placeholder: "ProductSimpleList",
+    placeholder: "Products",
     query: GET_PRODUCTS,
     queryField: "products",
     vars: vars,
