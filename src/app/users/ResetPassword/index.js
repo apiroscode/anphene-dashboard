@@ -46,7 +46,7 @@ export default () => {
       variables: { email: data.email.trim().toLowerCase(), redirectUrl: CONFIRM_PASSWORD_URI },
     });
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`A magic link has been sent to ${data.email}.`, {
         variant: "success",

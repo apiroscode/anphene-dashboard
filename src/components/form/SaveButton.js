@@ -92,13 +92,13 @@ const Delete = ({ deleteProps, handleBack }) => {
 
 export const SaveButton = (props) => {
   const { onSubmit, disabled, loading, deleteProps, saveText = "SAVE" } = props;
-
+  const backUrl = deleteProps ? (deleteProps.backUrl ? deleteProps.backUrl : "..") : "..";
   const navigate = useNavigate();
   const saveButtonRef = useStoreState((state) => state.app.saveButtonRef);
   const classes = useStyles();
 
   const handleBack = () => {
-    navigate("..");
+    navigate(backUrl);
   };
 
   return saveButtonRef ? (

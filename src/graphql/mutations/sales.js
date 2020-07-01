@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import { errorFragment } from "@/graphql/fragments/base";
-import { saleFragment } from "@/graphql/fragments/sales";
+import { saleFragment, saleTotalCountFragment } from "@/graphql/fragments/sales";
 
 export const CREATE_SALE = gql`
   mutation CREATE_SALE($input: SaleInput!) {
@@ -52,4 +52,45 @@ export const BULK_DELETE_SALE = gql`
     }
   }
   ${errorFragment}
+`;
+
+export const ADD_SALE_CATALOGUES = gql`
+  mutation ADD_SALE_CATALOGUES($id: ID!, $categories: [ID], $collections: [ID], $products: [ID]) {
+    saleCataloguesAdd(
+      id: $id
+      input: { categories: $categories, collections: $collections, products: $products }
+    ) {
+      errors {
+        field
+        message
+      }
+      sale {
+        ...saleTotalCountFragment
+      }
+    }
+  }
+  ${saleTotalCountFragment}
+`;
+
+export const REMOVE_SALE_CATALOGUES = gql`
+  mutation REMOVE_SALE_CATALOGUES(
+    $id: ID!
+    $categories: [ID]
+    $collections: [ID]
+    $products: [ID]
+  ) {
+    saleCataloguesRemove(
+      id: $id
+      input: { categories: $categories, collections: $collections, products: $products }
+    ) {
+      errors {
+        field
+        message
+      }
+      sale {
+        ...saleTotalCountFragment
+      }
+    }
+  }
+  ${saleTotalCountFragment}
 `;

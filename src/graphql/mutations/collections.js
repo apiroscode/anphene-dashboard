@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import { errorFragment } from "@/graphql/fragments/base";
-import { collectionFragment, collectionDetailFragment } from "@/graphql/fragments/collections";
+import { collectionDetailFragment, collectionFragment } from "@/graphql/fragments/collections";
 
 export const CREATE_COLLECTION = gql`
   mutation CREATE_COLLECTION($input: CollectionInput!) {
@@ -69,4 +69,25 @@ export const BULK_PUBLISH_COLLECTION = gql`
     }
   }
   ${errorFragment}
+`;
+
+export const COLLECTION_ADD_PRODUCTS = gql`
+  mutation COLLECTION_ADD_PRODUCTS($collectionId: ID!, $products: [ID]!) {
+    collectionAddProducts(collectionId: $collectionId, products: $products) {
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+export const COLLECTION_REMOVE_PRODUCTS = gql`
+  mutation COLLECTION_REMOVE_PRODUCTS($collectionId: ID!, $products: [ID]!) {
+    collectionRemoveProducts(collectionId: $collectionId, products: $products) {
+      errors {
+        field
+        message
+      }
+    }
+  }
 `;

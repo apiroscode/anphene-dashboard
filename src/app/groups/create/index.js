@@ -75,7 +75,7 @@ const Base = ({ data }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Group ${data.name} successfully created.`, {
         variant: "success",

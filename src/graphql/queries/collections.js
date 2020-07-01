@@ -38,3 +38,39 @@ export const GET_COLLECTION = gql`
   }
   ${collectionDetailFragment}
 `;
+
+export const GET_SIMPLE_COLLECTIONS = gql`
+  query GET_SIMPLE_COLLECTIONS(
+    ${filterVariable.type("CollectionSortField")}
+    $search: String
+    $sales: [ID]
+    $notInSales: [ID]
+    $vouchers: [ID]
+    $notInVouchers: [ID]
+  ) {
+    collections(
+      ${filterVariable.vars}, 
+      filter: {
+        search: $search
+        sales: $sales
+        notInSales: $notInSales
+        vouchers: $vouchers
+        notInVouchers: $notInVouchers
+      }
+    ) {
+      pageInfo {
+        ...pageInfo
+      }
+      edges {
+        node {
+          id
+          name
+          products {
+            totalCount
+          }
+        }
+      }
+    }
+  }
+  ${pageInfo}
+`;

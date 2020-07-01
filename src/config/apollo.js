@@ -13,7 +13,6 @@ const cache = new InMemoryCache();
 
 const errorLog = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
-    // TODO: add toast here
     graphQLErrors.map(({ message, locations, path }) =>
       console.debug(
         `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(

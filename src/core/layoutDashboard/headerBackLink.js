@@ -8,16 +8,24 @@ export const backLink = [
     label: "ATTRIBUTES",
   },
   {
+    link: "/configuration/groups",
+    label: "GROUPS",
+  },
+  {
+    link: "/configuration/navigations",
+    label: "NAVIGATIONS",
+  },
+  {
+    link: "/configuration/pages",
+    label: "PAGES",
+  },
+  {
     link: "/configuration/product-types",
     label: "PRODUCT TYPES",
   },
   {
     link: "/configuration/staff",
     label: "STAFF",
-  },
-  {
-    link: "/configuration/groups",
-    label: "GROUPS",
   },
   {
     link: "/configuration/suppliers",
@@ -32,7 +40,15 @@ export const backLink = [
     label: "Collections",
   },
   {
+    link: "/products",
+    label: "Products",
+  },
+  {
     link: "/sales",
     label: "Sales",
+  },
+  {
+    link: "/vouchers",
+    label: "Vouchers",
   },
 ];

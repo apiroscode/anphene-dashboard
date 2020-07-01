@@ -57,6 +57,7 @@ export const ImageUpload = (props) => {
     iconContainerClassName,
     isActiveClassName,
     onImageUpload,
+    multiple,
   } = props;
 
   const onDrop = useCallback(
@@ -83,7 +84,12 @@ export const ImageUpload = (props) => {
             [iconContainerActiveClassName]: isDragActive,
           })}
         >
-          <input {...getInputProps()} className={classes.fileField} accept="image/*" />
+          <input
+            {...getInputProps()}
+            className={classes.fileField}
+            accept="image/*"
+            multiple={multiple}
+          />
           <ImageIcon className={classes.photosIcon} />
           <Typography className={classes.uploadText}>Drop here to upload</Typography>
         </div>

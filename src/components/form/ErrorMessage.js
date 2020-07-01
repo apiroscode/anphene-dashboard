@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ErrorMessage as EMR } from "react-hook-form";
+import { ErrorMessage as EMR } from "@hookform/error-message";
 
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -20,8 +20,9 @@ export const ErrorMessage = (props) => {
   const { useMarginTop = true, useMarginBottom = true } = props;
   const classes = useStyles({ useMarginTop, useMarginBottom });
   return (
-    <EMR {...props}>
-      {({ message }) => {
+    <EMR
+      {...props}
+      render={({ message }) => {
         return (
           message && (
             <AlertMUI severity="error" className={classes.root}>
@@ -40,6 +41,6 @@ export const ErrorMessage = (props) => {
           )
         );
       }}
-    </EMR>
+    />
   );
 };

@@ -3,8 +3,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { maybe } from "@/utils";
+import { useSelected } from "@/utils/hooks";
 
-import { useSelected } from "../utils";
 import { TableComponent } from "./TableComponent";
 
 export const Table = (props) => {
@@ -22,14 +22,14 @@ export const Table = (props) => {
   const navigate = useNavigate();
 
   const data = maybe(() => rawData?.[queryField]?.edges, []);
-  const [
+  const {
     selected,
     setSelected,
     isSelected,
     numSelected,
     handleAllClick,
     handleSingleClick,
-  ] = useSelected(data);
+  } = useSelected(data);
 
   const dataCount = data.length;
 

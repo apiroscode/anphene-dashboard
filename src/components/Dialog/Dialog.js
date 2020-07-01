@@ -44,6 +44,7 @@ export const Dialog = (props) => {
     dialogProps = {
       fullWidth: true,
     },
+    dialogContentProps = {},
     contentClass,
   } = props;
   const classes = useStyles();
@@ -56,6 +57,7 @@ export const Dialog = (props) => {
       <DialogContent
         dividers
         className={clsx(classes.content, { [contentClass]: !!contentClass })}
+        {...dialogContentProps}
       >
         {content ? (
           <Typography variant="body1" color="textSecondary" gutterBottom>

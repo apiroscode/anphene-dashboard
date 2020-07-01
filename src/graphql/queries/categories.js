@@ -36,3 +36,46 @@ export const GET_CATEGORY = gql`
   }
   ${categoryDetailFragment}
 `;
+
+export const GET_SIMPLE_CATEGORIES = gql`
+  query GET_SIMPLE_CATEGORIES(
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+    $search: String
+    $sales: [ID]
+    $notInSales: [ID]
+    $vouchers: [ID]
+    $notInVouchers: [ID]
+  ) {
+    categories(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      filter: {
+        search: $search
+        sales: $sales
+        notInSales: $notInSales
+        vouchers: $vouchers
+        notInVouchers: $notInVouchers
+      }
+    ) {
+      pageInfo {
+        ...pageInfo
+      }
+      edges {
+        node {
+          id
+          name
+          level
+          products {
+            totalCount
+          }
+        }
+      }
+    }
+  }
+  ${pageInfo}
+`;

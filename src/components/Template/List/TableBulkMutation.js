@@ -34,7 +34,10 @@ export const TableBulkMutation = (props) => {
   };
   const handleMutation = () => {
     item.mutation({
-      variables: { ids: selected, ...(item.vars ? item.vars : {}) },
+      variables: {
+        [item.selector ? item.selector : "ids"]: selected,
+        ...(item.vars ? item.vars : {}),
+      },
       refetchQueries: [{ query, variables: { ...variables, ...vars } }],
     });
     handleClose();

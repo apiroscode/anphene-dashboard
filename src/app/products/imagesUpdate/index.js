@@ -73,7 +73,7 @@ const Base = ({ product }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`This image successfully updated.`, {
         variant: "success",

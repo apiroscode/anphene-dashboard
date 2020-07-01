@@ -27,3 +27,12 @@ export const GET_SALES = gql`
   ${pageInfo}
   ${saleFragment}
 `;
+
+export const GET_SALE = gql`
+  query GET_SALE($id: ID!) {
+    sale(id: $id) {
+      ...saleFragment
+    }
+  }
+  ${saleFragment}
+`;

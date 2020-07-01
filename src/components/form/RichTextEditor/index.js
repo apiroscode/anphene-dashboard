@@ -1,22 +1,26 @@
 import React from "react";
 
 import clsx from "clsx";
-import { BLOCK_TYPE, DraftailEditor, INLINE_STYLE } from "draftail";
+import { BLOCK_TYPE, DraftailEditor, INLINE_STYLE, ENTITY_TYPE } from "draftail";
 import equal from "fast-deep-equal";
 
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
-import BoldIcon from "../icons/BoldIcon";
-import HeaderTwo from "../icons/HeaderTwo";
-import HeaderThree from "../icons/HeaderThree";
-import ItalicIcon from "../icons/ItalicIcon";
-import OrderedListIcon from "../icons/OrderedListIcon";
-import HeaderOne from "../icons/HeaderOne";
-import QuotationIcon from "../icons/QuotationIcon";
-import StrikethroughIcon from "../icons/StrikethroughIcon";
-import UnorderedListIcon from "../icons/UnorderedListIcon";
+import { LinkEntity } from "./LinkEntity";
+import { LinkSource } from "./LinkSource";
+
+import BoldIcon from "../../icons/BoldIcon";
+import HeaderTwo from "../../icons/HeaderTwo";
+import HeaderThree from "../../icons/HeaderThree";
+import ItalicIcon from "../../icons/ItalicIcon";
+import OrderedListIcon from "../../icons/OrderedListIcon";
+import HeaderOne from "../../icons/HeaderOne";
+import QuotationIcon from "../../icons/QuotationIcon";
+import StrikethroughIcon from "../../icons/StrikethroughIcon";
+import UnorderedListIcon from "../../icons/UnorderedListIcon";
+import LinkIcon from "../../icons/LinkIcon";
 
 const useStyles = makeStyles(
   (theme) => {
@@ -237,6 +241,15 @@ export const RichTextEditor = (props) => {
             },
           ]}
           enableLineBreak
+          entityTypes={[
+            {
+              attributes: ["url"],
+              decorator: LinkEntity,
+              icon: <LinkIcon className={classes.linkIcon} />,
+              source: LinkSource,
+              type: ENTITY_TYPE.LINK,
+            },
+          ]}
         />
       </div>
       {helperText && (

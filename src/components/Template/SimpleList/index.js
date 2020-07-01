@@ -1,13 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { useObjectState, useQuery } from "@/utils/hooks";
 
-import { DEFAULT_PAGE_SIZE } from "../constants";
 import { optimizeParams } from "../utils";
 import { Search } from "./Search";
 import { Pagination } from "./Pagination";
 import { Table } from "./Table";
 
+const DEFAULT_PAGE_SIZE = 10;
 export const SimpleList = (props) => {
   const {
     query,
@@ -19,6 +19,7 @@ export const SimpleList = (props) => {
     bulkLoading = false,
     placeholder,
     queryField,
+    setListProps,
   } = props;
 
   const [params, setParams] = useObjectState({
@@ -52,6 +53,13 @@ export const SimpleList = (props) => {
     variables,
     vars,
   };
+
+  useEffect(() => {
+    if (setListProps) {
+      setListProps({ ...variables, ...vars });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [variables, setListProps]);
 
   return (
     <div>

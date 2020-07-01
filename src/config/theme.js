@@ -271,7 +271,7 @@ export const theme = (appTheme) => {
               color: colors.primary,
             },
           },
-          color: colors.input.text,
+          color: fade(colors.input.text, 0.6),
         },
         shrink: {
           // Negates x0.75 scale
@@ -336,7 +336,7 @@ export const theme = (appTheme) => {
             opacity: [[0], "!important"],
           },
           color: colors.input.text,
-          padding: "23px 12px 10px 12px",
+          padding: "23px 12px 10px 12px ",
         },
         inputMultiline: {
           left: -2,

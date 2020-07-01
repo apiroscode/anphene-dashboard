@@ -53,7 +53,7 @@ const Base = ({ productType }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Product type ${updatedProductType.name} successfully updated.`, {
         variant: "success",

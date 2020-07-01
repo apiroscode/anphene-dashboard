@@ -16,9 +16,9 @@ import { Header, RowGrid } from "@/components/Template";
 import { FormSupplierInformation, schema } from "../components";
 
 export default () => {
+  const [create] = useMutation(CREATE_SUPPLIER);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [create] = useMutation(CREATE_SUPPLIER);
 
   const methods = useForm({
     defaultValues: {
@@ -47,7 +47,7 @@ export default () => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Supplier ${data.name} successfully created.`, {
         variant: "success",

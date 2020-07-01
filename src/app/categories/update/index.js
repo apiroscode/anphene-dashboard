@@ -83,7 +83,7 @@ const Base = ({ category }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Category ${data.name} successfully updated.`, {
         variant: "success",
@@ -114,7 +114,6 @@ const Base = ({ category }) => {
           <Tab label="All Products" />
         </Tabs>
         {params.activeTab === 0 && <SubCategories category={category} />}
-        {/*TODO: after products finish*/}
         {params.activeTab === 1 && (
           <ProductSimpleList title="All Products" vars={{ categories: [category.id] }} />
         )}

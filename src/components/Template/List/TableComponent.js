@@ -109,8 +109,10 @@ export const TableComponent = (props) => {
                   align={cell.align}
                   padding={idx === 0 && bulkMutations.length > 0 ? "none" : "default"}
                   sortDirection={
-                    params.sortField === cell.sortField
-                      ? params.sortDirection.toLowerCase()
+                    table.defaultSort
+                      ? params.sortField === cell.sortField
+                        ? params.sortDirection.toLowerCase()
+                        : false
                       : false
                   }
                   width={cell.width ? cell.width : "auto"}
@@ -167,7 +169,7 @@ export const TableComponent = (props) => {
                         padding={idx === 0 && bulkMutations.length > 0 ? "none" : "default"}
                         width={cell.width ? cell.width : "auto"}
                       >
-                        {cell.render ? cell.render(cellField, item) : cellField}
+                        {cell.render ? cell.render(cellField, item.node) : cellField}
                       </TableCell>
                     );
                   })}

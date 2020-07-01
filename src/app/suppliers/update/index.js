@@ -16,6 +16,13 @@ import { Header, QueryWrapper, RowGrid } from "@/components/Template";
 
 import { FormSupplierInformation, schema } from "../components";
 
+const getDefaultValues = (supplier) => ({
+  name: supplier.name,
+  email: supplier.email,
+  phone: supplier.phone,
+  address: supplier.address,
+});
+
 const Base = ({ supplier }) => {
   const [update] = useMutation(UPDATE_SUPPLIER);
   const { enqueueSnackbar } = useSnackbar();
@@ -28,12 +35,7 @@ const Base = ({ supplier }) => {
   };
 
   const methods = useForm({
-    defaultValues: {
-      name: supplier.name,
-      email: supplier.email,
-      phone: supplier.phone,
-      address: supplier.address,
-    },
+    defaultValues: getDefaultValues(supplier),
     resolver: yupResolver(schema),
   });
   const {
@@ -54,17 +56,12 @@ const Base = ({ supplier }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Supplier ${data.name} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        name: updatedSupplier.name,
-        email: updatedSupplier.email,
-        phone: updatedSupplier.phone,
-        address: updatedSupplier.address,
-      });
+      reset(getDefaultValues(updatedSupplier));
     }
   };
 

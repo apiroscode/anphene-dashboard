@@ -1,5 +1,7 @@
 import React from "react";
+
 import { Navigate, Route as ReactRoute } from "react-router-dom";
+
 import { usePermissions } from "@/utils/hooks";
 
 export const Route = (props) => {

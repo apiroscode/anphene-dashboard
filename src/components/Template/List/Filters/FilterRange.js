@@ -3,11 +3,35 @@ import React, { useEffect, useState } from "react";
 import { MenuItem, Select, TextField, Typography } from "@material-ui/core";
 
 import { Arrow } from "./Arrow";
-import { rangeStyles } from "./styles";
+import { makeStyles } from "@material-ui/core/styles";
+
+export const useStyles = makeStyles(
+  (theme) => ({
+    root: {
+      display: "flex",
+      flexDirection: "column",
+      width: "100%",
+      "&>*:first-child": {
+        marginBottom: theme.spacing(1),
+      },
+    },
+    wrapper: {
+      display: "flex",
+      alignItems: "center",
+      "&>:not(:last-child)": {
+        marginRight: theme.spacing(1),
+      },
+    },
+    input: {
+      padding: "10px 12px 10px 12px",
+    },
+  }),
+  { name: "FilterRange" }
+);
 
 export const FilterRange = (props) => {
   const { filter, tempFilter, setTempFilter, filterType } = props;
-  const classes = rangeStyles();
+  const classes = useStyles();
   const [state, setState] = useState("equal");
   const fromValue = tempFilter[`${filter.field}From`];
   const toValue = tempFilter[`${filter.field}To`];

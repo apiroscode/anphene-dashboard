@@ -15,27 +15,9 @@ const Login = lazy(() => import("@/app/users/Login"));
 const ResetPassword = lazy(() => import("@/app/users/ResetPassword"));
 const ResetPasswordConfirm = lazy(() => import("@/app/users/ResetPasswordConfirm"));
 
-const Configuration = lazy(() => import("@/app/configuration"));
-
-const StaffList = lazy(() => import("@/app/staff/list"));
-const StaffCreate = lazy(() => import("@/app/staff/create"));
-const StaffUpdate = lazy(() => import("@/app/staff/update"));
-
-const GroupList = lazy(() => import("@/app/groups/list"));
-const GroupCreate = lazy(() => import("@/app/groups/create"));
-const GroupUpdate = lazy(() => import("@/app/groups/update"));
-
 const AttributeList = lazy(() => import("@/app/attributes/list"));
 const AttributeCreate = lazy(() => import("@/app/attributes/create"));
 const AttributeUpdate = lazy(() => import("@/app/attributes/update"));
-
-const ProductTypeList = lazy(() => import("@/app/productTypes/list"));
-const ProductTypeCreate = lazy(() => import("@/app/productTypes/create"));
-const ProductTypeUpdate = lazy(() => import("@/app/productTypes/update"));
-
-const SupplierList = lazy(() => import("@/app/suppliers/list"));
-const SupplierCreate = lazy(() => import("@/app/suppliers/create"));
-const SupplierUpdate = lazy(() => import("@/app/suppliers/update"));
 
 const CategoryList = lazy(() => import("@/app/categories/list"));
 const CategoryCreate = lazy(() => import("@/app/categories/create"));
@@ -45,9 +27,47 @@ const CollectionList = lazy(() => import("@/app/collections/list"));
 const CollectionCreate = lazy(() => import("@/app/collections/create"));
 const CollectionUpdate = lazy(() => import("@/app/collections/update"));
 
+const Configuration = lazy(() => import("@/app/configuration"));
+
+const GroupList = lazy(() => import("@/app/groups/list"));
+const GroupCreate = lazy(() => import("@/app/groups/create"));
+const GroupUpdate = lazy(() => import("@/app/groups/update"));
+
+const NavigationList = lazy(() => import("@/app/navigations/list"));
+const NavigationUpdate = lazy(() => import("@/app/navigations/update"));
+
+const StaffList = lazy(() => import("@/app/staff/list"));
+const StaffCreate = lazy(() => import("@/app/staff/create"));
+const StaffUpdate = lazy(() => import("@/app/staff/update"));
+
+const PageList = lazy(() => import("@/app/pages/list"));
+const PageCreate = lazy(() => import("@/app/pages/create"));
+const PageUpdate = lazy(() => import("@/app/pages/update"));
+
+const ProductList = lazy(() => import("@/app/products/list"));
+const ProductCreate = lazy(() => import("@/app/products/create"));
+const ProductUpdate = lazy(() => import("@/app/products/update"));
+const ProductImagesUpdate = lazy(() => import("@/app/products/imagesUpdate"));
+
+const ProductTypeList = lazy(() => import("@/app/productTypes/list"));
+const ProductTypeCreate = lazy(() => import("@/app/productTypes/create"));
+const ProductTypeUpdate = lazy(() => import("@/app/productTypes/update"));
+
+const ProductVariantsCreator = lazy(() => import("@/app/productVariants/creator"));
+const ProductVariantsCreate = lazy(() => import("@/app/productVariants/create"));
+const ProductVariantsUpdate = lazy(() => import("@/app/productVariants/update"));
+
 const SaleList = lazy(() => import("@/app/sales/list"));
 const SaleCreate = lazy(() => import("@/app/sales/create"));
 const SaleUpdate = lazy(() => import("@/app/sales/update"));
+
+const SupplierList = lazy(() => import("@/app/suppliers/list"));
+const SupplierCreate = lazy(() => import("@/app/suppliers/create"));
+const SupplierUpdate = lazy(() => import("@/app/suppliers/update"));
+
+const VoucherList = lazy(() => import("@/app/vouchers/list"));
+const VoucherCreate = lazy(() => import("@/app/vouchers/create"));
+const VoucherUpdate = lazy(() => import("@/app/vouchers/update"));
 
 export const Routes = () => (
   <Suspense fallback={<Loading />}>
@@ -58,41 +78,13 @@ export const Routes = () => (
           element={<Configuration />}
           permissions={[
             PermissionEnum.MANAGE_ATTRIBUTES,
-            PermissionEnum.MANAGE_PRODUCT_TYPES,
             PermissionEnum.MANAGE_GROUPS,
+            PermissionEnum.MANAGE_MENUS,
+            PermissionEnum.MANAGE_PAGES,
+            PermissionEnum.MANAGE_PRODUCT_TYPES,
             PermissionEnum.MANAGE_STAFF,
+            PermissionEnum.MANAGE_SUPPLIERS,
           ]}
-        />
-        <Route
-          path="configuration/staff"
-          element={<StaffList />}
-          permissions={[PermissionEnum.MANAGE_STAFF]}
-        />
-        <Route
-          path="configuration/staff/create"
-          element={<StaffCreate />}
-          permissions={[PermissionEnum.MANAGE_STAFF]}
-        />
-        <Route
-          path="configuration/staff/:id"
-          element={<StaffUpdate />}
-          permissions={[PermissionEnum.MANAGE_STAFF]}
-        />
-
-        <Route
-          path="configuration/groups"
-          element={<GroupList />}
-          permissions={[PermissionEnum.MANAGE_GROUPS]}
-        />
-        <Route
-          path="configuration/groups/create"
-          element={<GroupCreate />}
-          permissions={[PermissionEnum.MANAGE_GROUPS]}
-        />
-        <Route
-          path="configuration/groups/:id"
-          element={<GroupUpdate />}
-          permissions={[PermissionEnum.MANAGE_GROUPS]}
         />
 
         <Route
@@ -112,6 +104,49 @@ export const Routes = () => (
         />
 
         <Route
+          path="configuration/groups"
+          element={<GroupList />}
+          permissions={[PermissionEnum.MANAGE_GROUPS]}
+        />
+        <Route
+          path="configuration/groups/create"
+          element={<GroupCreate />}
+          permissions={[PermissionEnum.MANAGE_GROUPS]}
+        />
+        <Route
+          path="configuration/groups/:id"
+          element={<GroupUpdate />}
+          permissions={[PermissionEnum.MANAGE_GROUPS]}
+        />
+
+        <Route
+          path="configuration/navigations"
+          element={<NavigationList />}
+          permissions={[PermissionEnum.MANAGE_MENUS]}
+        />
+        <Route
+          path="configuration/navigations/:id"
+          element={<NavigationUpdate />}
+          permissions={[PermissionEnum.MANAGE_MENUS]}
+        />
+
+        <Route
+          path="configuration/pages"
+          element={<PageList />}
+          permissions={[PermissionEnum.MANAGE_PAGES]}
+        />
+        <Route
+          path="configuration/pages/create"
+          element={<PageCreate />}
+          permissions={[PermissionEnum.MANAGE_PAGES]}
+        />
+        <Route
+          path="configuration/pages/:id"
+          element={<PageUpdate />}
+          permissions={[PermissionEnum.MANAGE_PAGES]}
+        />
+
+        <Route
           path="configuration/product-types"
           element={<ProductTypeList />}
           permissions={[PermissionEnum.MANAGE_PRODUCT_TYPES]}
@@ -125,6 +160,22 @@ export const Routes = () => (
           path="configuration/product-types/:id"
           element={<ProductTypeUpdate />}
           permissions={[PermissionEnum.MANAGE_PRODUCT_TYPES]}
+        />
+
+        <Route
+          path="configuration/staff"
+          element={<StaffList />}
+          permissions={[PermissionEnum.MANAGE_STAFF]}
+        />
+        <Route
+          path="configuration/staff/create"
+          element={<StaffCreate />}
+          permissions={[PermissionEnum.MANAGE_STAFF]}
+        />
+        <Route
+          path="configuration/staff/:id"
+          element={<StaffUpdate />}
+          permissions={[PermissionEnum.MANAGE_STAFF]}
         />
 
         <Route
@@ -181,6 +232,42 @@ export const Routes = () => (
         />
 
         <Route
+          path="products"
+          element={<ProductList />}
+          permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+        />
+        <Route
+          path="products/create"
+          element={<ProductCreate />}
+          permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+        />
+        <Route
+          path="products/:id"
+          element={<ProductUpdate />}
+          permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+        />
+        <Route
+          path="products/:id/variants-creator"
+          element={<ProductVariantsCreator />}
+          permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+        />
+        <Route
+          path="products/:id/variants/create"
+          element={<ProductVariantsCreate />}
+          permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+        />
+        <Route
+          path="products/:id/variants/:variantId"
+          element={<ProductVariantsUpdate />}
+          permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+        />
+        <Route
+          path="products/:id/images/:imageId"
+          element={<ProductImagesUpdate />}
+          permissions={[PermissionEnum.MANAGE_PRODUCTS]}
+        />
+
+        <Route
           path="sales"
           element={<SaleList />}
           permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
@@ -193,6 +280,22 @@ export const Routes = () => (
         <Route
           path="sales/:id"
           element={<SaleUpdate />}
+          permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
+        />
+
+        <Route
+          path="vouchers"
+          element={<VoucherList />}
+          permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
+        />
+        <Route
+          path="vouchers/create"
+          element={<VoucherCreate />}
+          permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
+        />
+        <Route
+          path="vouchers/:id"
+          element={<VoucherUpdate />}
           permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
         />
 

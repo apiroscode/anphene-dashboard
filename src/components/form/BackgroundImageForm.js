@@ -1,19 +1,10 @@
 import React, { useEffect } from "react";
 
-import { Button, Divider, TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Divider, TextField } from "@material-ui/core";
 
-import { Card } from "@/components/Template";
 import { ImageTile, ImageUpload } from "@/components/image";
-
-const useStyles = makeStyles(
-  () => ({
-    input: {
-      display: "none",
-    },
-  }),
-  { name: "BackgroundImage" }
-);
+import { ButtonUpload } from "@/components/Button/ButtonUpload";
+import { Card } from "@/components/Template";
 
 export const BackgroundImageForm = (props) => {
   const {
@@ -25,9 +16,9 @@ export const BackgroundImageForm = (props) => {
     register,
     unregister,
     submitUpload,
+    multiple = false,
   } = props;
   const backgroundImageAlt = watch("backgroundImageAlt");
-  const classes = useStyles();
 
   useEffect(() => {
     register("backgroundImageAlt");
@@ -46,37 +37,15 @@ export const BackgroundImageForm = (props) => {
     handleSubmit(() => submitUpload(null))();
   };
 
-  const handleImageButton = (e) => {
-    e.preventDefault();
-    const backgroundImage = e.target.files[0];
-    handleSubmit(() => submitUpload(backgroundImage))();
-  };
-
   return (
     <Card
       title="Background Image (optional)"
       useMargin
       useDense={image === null}
-      action={
-        <>
-          <input
-            accept="image/*"
-            onChange={handleImageButton}
-            className={classes.input}
-            id="button-file"
-            multiple
-            type="file"
-          />
-          <label htmlFor="button-file">
-            <Button color="primary" component="span">
-              UPLOAD IMAGE
-            </Button>
-          </label>
-        </>
-      }
+      action={<ButtonUpload handleImageUpload={handleUpload} />}
     >
       {image === null ? (
-        <ImageUpload onImageUpload={handleUpload} />
+        <ImageUpload onImageUpload={handleUpload} multiple={multiple} />
       ) : (
         <>
           <ImageTile image={image} onImageDelete={handleImageDelete} />

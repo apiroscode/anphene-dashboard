@@ -44,7 +44,7 @@ export const ValueAssign = (props) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Value ${data.name} successfully assign.`, {
         variant: "success",

@@ -69,7 +69,7 @@ const Base = ({ sale }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Sale ${data.name} successfully updated.`, {
         variant: "success",

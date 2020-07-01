@@ -99,7 +99,7 @@ const Base = ({ variant }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(
         `Variant ${updatedVariant.name || updatedVariant.sku} successfully updated.`,

@@ -1,6 +1,5 @@
-export const getErrors = (errors) => {
-  return errors.map((item) => ({
-    name: item.field,
-    message: item.message,
-  }));
+export const getErrors = (errors, setError) => {
+  errors.forEach((item) => {
+    setError(item.field, { message: item.message });
+  });
 };

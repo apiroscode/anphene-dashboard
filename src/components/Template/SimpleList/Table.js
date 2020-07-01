@@ -1,8 +1,7 @@
 import React from "react";
 
 import { maybe } from "@/utils";
-
-import { useSelected } from "../utils";
+import { useSelected } from "@/utils/hooks";
 
 import { TableComponent } from "../List/TableComponent";
 
@@ -23,14 +22,14 @@ export const Table = (props) => {
 
   const data = maybe(() => rawData?.[queryField]?.edges, []);
 
-  const [
+  const {
     selected,
     setSelected,
     isSelected,
     numSelected,
     handleAllClick,
     handleSingleClick,
-  ] = useSelected(data);
+  } = useSelected(data);
 
   const dataCount = data.length;
 

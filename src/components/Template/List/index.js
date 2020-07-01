@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { useLocalStorage, useQS, useQuery } from "@/utils/hooks";
 
-import { DEFAULT_PAGE_SIZE } from "../constants";
 import { optimizeParams } from "../utils";
 import { Header } from "../Header";
 
@@ -53,6 +52,7 @@ const useStyles = makeStyles(
   { name: "TemplateListIndex" }
 );
 
+const DEFAULT_PAGE_SIZE = 25;
 export const List = (props) => {
   const {
     appName,

@@ -23,7 +23,7 @@ export const CREATE_ATTRIBUTE = gql`
 `;
 
 export const UPDATE_ATTRIBUTE = gql`
-  mutation UPDATE_ATTRIBUTE($id: ID!, $input: AttributeInput!) {
+  mutation UPDATE_ATTRIBUTE($id: ID!, $input: AttributeBaseInput!) {
     attributeUpdate(id: $id, input: $input) {
       errors {
         ...errorFragment
@@ -60,7 +60,7 @@ export const BULK_DELETE_ATTRIBUTE = gql`
 `;
 
 export const CREATE_ATTRIBUTE_VALUE = gql`
-  mutation CREATE_ATTRIBUTE_VALUE($attributeId: ID!, $input: AttributeValueInput!) {
+  mutation CREATE_ATTRIBUTE_VALUE($attributeId: ID!, $input: AttributeValueCreateInput!) {
     attributeValueCreate(attribute: $attributeId, input: $input) {
       errors {
         ...errorFragment
@@ -75,7 +75,7 @@ export const CREATE_ATTRIBUTE_VALUE = gql`
 `;
 
 export const UPDATE_ATTRIBUTE_VALUE = gql`
-  mutation UPDATE_ATTRIBUTE_VALUE($id: ID!, $input: AttributeValueInput!) {
+  mutation UPDATE_ATTRIBUTE_VALUE($id: ID!, $input: AttributeValueCreateInput!) {
     attributeValueUpdate(id: $id, input: $input) {
       errors {
         ...errorFragment

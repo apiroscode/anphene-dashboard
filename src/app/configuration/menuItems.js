@@ -1,15 +1,18 @@
 import React from "react";
 
 import { PermissionEnum } from "@/config/enum";
-import StaffMembers from "@/components/icons/StaffMembers";
-import Groups from "@/components/icons/Groups";
+
 import Attributes from "@/components/icons/Attributes";
+import Groups from "@/components/icons/Groups";
+import Navigation from "@/components/icons/Navigation";
+import Pages from "@/components/icons/Pages";
 import ProductTypes from "@/components/icons/ProductTypes";
+import StaffMembers from "@/components/icons/StaffMembers";
 import Suppliers from "@/components/icons/Suppliers";
 
 export const menuItems = [
   {
-    description: "FormAttributes and Product Types",
+    description: "Attributes and Product Types",
     children: [
       {
         icon: <Attributes fontSize="inherit" viewBox="0 0 44 44" />,
@@ -55,6 +58,25 @@ export const menuItems = [
         label: "Groups",
         description: "Manage your groups and their permissions",
         permission: PermissionEnum.MANAGE_GROUPS,
+      },
+    ],
+  },
+  {
+    description: "Store Page Settings",
+    children: [
+      {
+        icon: <Navigation fontSize="inherit" viewBox="0 0 44 44" />,
+        url: "navigations",
+        label: "Navigation",
+        description: "Define how users can navigate through your store",
+        permission: PermissionEnum.MANAGE_MENUS,
+      },
+      {
+        icon: <Pages fontSize="inherit" viewBox="0 0 44 44" />,
+        url: "pages",
+        label: "Pages",
+        description: "Manage and add additional pages",
+        permission: PermissionEnum.MANAGE_PAGES,
       },
     ],
   },

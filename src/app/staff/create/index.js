@@ -74,7 +74,7 @@ const Base = ({ groups: groupsData }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Staff ${user.name} successfully invited.`, {
         variant: "success",

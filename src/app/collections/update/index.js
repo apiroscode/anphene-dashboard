@@ -74,7 +74,7 @@ const Base = ({ collection }) => {
     } = result;
 
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`Collection ${data.name} successfully updated.`, {
         variant: "success",

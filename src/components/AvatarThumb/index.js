@@ -2,8 +2,7 @@ import React from "react";
 
 import { Avatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
-import Image from "../../icons/Image";
+import { Cached } from "@material-ui/icons";
 
 const useStyles = makeStyles(
   (theme) => ({
@@ -19,7 +18,7 @@ const useStyles = makeStyles(
   { name: "TableCellAvatar" }
 );
 
-export const TableCellAvatar = (props) => {
+export const AvatarThumb = (props) => {
   const { thumbnail } = props;
 
   const classes = useStyles();
@@ -28,7 +27,7 @@ export const TableCellAvatar = (props) => {
     <Avatar className={classes.avatar} src={thumbnail} />
   ) : (
     <Avatar className={classes.avatar}>
-      <Image color="primary" />
+      <Cached color="primary" />
     </Avatar>
   );
 };

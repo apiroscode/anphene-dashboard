@@ -57,7 +57,7 @@ export default () => {
       },
     });
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
       const errorsField = errors.map((item) => item.field);
 
       if (errorsField.includes("token") || errorsField.includes("email")) {
