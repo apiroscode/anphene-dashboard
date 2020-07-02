@@ -9,7 +9,7 @@ import { useMutation, useSelected } from "@/utils/hooks";
 
 import { GET_PRODUCTS } from "@/graphql/queries/products";
 
-import { ACTION_CATEGORIES, ACTION_COLLECTIONS, ACTION_PRODUCTS } from "@/app/components";
+import { ACTION_CATEGORIES, ACTION_COLLECTIONS, ACTION_PRODUCTS } from "@/app/_components";
 import { ADD_VOUCHER_CATALOGUES, REMOVE_VOUCHER_CATALOGUES } from "@/graphql/mutations/vouchers";
 import { GET_SIMPLE_CATEGORIES } from "@/graphql/queries/categories";
 import { GET_SIMPLE_COLLECTIONS } from "@/graphql/queries/collections";

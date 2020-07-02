@@ -14,19 +14,18 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 import { move } from "@/utils/lists";
 import { useMutation, useQS } from "@/utils/hooks";
 
-import { REORDER_ATTRIBUTE_VALUES } from "@/graphql/mutations/attributes";
+import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/_table";
+import { Card } from "@/components/Card";
 
-import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/Table";
-import { Card } from "@/components/Template";
-
-import { useAttributeValuesStyles } from "../components";
+import { ReorderAttributeValue } from "../mutations";
+import { useAttributeValuesStyles } from "../_form";
 import { ValueDelete } from "./ValueDelete";
 import { ValueUpdate } from "./ValueUpdate";
 import { ValueAssign } from "./ValueAssign";
 
 export const FormValues = (props) => {
   const { attribute } = props;
-  const [reorder] = useMutation(REORDER_ATTRIBUTE_VALUES);
+  const [reorder] = useMutation(ReorderAttributeValue);
   const classes = useAttributeValuesStyles();
   const [params, setParams] = useQS({
     action: undefined,

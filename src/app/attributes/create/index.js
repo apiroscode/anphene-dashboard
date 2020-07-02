@@ -8,18 +8,20 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_ATTRIBUTE } from "@/graphql/mutations/attributes";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, RowGrid } from "@/components/Template";
+import { CreateAttribute } from "../mutations";
 
-import { FormGeneralInformation, FormProperties, schema } from "../components";
+import { GeneralInformation, Properties, schema } from "../_form";
 import { FormValues } from "./FormValues";
 
 export default () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [create] = useMutation(CREATE_ATTRIBUTE);
+  const [create] = useMutation(CreateAttribute);
 
   const methods = useForm({
     defaultValues: {
@@ -69,10 +71,10 @@ export default () => {
       <Header title="Create Attribute" />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation control={control} errors={errors} watch={watch} isCreate />
+          <GeneralInformation control={control} errors={errors} watch={watch} isCreate />
           <FormValues {...methods} />
         </RowGrid>
-        <FormProperties control={control} errors={errors} />
+        <Properties control={control} errors={errors} />
       </ColGrid>
       <SaveButton onSubmit={handleSubmit(onSubmit)} loading={isSubmitting} disabled={!isDirty} />
     </>

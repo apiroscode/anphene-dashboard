@@ -6,17 +6,19 @@ import { useNavigate } from "react-router-dom";
 
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_COLLECTION } from "@/graphql/mutations/collections";
+import { getErrors, Publish, SaveButton, Seo } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
-import { ColGrid, Header, RowGrid } from "@/components/Template";
+import { CreateCollection } from "../mutations";
 
-import { FormGeneralInformation } from "../components/FormGeneralInformation";
+import { GeneralInformation } from "../_form/GeneralInformation";
 
 export default () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [create] = useMutation(CREATE_COLLECTION);
+  const [create] = useMutation(CreateCollection);
   const methods = useForm({
     defaultValues: {
       name: "",
@@ -61,11 +63,11 @@ export default () => {
       <Header title="Create Collection" />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
-          <SeoForm {...methods} />
+          <GeneralInformation {...methods} />
+          <Seo {...methods} />
         </RowGrid>
         <RowGrid>
-          <PublishForm {...methods} />
+          <Publish {...methods} />
         </RowGrid>
       </ColGrid>
       <SaveButton onSubmit={handleSubmit(onSubmit)} loading={isSubmitting} disabled={!isDirty} />

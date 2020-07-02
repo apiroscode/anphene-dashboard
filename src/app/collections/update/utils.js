@@ -8,17 +8,15 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 import { useMutation, useSelected } from "@/utils/hooks";
 
 import { GET_PRODUCTS } from "@/graphql/queries/products";
-import {
-  COLLECTION_ADD_PRODUCTS,
-  COLLECTION_REMOVE_PRODUCTS,
-} from "@/graphql/mutations/collections";
 
-import { ACTION } from "@/app/components/AssignProducts";
+import { ACTION } from "@/app/_components/AssignProducts";
+
+import { CollectionAddProducts, CollectionRemoveProducts } from "../mutations";
 
 export const useAssignProductsProps = (props) => {
   const { collection, listProps, params, setParams } = props;
   const { enqueueSnackbar } = useSnackbar();
-  const [addProducts, { loading }] = useMutation(COLLECTION_ADD_PRODUCTS);
+  const [addProducts, { loading }] = useMutation(CollectionAddProducts);
   const { selected, setSelected, handleSingleClick } = useSelected();
 
   const onCloseDialog = () => {
@@ -74,7 +72,7 @@ export const useAssignProductsProps = (props) => {
 
 export const useProductSimpleListProps = (props) => {
   const { collection, setListProps, setParams } = props;
-  const [removeProducts, { loading }] = useMutation(COLLECTION_REMOVE_PRODUCTS);
+  const [removeProducts, { loading }] = useMutation(CollectionRemoveProducts);
 
   const action = (
     <Button color="primary" onClick={() => setParams({ action: ACTION })}>

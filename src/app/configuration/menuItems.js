@@ -2,13 +2,13 @@ import React from "react";
 
 import { PermissionEnum } from "@/config/enum";
 
-import Attributes from "@/components/icons/Attributes";
-import Groups from "@/components/icons/Groups";
-import Navigation from "@/components/icons/Navigation";
-import Pages from "@/components/icons/Pages";
-import ProductTypes from "@/components/icons/ProductTypes";
-import StaffMembers from "@/components/icons/StaffMembers";
-import Suppliers from "@/components/icons/Suppliers";
+import Attributes from "@/components/_icons/Attributes";
+import Groups from "@/components/_icons/Groups";
+import Navigation from "@/components/_icons/Navigation";
+import Pages from "@/components/_icons/Pages";
+import ProductTypes from "@/components/_icons/ProductTypes";
+import StaffMembers from "@/components/_icons/StaffMembers";
+import Suppliers from "@/components/_icons/Suppliers";
 
 export const menuItems = [
   {

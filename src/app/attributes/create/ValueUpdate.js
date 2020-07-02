@@ -6,16 +6,14 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { Dialog } from "@/components/Dialog";
 
-import { AttributeValue } from "../components";
-
-import { schema } from "./ValueAssign";
+import { AttributeValue, valueSchema } from "../_form";
 
 const ACTION = "update-value";
 export const ValueUpdate = (props) => {
   const { values, setValue, params, handleClose } = props;
   const { control, reset, handleSubmit, errors, setError } = useForm({
     defaultValues: { name: "", value: "" },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(valueSchema),
   });
 
   const { id, action } = params;

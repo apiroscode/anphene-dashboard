@@ -11,8 +11,8 @@ import {
   REORDER_PRODUCT_IMAGE,
 } from "@/graphql/mutations/productsImages";
 
-import { ButtonUpload } from "@/components/Button/ButtonUpload";
-import { ImageUpload } from "@/components/image";
+import { ButtonUpload } from "@/components/ButtonUpload";
+import { ImageUpload } from "@/components/ImageUpload";
 import { Card } from "@/components/Template";
 
 import { createMultiFileUploadHandler, ImageListContainer } from "./components";

@@ -1,18 +1,12 @@
 import React, { useEffect } from "react";
 
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 import { yupResolver } from "@hookform/resolvers";
 
 import { Dialog } from "@/components/Dialog";
 
-import { AttributeValue } from "../components";
-
-export const schema = yup.object().shape({
-  name: yup.string().required(),
-  value: yup.string(),
-});
+import { AttributeValue, valueSchema } from "../_form";
 
 const ACTION = "assign-value";
 export const ValueAssign = (props) => {
@@ -20,7 +14,7 @@ export const ValueAssign = (props) => {
   const { action } = params;
   const { control, reset, handleSubmit, errors, setError } = useForm({
     defaultValues: { name: "", value: "" },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(valueSchema),
   });
 
   useEffect(() => {

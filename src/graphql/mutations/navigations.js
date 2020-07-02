@@ -42,6 +42,17 @@ export const DELETE_MENU = gql`
   ${errorFragment}
 `;
 
+export const BULK_DELETE_MENU = gql`
+  mutation BULK_DELETE_MENU($ids: [ID]!) {
+    menuBulkDelete(ids: $ids) {
+      errors {
+        ...errorFragment
+      }
+    }
+  }
+  ${errorFragment}
+`;
+
 export const CREATE_MENU_ITEM = gql`
   mutation CREATE_MENU_ITEM($input: MenuItemCreateInput!) {
     menuItemCreate(input: $input) {
@@ -78,38 +89,11 @@ export const UPDATE_MENU_ITEM = gql`
   ${menuDetailsFragment}
 `;
 
-export const BULK_DELETE_MENU = gql`
-  mutation BULK_DELETE_MENU($ids: [ID]!) {
-    menuBulkDelete(ids: $ids) {
-      errors {
-        ...errorFragment
-      }
-    }
-  }
-  ${errorFragment}
-`;
-
-export const MOVE_ITEM = gql`
-  mutation MOVE_ITEM($id: ID!, $sortOrder: Int!, $parentId: ID) {
-    itemMove(id: $id, sortOrder: $sortOrder, parentId: $parentId) {
-      errors {
-        field
-        message
-      }
-      menu {
-        ...menuDetailsFragment
-      }
-    }
-  }
-  ${menuDetailsFragment}
-`;
-
-export const DELETE_ITEM = gql`
-  mutation DELETE_ITEM($id: ID!) {
+export const DELETE_MENU_ITEM = gql`
+  mutation DELETE_MENU_ITEM($id: ID!) {
     menuItemDelete(id: $id) {
       errors {
-        field
-        message
+        ...errorFragment
       }
       menuItem {
         id
@@ -119,5 +103,21 @@ export const DELETE_ITEM = gql`
       }
     }
   }
+  ${errorFragment}
+  ${menuDetailsFragment}
+`;
+
+export const MOVE_MENU_ITEM = gql`
+  mutation MOVE_MENU_ITEM($id: ID!, $sortOrder: Int!, $parentId: ID) {
+    menuItemMove(id: $id, sortOrder: $sortOrder, parentId: $parentId) {
+      errors {
+        ...errorFragment
+      }
+      menu {
+        ...menuDetailsFragment
+      }
+    }
+  }
+  ${errorFragment}
   ${menuDetailsFragment}
 `;

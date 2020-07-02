@@ -10,7 +10,7 @@ import { useMutation, useQS } from "@/utils/hooks";
 
 import { Card } from "@/components/Template";
 
-import { DELETE_ITEM, MOVE_ITEM } from "@/graphql/mutations/navigations";
+import { DELETE_MENU_ITEM, MOVE_MENU_ITEM } from "@/graphql/mutations/navigations";
 
 import { ACTION as EDIT_ITEM, EditItem } from "./EditItem";
 import { ACTION as ADD_ITEM, AddItem } from "./AddItem";
@@ -37,8 +37,8 @@ export const MenuItems = (props) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [params, setParams] = useQS({ action: undefined, id: undefined });
-  const [moveItem, { loading: moveLoading }] = useMutation(MOVE_ITEM);
-  const [deleteItem, { loading: deleteLoading }] = useMutation(DELETE_ITEM);
+  const [moveItem, { loading: moveLoading }] = useMutation(MOVE_MENU_ITEM);
+  const [deleteItem, { loading: deleteLoading }] = useMutation(DELETE_MENU_ITEM);
 
   const handleClose = () => {
     setParams({ action: undefined });
@@ -102,7 +102,6 @@ export const MenuItems = (props) => {
         onItemEdit={handleItemEdit}
         onChange={handleTreeChange}
       />
-      <Divider />
       <div className={classes.buttonRoot}>
         <Button color="primary" onClick={() => setParams({ action: ADD_ITEM })}>
           Add New Item

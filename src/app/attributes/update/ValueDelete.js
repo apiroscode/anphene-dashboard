@@ -4,15 +4,15 @@ import { useSnackbar } from "notistack";
 
 import { useMutation } from "@/utils/hooks";
 
-import { DELETE_ATTRIBUTE_VALUE } from "@/graphql/mutations/attributes";
-
 import { Dialog } from "@/components/Dialog";
+
+import { DeleteAttributeValue } from "../mutations";
 
 const ACTION = "delete-value";
 export const ValueDelete = (props) => {
   const { attributeValues, params, handleClose } = props;
   const { enqueueSnackbar } = useSnackbar();
-  const [deleteMutation, { loading }] = useMutation(DELETE_ATTRIBUTE_VALUE);
+  const [deleteMutation, { loading }] = useMutation(DeleteAttributeValue);
   const { action, id } = params;
   const value = attributeValues.find((x) => x.id === id);
 

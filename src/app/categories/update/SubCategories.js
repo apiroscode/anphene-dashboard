@@ -7,14 +7,15 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
 
-import { BULK_DELETE_CATEGORY } from "@/graphql/mutations/categories";
-import { GET_CATEGORIES } from "@/graphql/queries/categories";
+import { Card } from "@/components/Card";
+import { SimpleList } from "@/components/SimpleList";
 
-import { Card, SimpleList } from "@/components/Template";
+import { getCategories } from "../queries";
+import { BulkDeleteCategory } from "../mutations";
 
 export const SubCategories = ({ category }) => {
   const navigate = useNavigate();
-  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_CATEGORY);
+  const [bulkDelete, { loading }] = useMutation(BulkDeleteCategory);
 
   const buttonCreate = (
     <Button color="primary" onClick={() => navigate(`create`)}>
@@ -24,7 +25,7 @@ export const SubCategories = ({ category }) => {
 
   const listProps = {
     placeholder: "subcategories",
-    query: GET_CATEGORIES,
+    query: getCategories,
     queryField: "categories",
     vars: { parent: category.id },
     table: {

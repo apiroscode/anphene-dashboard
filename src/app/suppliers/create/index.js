@@ -8,15 +8,15 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_SUPPLIER } from "@/graphql/mutations/suppliers";
+import { getErrors, SaveButton } from "@/components/_form";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { Header, RowGrid } from "@/components/Template";
-
-import { FormSupplierInformation, schema } from "../components";
+import { CreateSupplier } from "../mutations";
+import { SupplierInformation, schema } from "../_form";
 
 export default () => {
-  const [create] = useMutation(CREATE_SUPPLIER);
+  const [create] = useMutation(CreateSupplier);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -60,7 +60,7 @@ export default () => {
     <>
       <Header title="Create Supplier" />
       <RowGrid>
-        <FormSupplierInformation {...methods} />
+        <SupplierInformation {...methods} />
       </RowGrid>
       <SaveButton onSubmit={handleSubmit(onSubmit)} loading={isSubmitting} disabled={!isDirty} />
     </>

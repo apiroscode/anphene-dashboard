@@ -7,38 +7,43 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_ATTRIBUTE } from "@/graphql/queries/attributes";
-import { DELETE_ATTRIBUTE, UPDATE_ATTRIBUTE } from "@/graphql/mutations/attributes";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { GetAttribute } from "../queries";
+import { DeleteAttribute, UpdateAttribute } from "../mutations";
 
-import { FormGeneralInformation, FormProperties, schema } from "../components";
+import { GeneralInformation, Properties, schema } from "../_form";
 import { FormValues } from "./FormValues";
 
+const getDefaultValues = (attribute) => ({
+  name: attribute.name,
+  slug: attribute.slug,
+  valueRequired: attribute.valueRequired,
+  visibleInStorefront: attribute.visibleInStorefront,
+  filterableInStorefront: attribute.filterableInStorefront,
+  filterableInDashboard: attribute.filterableInDashboard,
+  storefrontSearchPosition: attribute.storefrontSearchPosition,
+  availableInGrid: attribute.availableInGrid,
+  inputType: attribute.inputType,
+});
+
 const Base = ({ attribute }) => {
-  const [update] = useMutation(UPDATE_ATTRIBUTE);
+  const [update] = useMutation(UpdateAttribute);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_ATTRIBUTE,
+    mutation: DeleteAttribute,
     id: attribute.id,
     name: attribute.name,
     field: "attributeDelete",
   };
 
   const methods = useForm({
-    defaultValues: {
-      name: attribute.name,
-      slug: attribute.slug,
-      valueRequired: attribute.valueRequired,
-      visibleInStorefront: attribute.visibleInStorefront,
-      filterableInStorefront: attribute.filterableInStorefront,
-      filterableInDashboard: attribute.filterableInDashboard,
-      storefrontSearchPosition: attribute.storefrontSearchPosition,
-      availableInGrid: attribute.availableInGrid,
-      inputType: attribute.inputType,
-    },
+    defaultValues: getDefaultValues(attribute),
     resolver: yupResolver(schema),
   });
 
@@ -73,17 +78,7 @@ const Base = ({ attribute }) => {
       enqueueSnackbar(`Attribute ${updatedAttribute.name} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        name: updatedAttribute.name,
-        slug: updatedAttribute.slug,
-        valueRequired: updatedAttribute.valueRequired,
-        visibleInStorefront: updatedAttribute.visibleInStorefront,
-        filterableInStorefront: updatedAttribute.filterableInStorefront,
-        filterableInDashboard: updatedAttribute.filterableInDashboard,
-        storefrontSearchPosition: updatedAttribute.storefrontSearchPosition,
-        availableInGrid: updatedAttribute.availableInGrid,
-        inputType: updatedAttribute.inputType,
-      });
+      reset(getDefaultValues(updatedAttribute));
     }
   };
 
@@ -92,10 +87,10 @@ const Base = ({ attribute }) => {
       <Header title={`Update ${attribute.name}`} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation control={control} errors={errors} watch={watch} />
+          <GeneralInformation control={control} errors={errors} watch={watch} />
           <FormValues attribute={attribute} />
         </RowGrid>
-        <FormProperties control={control} errors={errors} />
+        <Properties control={control} errors={errors} />
       </ColGrid>
       <SaveButton
         deleteProps={deleteProps}
@@ -110,7 +105,7 @@ const Base = ({ attribute }) => {
 export default () => {
   const { id } = useParams();
   return (
-    <QueryWrapper query={GET_ATTRIBUTE} id={id} fieldName="attribute">
+    <QueryWrapper query={GetAttribute} id={id} fieldName="attribute">
       {(data) => <Base attribute={data?.attribute} />}
     </QueryWrapper>
   );

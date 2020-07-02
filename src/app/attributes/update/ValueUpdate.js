@@ -7,18 +7,17 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { UPDATE_ATTRIBUTE_VALUE } from "@/graphql/mutations/attributes";
-
-import { getErrors } from "@/components/form";
+import { getErrors } from "@/components/_form";
 import { Dialog } from "@/components/Dialog";
 
-import { AttributeValue } from "../components";
-import { valueSchema } from "./valueSchema";
+import { UpdateAttributeValue } from "../mutations";
+
+import { AttributeValue, valueSchema } from "../_form";
 
 const ACTION = "update-value";
 export const ValueUpdate = (props) => {
   const { attributeValues, params, handleClose } = props;
-  const [update, { loading }] = useMutation(UPDATE_ATTRIBUTE_VALUE);
+  const [update, { loading }] = useMutation(UpdateAttributeValue);
   const { enqueueSnackbar } = useSnackbar();
 
   const { action, id } = params;

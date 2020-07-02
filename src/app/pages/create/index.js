@@ -8,15 +8,16 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
-import { ColGrid, Header, RowGrid } from "@/components/Template";
+import { getErrors, Publish, SaveButton, Seo } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
 
-import { CREATE_PAGE } from "@/graphql/mutations/mutations";
-
-import { FormGeneralInformation, FormUrl, schema } from "../components";
+import { CreatePage } from "../mutations";
+import { GeneralInformation, Url, schema } from "../_form";
 
 export default () => {
-  const [create] = useMutation(CREATE_PAGE);
+  const [create] = useMutation(CreatePage);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -65,12 +66,12 @@ export default () => {
       <Header title="Create Collection" />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
-          <SeoForm {...methods} />
+          <GeneralInformation {...methods} />
+          <Seo {...methods} />
         </RowGrid>
         <RowGrid>
-          <FormUrl {...methods} />
-          <PublishForm {...methods} />
+          <Url {...methods} />
+          <Publish {...methods} />
         </RowGrid>
       </ColGrid>
       <SaveButton onSubmit={handleSubmit(onSubmit)} loading={isSubmitting} disabled={!isDirty} />

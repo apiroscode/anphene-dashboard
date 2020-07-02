@@ -8,7 +8,7 @@ import { Button, IconButton, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@material-ui/icons";
 
-import Draggable from "@/components/icons/Draggable";
+import Draggable from "@/components/_icons/Draggable";
 
 import { getDiff, getNodeData, getNodeQuantity } from "./tree";
 

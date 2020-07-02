@@ -6,20 +6,23 @@ import { useParams } from "react-router-dom";
 
 import { useMutation, useQS } from "@/utils/hooks";
 
-import { GET_COLLECTION } from "@/graphql/queries/collections";
-import { DELETE_COLLECTION, UPDATE_COLLECTION } from "@/graphql/mutations/collections";
+import { getErrors, Publish, SaveButton, Seo } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { AssignProducts } from "@/app/_components/AssignProducts";
+import { ProductSimpleList } from "@/app/_components/ProductSimpleList";
 
-import { AssignProducts } from "@/app/components/AssignProducts";
-import { ProductSimpleList } from "@/app/components/ProductSimpleList";
+import { GetCollection } from "../queries";
+import { DeleteCollection, UpdateCollection } from "../mutations";
 
-import { FormGeneralInformation } from "../components";
+import { GeneralInformation } from "../_form";
 import { BackgroundImage } from "./BackgroundImage";
 import { useAssignProductsProps, useProductSimpleListProps } from "./utils";
 
-const getDefaultValues = (collection) => ({
+export const getDefaultValues = (collection) => ({
   name: collection.name,
   description: collection.description,
   seo: {
@@ -33,7 +36,7 @@ const getDefaultValues = (collection) => ({
 
 const Base = ({ collection }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [update] = useMutation(UPDATE_COLLECTION);
+  const [update] = useMutation(UpdateCollection);
 
   // products
   const [params, setParams] = useQS({ action: undefined });
@@ -46,7 +49,7 @@ const Base = ({ collection }) => {
   });
 
   const deleteProps = {
-    mutation: DELETE_COLLECTION,
+    mutation: DeleteCollection,
     id: collection.id,
     name: collection.name,
     field: "collectionDelete",
@@ -88,7 +91,7 @@ const Base = ({ collection }) => {
       <Header title={collection.name} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} collection={collection} />
+          <GeneralInformation {...methods} collection={collection} />
           <BackgroundImage
             {...methods}
             id={collection.id}
@@ -97,10 +100,10 @@ const Base = ({ collection }) => {
             enqueueSnackbar={enqueueSnackbar}
           />
           <ProductSimpleList {...productSimpleListProps} />
-          <SeoForm {...methods} />
+          <Seo {...methods} />
         </RowGrid>
         <RowGrid>
-          <PublishForm {...methods} publicationDateData={collection.publicationDate} />
+          <Publish {...methods} publicationDateData={collection.publicationDate} />
         </RowGrid>
       </ColGrid>
       <SaveButton
@@ -118,7 +121,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={GET_COLLECTION} id={id} fieldName="collection">
+    <QueryWrapper query={GetCollection} id={id} fieldName="collection">
       {(data) => <Base collection={data.collection} />}
     </QueryWrapper>
   );

@@ -13,7 +13,7 @@ import {
   CategorySimpleList,
   CollectionSimpleList,
   ProductSimpleList,
-} from "@/app/components";
+} from "@/app/_components";
 
 import {
   useAssignCategoriesProps,

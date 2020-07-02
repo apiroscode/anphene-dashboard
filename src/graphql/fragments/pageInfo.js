@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const pageInfo = gql`
-  fragment pageInfo on PageInfo {
+  fragment PageInfo on PageInfo {
     hasNextPage
     hasPreviousPage
     startCursor

@@ -3,8 +3,8 @@ import React from "react";
 import { Switch } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-import MoonIcon from "@/components/icons/Moon";
-import SunIcon from "@/components/icons/Sun";
+import MoonIcon from "@/components/_icons/Moon";
+import SunIcon from "@/components/_icons/Sun";
 
 const useStyles = makeStyles(
   (theme) => ({

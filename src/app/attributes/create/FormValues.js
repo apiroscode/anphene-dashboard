@@ -13,11 +13,11 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useQS } from "@/utils/hooks";
 
-import { ErrorMessage } from "@/components/form";
-import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/Table";
-import { Card } from "@/components/Template";
+import { ErrorMessage } from "@/components/_form";
+import { ResponsiveTable, SortableTableBody, SortableTableRow } from "@/components/_table";
+import { Card } from "@/components/Card";
 
-import { useAttributeValuesStyles } from "../components";
+import { useAttributeValuesStyles } from "../_form";
 import { ValueAssign } from "./ValueAssign";
 import { ValueUpdate } from "./ValueUpdate";
 import { ValueDelete } from "./ValueDelete";

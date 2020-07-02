@@ -4,7 +4,7 @@ import { SortableContainer } from "react-sortable-hoc";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { ImageTile } from "@/components/image";
+import { ImageTile } from "@/components/ImageTile";
 
 import { SortableImage } from "./SortableImage";
 

@@ -4,18 +4,18 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_ATTRIBUTES } from "@/graphql/queries/attributes";
-import { BULK_DELETE_ATTRIBUTE } from "@/graphql/mutations/attributes";
+import { List } from "@/components/List";
+import { FilterRadioBox } from "@/components/ListFilters";
 
-import { List } from "@/components/Template";
-import { FilterRadioBox } from "@/components/Template/List/Filters";
+import { GetAttributes } from "../queries";
+import { BulkDeleteAttribute } from "../mutations";
 
 export default () => {
-  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_ATTRIBUTE);
+  const [bulkDelete, { loading }] = useMutation(BulkDeleteAttribute);
 
   const props = {
     appName: "Attribute",
-    query: GET_ATTRIBUTES,
+    query: GetAttributes,
     queryField: "attributes",
     filters: [
       {

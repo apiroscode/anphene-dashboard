@@ -8,13 +8,15 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_SUPPLIER } from "@/graphql/queries/suppliers";
-import { DELETE_SUPPLIER, UPDATE_SUPPLIER } from "@/graphql/mutations/suppliers";
+import { getErrors, SaveButton } from "@/components/_form";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { getSupplier } from "../queries";
+import { DeleteSupplier, UpdateSupplier } from "../mutations";
 
-import { FormSupplierInformation, schema } from "../components";
+import { SupplierInformation, schema } from "../_form";
 
 const getDefaultValues = (supplier) => ({
   name: supplier.name,
@@ -24,11 +26,11 @@ const getDefaultValues = (supplier) => ({
 });
 
 const Base = ({ supplier }) => {
-  const [update] = useMutation(UPDATE_SUPPLIER);
+  const [update] = useMutation(UpdateSupplier);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_SUPPLIER,
+    mutation: DeleteSupplier,
     id: supplier.id,
     name: supplier.name,
     field: "supplierDelete",
@@ -69,7 +71,7 @@ const Base = ({ supplier }) => {
     <>
       <Header title={`Update ${supplier.name}`} />
       <RowGrid>
-        <FormSupplierInformation {...methods} />
+        <SupplierInformation {...methods} />
       </RowGrid>
       <SaveButton
         deleteProps={deleteProps}
@@ -85,7 +87,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={GET_SUPPLIER} id={id} fieldName="supplier">
+    <QueryWrapper query={getSupplier} id={id} fieldName="supplier">
       {(data) => <Base supplier={data.supplier} />}
     </QueryWrapper>
   );

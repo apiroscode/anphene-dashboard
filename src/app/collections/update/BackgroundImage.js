@@ -1,6 +1,8 @@
 import React from "react";
 
-import { BackgroundImageForm } from "@/components/form";
+import { BackgroundImage as BackgroundImageForm } from "@/components/_form";
+
+import { getDefaultValues } from "./index";
 
 export const BackgroundImage = (props) => {
   const { id, update, enqueueSnackbar, reset } = props;
@@ -34,17 +36,7 @@ export const BackgroundImage = (props) => {
           variant: "success",
         }
       );
-      reset({
-        name: updatedCollection.name,
-        description: updatedCollection.description,
-        seo: {
-          title: updatedCollection.seoTitle,
-          description: updatedCollection.seoDescription,
-        },
-        backgroundImageAlt: updatedCollection?.backgroundImage?.alt || "",
-        isPublished: updatedCollection.isPublished,
-        publicationDate: updatedCollection.publicationDate,
-      });
+      reset(getDefaultValues(updatedCollection));
     }
   };
 
