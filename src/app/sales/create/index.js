@@ -5,26 +5,19 @@ import { useNavigate } from "react-router-dom";
 
 import { yupResolver } from "@hookform/resolvers";
 
+import { getOptimizeDate } from "@/utils/index";
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_SALE } from "@/graphql/mutations/sales";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, RowGrid } from "@/components/Template";
-
-import { getOptimizeDate } from "@/app/utils";
-
-import {
-  FormActiveDates,
-  FormDiscountType,
-  FormGeneralInformation,
-  FormValue,
-  schema,
-  Summary,
-} from "../components";
+import { CreateSale } from "../mutations";
+import { ActiveDates, DiscountType, GeneralInformation, schema, Summary, Value } from "../_form";
 
 export default () => {
-  const [create] = useMutation(CREATE_SALE);
+  const [create] = useMutation(CreateSale);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const methods = useForm({
@@ -70,10 +63,10 @@ export default () => {
       <Header title="Create sale" />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
-          <FormDiscountType {...methods} />
-          <FormValue {...methods} />
-          <FormActiveDates {...methods} />
+          <GeneralInformation {...methods} />
+          <DiscountType {...methods} />
+          <Value {...methods} />
+          <ActiveDates {...methods} />
         </RowGrid>
         <Summary {...methods} />
       </ColGrid>

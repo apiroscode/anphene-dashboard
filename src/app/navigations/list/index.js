@@ -5,15 +5,16 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation, useQS } from "@/utils/hooks";
 
-import { GET_MENUS } from "@/graphql/queries/navigations";
-import { BULK_DELETE_MENU } from "@/graphql/mutations/navigations";
+import { List } from "@/components/List";
 
-import { List } from "@/components/Template";
-import { ACTION, CreateMenu } from "./CreateMenu";
+import { GetMenus } from "../queries";
+import { BulkDeleteMenu } from "../mutations";
+
+import { ACTION, CreateMenu } from "./_components/CreateMenu";
 
 export default () => {
   const [params, setParams] = useQS({ action: undefined });
-  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_MENU);
+  const [bulkDelete, { loading }] = useMutation(BulkDeleteMenu);
 
   const actions = [
     <Button
@@ -28,7 +29,7 @@ export default () => {
 
   const props = {
     appName: "Navigation",
-    query: GET_MENUS,
+    query: GetMenus,
     queryField: "menus",
     isCreatable: false,
     actions,

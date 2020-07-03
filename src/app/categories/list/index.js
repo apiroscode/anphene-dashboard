@@ -4,17 +4,17 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
 
-import { BULK_DELETE_CATEGORY } from "@/graphql/mutations/categories";
-import { GET_CATEGORIES } from "@/graphql/queries/categories";
+import { List } from "@/components/List";
 
-import { List } from "@/components/Template";
+import { GetCategories } from "../queries";
+import { BulkDeleteCategory } from "../mutations";
 
 export default () => {
-  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_CATEGORY);
+  const [bulkDelete, { loading }] = useMutation(BulkDeleteCategory);
 
   const props = {
     appName: "Category",
-    query: GET_CATEGORIES,
+    query: GetCategories,
     queryField: "categories",
     vars: { level: 0 },
     table: {

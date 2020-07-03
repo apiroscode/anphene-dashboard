@@ -8,13 +8,16 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { getErrors, Publish, SaveButton, Seo } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
+import { QueryWrapper } from "@/components/QueryWrapper";
 
-import { GET_PAGE } from "@/graphql/queries/pages";
-import { UPDATE_PAGE, DELETE_PAGE } from "@/graphql/mutations/mutations";
+import { GetPage } from "../queries";
+import { DeletePage, UpdatePage } from "../mutations";
 
-import { FormGeneralInformation, FormUrl, schema } from "../components";
+import { GeneralInformation, schema, Url } from "../_form";
 
 const getDefaultValues = (page) => ({
   title: page.title,
@@ -29,11 +32,11 @@ const getDefaultValues = (page) => ({
 });
 
 const Base = ({ page }) => {
-  const [update] = useMutation(UPDATE_PAGE);
+  const [update] = useMutation(UpdatePage);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_PAGE,
+    mutation: DeletePage,
     id: page.id,
     name: page.title,
     field: "pageDelete",
@@ -76,12 +79,12 @@ const Base = ({ page }) => {
       <Header title={`Update ${page.title}`} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} page={page} />
-          <SeoForm {...methods} />
+          <GeneralInformation {...methods} page={page} />
+          <Seo {...methods} title={page.seoTitle} description={page.seoDescription} />
         </RowGrid>
         <RowGrid>
-          <FormUrl {...methods} />
-          <PublishForm {...methods} />
+          <Url {...methods} />
+          <Publish {...methods} publish={page.isPublished} date={page.publicationDate} />
         </RowGrid>
       </ColGrid>
       <SaveButton
@@ -98,7 +101,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={GET_PAGE} id={id} fieldName="page">
+    <QueryWrapper query={GetPage} id={id} fieldName="page">
       {(data) => <Base page={data.page} />}
     </QueryWrapper>
   );

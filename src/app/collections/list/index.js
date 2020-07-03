@@ -4,20 +4,20 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_COLLECTIONS } from "@/graphql/queries/collections";
-import { BULK_DELETE_COLLECTION, BULK_PUBLISH_COLLECTION } from "@/graphql/mutations/collections";
-
+import { List } from "@/components/List";
+import { FilterRadioBox } from "@/components/ListFilters";
 import { StatusLabel } from "@/components/StatusLabel";
-import { FilterRadioBox } from "@/components/Template/List/Filters";
-import { List } from "@/components/Template";
+
+import { GetCollections } from "../queries";
+import { BulkDeleteCollection, BulkPublishCollection } from "../mutations";
 
 export default () => {
-  const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_COLLECTION);
-  const [bulkPublish, { loading: publishLoading }] = useMutation(BULK_PUBLISH_COLLECTION);
+  const [bulkDelete, { loading: deleteLoading }] = useMutation(BulkDeleteCollection);
+  const [bulkPublish, { loading: publishLoading }] = useMutation(BulkPublishCollection);
 
   const props = {
     appName: "Collection",
-    query: GET_COLLECTIONS,
+    query: GetCollections,
     queryField: "collections",
     filters: [
       {

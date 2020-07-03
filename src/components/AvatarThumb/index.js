@@ -15,7 +15,7 @@ const useStyles = makeStyles(
       padding: theme.spacing(0.5),
     },
   }),
-  { name: "TableCellAvatar" }
+  { name: "AvatarThumb" }
 );
 
 export const AvatarThumb = (props) => {

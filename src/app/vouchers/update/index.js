@@ -9,58 +9,61 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_VOUCHER } from "@/graphql/queries/vouchers";
-import { DELETE_VOUCHER, UPDATE_VOUCHER } from "@/graphql/mutations/vouchers";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { GetVoucher } from "../queries";
+import { DeleteVoucher, UpdateVoucher } from "../mutations";
 
-import { FormActiveDates } from "@/app/sales/components";
-
+import { ActiveDates } from "../../sales/_form";
 import {
-  FormGeneralInformation,
-  FormMinimumRequirements,
-  FormUsageLimit,
-  FormValue,
-  FormVoucherType,
+  GeneralInformation,
   getOptimizeData,
+  MinimumRequirements,
   schema,
   Summary,
-} from "../components";
+  UsageLimit,
+  Value,
+  VoucherType,
+} from "../_form";
 
-import { SpecificProduct } from "./SpecificProduct";
+import { SpecificProduct } from "./_components";
 
+const getDefaultValues = (voucher) => ({
+  type: voucher.type,
+  code: voucher.code,
+  usageLimit: voucher.usageLimit,
+
+  applyOncePerOrder: voucher.applyOncePerOrder,
+  applyOncePerCustomer: voucher.applyOncePerCustomer,
+
+  discountType: voucher.discountType,
+  discountValue: voucher.discountValue,
+
+  minSpentAmount: voucher.minSpentAmount,
+  minCheckoutItemsQuantity: voucher.minCheckoutItemsQuantity,
+
+  startDate: dayjs(voucher.startDate).format("YYYY-MM-DD"),
+  endDate: voucher.endDate ? dayjs(voucher.endDate).format("YYYY-MM-DD") : "",
+  startHour: dayjs(voucher.startDate).format("HH:mm"),
+  endHour: voucher.endDate ? dayjs(voucher.endDate).format("HH:mm") : "",
+});
 const Base = ({ voucher }) => {
-  const [update] = useMutation(UPDATE_VOUCHER);
+  const [update] = useMutation(UpdateVoucher);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_VOUCHER,
+    mutation: DeleteVoucher,
     id: voucher.id,
     name: voucher.code,
     field: "voucherDelete",
   };
 
   const methods = useForm({
-    defaultValues: {
-      type: voucher.type,
-      code: voucher.code,
-      usageLimit: voucher.usageLimit,
-
-      applyOncePerOrder: voucher.applyOncePerOrder,
-      applyOncePerCustomer: voucher.applyOncePerCustomer,
-
-      discountType: voucher.discountType,
-      discountValue: voucher.discountValue,
-
-      minSpentAmount: voucher.minSpentAmount,
-      minCheckoutItemsQuantity: voucher.minCheckoutItemsQuantity,
-
-      startDate: dayjs(voucher.startDate).format("YYYY-MM-DD"),
-      endDate: voucher.endDate ? dayjs(voucher.endDate).format("YYYY-MM-DD") : "",
-      startHour: dayjs(voucher.startDate).format("HH:mm"),
-      endHour: voucher.endDate ? dayjs(voucher.endDate).format("HH:mm") : "",
-    },
+    defaultValues: getDefaultValues(voucher),
     resolver: yupResolver(schema),
   });
   const {
@@ -87,25 +90,7 @@ const Base = ({ voucher }) => {
       enqueueSnackbar(`Voucher ${data.code} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        type: updatedVoucher.type,
-        code: updatedVoucher.code,
-        usageLimit: updatedVoucher.usageLimit,
-
-        applyOncePerOrder: updatedVoucher.applyOncePerOrder,
-        applyOncePerCustomer: updatedVoucher.applyOncePerCustomer,
-
-        discountType: updatedVoucher.discountType,
-        discountValue: updatedVoucher.discountValue,
-
-        minSpentAmount: updatedVoucher.minSpentAmount,
-        minCheckoutItemsQuantity: updatedVoucher.minCheckoutItemsQuantity,
-
-        startDate: dayjs(updatedVoucher.startDate).format("YYYY-MM-DD"),
-        endDate: updatedVoucher.endDate ? dayjs(updatedVoucher.endDate).format("YYYY-MM-DD") : "",
-        startHour: dayjs(updatedVoucher.startDate).format("HH:mm"),
-        endHour: updatedVoucher.endDate ? dayjs(updatedVoucher.endDate).format("HH:mm") : "",
-      });
+      reset(getDefaultValues(updatedVoucher));
     }
   };
 
@@ -114,13 +99,13 @@ const Base = ({ voucher }) => {
       <Header title={`Update ${voucher.code}`} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
-          <FormVoucherType {...methods} />
+          <GeneralInformation {...methods} />
+          <VoucherType {...methods} />
           {voucher.type === "SPECIFIC_PRODUCT" && <SpecificProduct voucher={voucher} />}
-          <FormValue {...methods} />
-          <FormMinimumRequirements {...methods} voucher={voucher} />
-          <FormUsageLimit {...methods} voucher={voucher} />
-          <FormActiveDates {...methods} />
+          <Value {...methods} />
+          <MinimumRequirements {...methods} voucher={voucher} />
+          <UsageLimit {...methods} voucher={voucher} />
+          <ActiveDates {...methods} />
         </RowGrid>
         <Summary {...methods} />
       </ColGrid>
@@ -137,7 +122,7 @@ const Base = ({ voucher }) => {
 export default () => {
   const { id } = useParams();
   return (
-    <QueryWrapper query={GET_VOUCHER} id={id} fieldName="voucher">
+    <QueryWrapper query={GetVoucher} id={id} fieldName="voucher">
       {(data) => <Base voucher={data.voucher} />}
     </QueryWrapper>
   );

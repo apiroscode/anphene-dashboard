@@ -1,19 +1,21 @@
 import React from "react";
 import { Delete as DeleteIcon } from "@material-ui/icons";
-import { useMutation } from "@/utils/hooks";
-import { GET_PAGES } from "@/graphql/queries/pages";
-import { BULK_DELETE_PAGE, BULK_PUBLISH_PAGE } from "@/graphql/mutations/mutations";
 
-import { List } from "@/components/Template";
+import { useMutation } from "@/utils/hooks";
+
+import { List } from "@/components/List";
 import { StatusLabel } from "@/components/StatusLabel";
 
+import { GetPages } from "../queries";
+import { BulkDeletePage, BulkPublishPage } from "../mutations";
+
 export default () => {
-  const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_PAGE);
-  const [bulkPublish, { loading: publishLoading }] = useMutation(BULK_PUBLISH_PAGE);
+  const [bulkDelete, { loading: deleteLoading }] = useMutation(BulkDeletePage);
+  const [bulkPublish, { loading: publishLoading }] = useMutation(BulkPublishPage);
 
   const props = {
     appName: "Page",
-    query: GET_PAGES,
+    query: GetPages,
     queryField: "pages",
     table: {
       defaultSort: {

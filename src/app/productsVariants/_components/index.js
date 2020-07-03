@@ -1,0 +1,1 @@
+export { VariantsNavigation } from "./VariantsNavigation";

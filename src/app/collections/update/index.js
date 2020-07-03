@@ -6,20 +6,31 @@ import { useParams } from "react-router-dom";
 
 import { useMutation, useQS } from "@/utils/hooks";
 
-import { GET_COLLECTION } from "@/graphql/queries/collections";
-import { DELETE_COLLECTION, UPDATE_COLLECTION } from "@/graphql/mutations/collections";
+import { getErrors, Publish, SaveButton, Seo } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { ASSIGN_PRODUCTS, AssignItem } from "../../_components/AssignItem";
+import { SimpleListProduct } from "../../_components/SimpleListProduct";
+import { useAssignItem, useSimpleListProps } from "../../_components/_hooks";
 
-import { AssignProducts } from "@/app/components/AssignProducts";
-import { ProductSimpleList } from "@/app/components/ProductSimpleList";
+import { GetProducts } from "../../products/queries";
 
-import { FormGeneralInformation } from "../components";
-import { BackgroundImage } from "./BackgroundImage";
-import { useAssignProductsProps, useProductSimpleListProps } from "./utils";
+import { GetCollection } from "../queries";
+import {
+  CollectionAddProducts,
+  CollectionRemoveProducts,
+  DeleteCollection,
+  UpdateCollection,
+} from "../mutations";
 
-const getDefaultValues = (collection) => ({
+import { GeneralInformation } from "../_form";
+
+import { BackgroundImage } from "./_components";
+
+export const getDefaultValues = (collection) => ({
   name: collection.name,
   description: collection.description,
   seo: {
@@ -33,20 +44,38 @@ const getDefaultValues = (collection) => ({
 
 const Base = ({ collection }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [update] = useMutation(UPDATE_COLLECTION);
+  const [update] = useMutation(UpdateCollection);
 
   // products
   const [params, setParams] = useQS({ action: undefined });
   const [listProps, setListProps] = useState();
-  const assignProductsProps = useAssignProductsProps({ collection, listProps, params, setParams });
-  const productSimpleListProps = useProductSimpleListProps({
-    collection,
+  const assignProductsProps = useAssignItem({
+    instance: collection,
+    listProps,
+    params,
+    setParams,
+    mutation: CollectionAddProducts,
+    refetchQuery: GetProducts,
+    queryField: "collectionAddProducts",
+    querySelector: "products",
+    varIdMutation: "collectionId",
+    appName: "products",
+    vars: "notInCollections",
+  });
+  const productSimpleListProps = useSimpleListProps({
+    instance: collection,
+    removeMutation: CollectionRemoveProducts,
     setListProps,
     setParams,
+    assignAction: ASSIGN_PRODUCTS,
+    appName: "products",
+    selector: "products",
+    varIdMutation: "collectionId",
+    vars: "collections",
   });
 
   const deleteProps = {
-    mutation: DELETE_COLLECTION,
+    mutation: DeleteCollection,
     id: collection.id,
     name: collection.name,
     field: "collectionDelete",
@@ -88,7 +117,7 @@ const Base = ({ collection }) => {
       <Header title={collection.name} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} collection={collection} />
+          <GeneralInformation {...methods} collection={collection} />
           <BackgroundImage
             {...methods}
             id={collection.id}
@@ -96,11 +125,15 @@ const Base = ({ collection }) => {
             update={update}
             enqueueSnackbar={enqueueSnackbar}
           />
-          <ProductSimpleList {...productSimpleListProps} />
-          <SeoForm {...methods} />
+          <SimpleListProduct {...productSimpleListProps} />
+          <Seo {...methods} title={collection.seoTitle} description={collection.seoDescription} />
         </RowGrid>
         <RowGrid>
-          <PublishForm {...methods} publicationDateData={collection.publicationDate} />
+          <Publish
+            {...methods}
+            publish={collection.isPublished}
+            date={collection.publicationDate}
+          />
         </RowGrid>
       </ColGrid>
       <SaveButton
@@ -109,7 +142,7 @@ const Base = ({ collection }) => {
         loading={isSubmitting}
         disabled={!isDirty}
       />
-      <AssignProducts {...assignProductsProps} />
+      <AssignItem {...assignProductsProps} type="product" />
     </>
   );
 };
@@ -118,7 +151,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={GET_COLLECTION} id={id} fieldName="collection">
+    <QueryWrapper query={GetCollection} id={id} fieldName="collection">
       {(data) => <Base collection={data.collection} />}
     </QueryWrapper>
   );

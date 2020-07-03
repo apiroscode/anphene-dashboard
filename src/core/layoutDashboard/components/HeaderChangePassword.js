@@ -9,10 +9,10 @@ import { Grid } from "@material-ui/core";
 
 import { useMutation } from "@/utils/hooks";
 
-import { getErrors, PasswordField } from "@/components/form";
+import { getErrors, Password } from "@/components/_form";
 import { Dialog } from "@/components/Dialog";
 
-import { CHANGE_PASSWORD } from "@/graphql/mutations/auth";
+import { ChangePassword } from "../../../app/users/mutations";
 
 const schema = yup.object().shape({
   newPassword: yup.string().required(),
@@ -26,7 +26,7 @@ export const HeaderChangePassword = (props) => {
     handleClose,
   } = props;
 
-  const [changePassword] = useMutation(CHANGE_PASSWORD);
+  const [changePassword] = useMutation(ChangePassword);
   const { enqueueSnackbar } = useSnackbar();
   const {
     control,
@@ -54,7 +54,7 @@ export const HeaderChangePassword = (props) => {
       },
     } = result;
     if (errors.length > 0) {
-      setError(getErrors(errors));
+      getErrors(errors, setError);
     } else {
       enqueueSnackbar(`${user.email} password has been changed.`, {
         variant: "success",
@@ -76,7 +76,7 @@ export const HeaderChangePassword = (props) => {
         <Grid container direction="column" justify="center" alignItems="stretch" spacing={2}>
           <Grid item>
             <Controller
-              as={PasswordField}
+              as={Password}
               control={control}
               InputLabelProps={{ variant: "filled" }}
               label="Old Password"
@@ -89,7 +89,7 @@ export const HeaderChangePassword = (props) => {
           </Grid>
           <Grid item>
             <Controller
-              as={PasswordField}
+              as={Password}
               control={control}
               InputLabelProps={{ variant: "filled" }}
               label="New Password"

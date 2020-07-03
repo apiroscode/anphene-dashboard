@@ -9,18 +9,18 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_CATEGORY } from "@/graphql/mutations/categories";
+import { getErrors, SaveButton, Seo } from "@/components/_form";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton, SeoForm } from "@/components/form";
-import { Header, RowGrid } from "@/components/Template";
-
-import { FormGeneralInformation, schema } from "../components";
+import { CreateCategory } from "../mutations";
+import { GeneralInformation, schema } from "../_form";
 
 export default () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [create] = useMutation(CREATE_CATEGORY);
+  const [create] = useMutation(CreateCategory);
   const setHeaderBackLabel = useStoreActions((actions) => actions.app.setHeaderBackLabel);
 
   const methods = useForm({
@@ -75,8 +75,8 @@ export default () => {
     <>
       <Header title="Create Category" />
       <RowGrid>
-        <FormGeneralInformation {...methods} />
-        <SeoForm {...methods} />
+        <GeneralInformation {...methods} />
+        <Seo {...methods} />
       </RowGrid>
       <SaveButton onSubmit={handleSubmit(onSubmit)} loading={isSubmitting} disabled={!isDirty} />
     </>

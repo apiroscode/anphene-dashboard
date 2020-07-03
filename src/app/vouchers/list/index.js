@@ -4,19 +4,19 @@ import dayjs from "dayjs";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
-import { GET_VOUCHERS } from "@/graphql/queries/vouchers";
-import { BULK_DELETE_VOUCHER } from "@/graphql/mutations/vouchers";
 
-import { List } from "@/components/Template";
+import { List } from "@/components/List";
+import { FilterCheckBox, FilterRadioBox, FilterRange } from "@/components/ListFilters";
 
-import { FilterCheckBox, FilterRadioBox, FilterRange } from "@/components/Template/List/Filters";
+import { GetVouchers } from "../queries";
+import { BulkDeleteVoucher } from "../mutations";
 
 export default () => {
-  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_VOUCHER);
+  const [bulkDelete, { loading }] = useMutation(BulkDeleteVoucher);
 
   const props = {
     appName: "Voucher",
-    query: GET_VOUCHERS,
+    query: GetVouchers,
     queryField: "vouchers",
     filters: [
       {

@@ -4,17 +4,17 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_GROUPS } from "@/graphql/queries/groups";
-import { BULK_DELETE_GROUP } from "@/graphql/mutations/groups";
+import { List } from "@/components/List";
 
-import { List } from "@/components/Template";
+import { GetGroups } from "../queries";
+import { BulkDeleteGroup } from "../mutations";
 
 export default () => {
-  const [bulkDeleteMutation, { loading }] = useMutation(BULK_DELETE_GROUP);
+  const [bulkDeleteMutation, { loading }] = useMutation(BulkDeleteGroup);
 
   const props = {
     appName: "Group",
-    query: GET_GROUPS,
+    query: GetGroups,
     queryField: "groups",
     table: {
       defaultSort: {

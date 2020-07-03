@@ -11,9 +11,9 @@ import { yupResolver } from "@hookform/resolvers";
 import { Box, Button, Card, CardContent, Link, TextField } from "@material-ui/core";
 import { Lock } from "@material-ui/icons";
 
-import { PasswordField } from "@/components/form";
+import { Password } from "@/components/_form";
 
-import { LOGIN, LOGOUT } from "@/graphql/mutations/auth";
+import { Login, Logout } from "../mutations";
 
 import { useStyles } from "../styles";
 
@@ -23,8 +23,8 @@ const schema = yup.object().shape({
 });
 
 export default () => {
-  const [login] = useMutation(LOGIN);
-  const [logout] = useMutation(LOGOUT);
+  const [login] = useMutation(Login);
+  const [logout] = useMutation(Logout);
   const { enqueueSnackbar } = useSnackbar();
   const authUpdate = useStoreActions((actions) => actions.auth.update);
   const classes = useStyles();
@@ -80,7 +80,7 @@ export default () => {
               helperText={errors.email?.message}
             />
             <Controller
-              as={PasswordField}
+              as={Password}
               control={control}
               InputLabelProps={{ variant: "filled" }}
               label="Password"

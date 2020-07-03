@@ -10,20 +10,21 @@ import { Tab } from "@material-ui/core";
 
 import { useMutation, useQS } from "@/utils/hooks";
 
-import { GET_CATEGORY } from "@/graphql/queries/categories";
-import { DELETE_CATEGORY, UPDATE_CATEGORY } from "@/graphql/mutations/categories";
-
-import { getErrors, SaveButton, SeoForm } from "@/components/form";
+import { getErrors, SaveButton, Seo } from "@/components/_form";
 import { Tabs } from "@/components/Tabs";
-import { Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { ProductSimpleList } from "@/app/components/ProductSimpleList";
+import { SimpleListProduct } from "../../_components/SimpleListProduct";
 
-import { FormGeneralInformation, schema } from "../components";
-import { BackgroundImage } from "./BackgroundImage";
-import { SubCategories } from "./SubCategories";
+import { GetCategory } from "../queries";
+import { DeleteCategory, UpdateCategory } from "../mutations";
 
-const getDefaultValues = (category) => ({
+import { GeneralInformation, schema } from "../_form";
+import { BackgroundImage, SubCategories } from "./_components";
+
+export const getDefaultValues = (category) => ({
   name: category.name,
   description: category.description,
   seo: {
@@ -34,13 +35,13 @@ const getDefaultValues = (category) => ({
 });
 
 const Base = ({ category }) => {
-  const [update] = useMutation(UPDATE_CATEGORY);
+  const [update] = useMutation(UpdateCategory);
   const { enqueueSnackbar } = useSnackbar();
   const setHeaderBackLabel = useStoreActions((actions) => actions.app.setHeaderBackLabel);
   const [params, setParams] = useQS({ activeTab: 0 });
 
   const deleteProps = {
-    mutation: DELETE_CATEGORY,
+    mutation: DeleteCategory,
     id: category.id,
     name: category.name,
     field: "categoryDelete",
@@ -100,7 +101,7 @@ const Base = ({ category }) => {
     <>
       <Header title={`${category.name}`} />
       <RowGrid>
-        <FormGeneralInformation {...methods} category={category} />
+        <GeneralInformation {...methods} category={category} />
         <BackgroundImage
           {...methods}
           id={category.id}
@@ -108,14 +109,14 @@ const Base = ({ category }) => {
           update={update}
           enqueueSnackbar={enqueueSnackbar}
         />
-        <SeoForm {...methods} />
+        <Seo {...methods} />
         <Tabs value={params.activeTab} onChange={handleTabChange}>
           <Tab label="Subcategories" />
           <Tab label="All Products" />
         </Tabs>
         {params.activeTab === 0 && <SubCategories category={category} />}
         {params.activeTab === 1 && (
-          <ProductSimpleList title="All Products" vars={{ categories: [category.id] }} />
+          <SimpleListProduct title="All Products" vars={{ categories: [category.id] }} />
         )}
       </RowGrid>
       <SaveButton
@@ -132,7 +133,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={GET_CATEGORY} vars={{ id, first: 20 }} fieldName="category">
+    <QueryWrapper query={GetCategory} vars={{ id, first: 20 }} fieldName="category">
       {(data) => <Base category={data.category} />}
     </QueryWrapper>
   );

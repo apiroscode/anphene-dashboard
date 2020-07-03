@@ -1,8 +1,4 @@
-export const filteredObject = (raw, keys, defaultKeys) => {
-  return keys.reduce((obj, key) => {
-    return { ...obj, [key]: raw[key] !== undefined ? raw[key] : defaultKeys[key] };
-  }, {});
-};
+import dayjs from "dayjs";
 
 export const maybe = (exp, d) => {
   try {
@@ -13,10 +9,16 @@ export const maybe = (exp, d) => {
   }
 };
 
-export const renameKeys = (obj, newKeys) => {
-  const keyValues = Object.keys(obj).map((key) => {
-    const newKey = newKeys[key] || key;
-    return { [newKey]: obj[key] };
-  });
-  return Object.assign({}, ...keyValues);
+export const getOptimizeDate = (data) => {
+  const startDateStr = `${data.startDate} ${data.startHour ? data.startHour : "00:00"}`;
+  const startDate = dayjs(startDateStr).format();
+  const endDateStr = data?.endDate
+    ? `${data.endDate} ${data.endHour ? data.endHour : "00:00"}`
+    : "";
+  const endDate = endDateStr ? dayjs(endDateStr).format() : null;
+
+  const newData = { ...data, startDate, endDate };
+  delete newData["startHour"];
+  delete newData["endHour"];
+  return newData;
 };

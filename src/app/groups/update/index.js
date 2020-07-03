@@ -10,37 +10,41 @@ import { yupResolver } from "@hookform/resolvers";
 import { PermissionEnum } from "@/config/enum";
 import { useMutation, usePermissions } from "@/utils/hooks";
 
-import { GET_GROUP } from "@/graphql/queries/groups";
-import { DELETE_GROUP, UPDATE_GROUP } from "@/graphql/mutations/groups";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
+import { QueryWrapper } from "@/components/QueryWrapper";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { GetGroup } from "../queries";
+import { DeleteGroup, UpdateGroup } from "../mutations";
 
-import { FormGeneralInformation, FormPermissions } from "../components";
-import { Staff } from "./Staff";
+import { GeneralInformation, Permissions } from "../_form";
+import { Staff } from "./_components";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
 });
 
+const getDefaultValues = (group) => ({
+  name: group.name,
+  permissions: group.permissions.map((item) => item.code),
+});
 const Base = ({ data }) => {
   const [gotPermission] = usePermissions(PermissionEnum.MANAGE_STAFF);
   const { allPermissions, group } = data;
-  const [update] = useMutation(UPDATE_GROUP);
+  const [update] = useMutation(UpdateGroup);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_GROUP,
+    mutation: DeleteGroup,
     id: group.id,
     name: group.name,
     field: "groupDelete",
   };
 
   const methods = useForm({
-    defaultValues: {
-      name: group.name,
-      permissions: group.permissions.map((item) => item.code),
-    },
+    defaultValues: getDefaultValues(group),
     resolver: yupResolver(schema),
   });
   const {
@@ -87,10 +91,7 @@ const Base = ({ data }) => {
       enqueueSnackbar(`Group ${data.name} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        name: updatedGroup.name,
-        permissions: updatedGroup.permissions.map((item) => item.code),
-      });
+      reset(getDefaultValues(updatedGroup));
     }
   };
 
@@ -99,10 +100,10 @@ const Base = ({ data }) => {
       <Header title={`Update ${group.name}`} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation control={control} errors={errors} />
+          <GeneralInformation control={control} errors={errors} />
           {gotPermission && <Staff group={group} />}
         </RowGrid>
-        <FormPermissions
+        <Permissions
           allPermissions={allPermissions}
           permissions={permissions}
           handlePermission={handlePermission}
@@ -121,7 +122,7 @@ const Base = ({ data }) => {
 export default () => {
   const { id } = useParams();
   return (
-    <QueryWrapper query={GET_GROUP} id={id} fieldName="group">
+    <QueryWrapper query={GetGroup} id={id} fieldName="group">
       {(data) => <Base data={data} />}
     </QueryWrapper>
   );

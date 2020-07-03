@@ -11,10 +11,9 @@ import { Box, Button, Card, CardContent, Link, Typography } from "@material-ui/c
 import { VpnKey } from "@material-ui/icons";
 
 import { useQS } from "@/utils/hooks";
-import { getErrors, PasswordField } from "@/components/form";
+import { getErrors, Password } from "@/components/_form";
 
-import { PASSWORD_RESET_CONFIRM } from "@/graphql/mutations/auth";
-
+import { PasswordResetConfirm } from "../mutations";
 import { useStyles } from "../styles";
 
 const schema = yup.object().shape({
@@ -22,7 +21,7 @@ const schema = yup.object().shape({
 });
 
 export default () => {
-  const [confirmPassword] = useMutation(PASSWORD_RESET_CONFIRM);
+  const [confirmPassword] = useMutation(PasswordResetConfirm);
   const [params] = useQS({
     email: undefined,
     token: undefined,
@@ -86,7 +85,7 @@ export default () => {
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
-              as={PasswordField}
+              as={Password}
               control={control}
               InputLabelProps={{ variant: "filled" }}
               name="password"

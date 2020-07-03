@@ -4,17 +4,17 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_SUPPLIERS } from "@/graphql/queries/suppliers";
-import { BULK_DELETE_SUPPLIERS } from "@/graphql/mutations/suppliers";
+import { List } from "@/components/List";
 
-import { List } from "@/components/Template";
+import { GetSuppliers } from "../queries";
+import { BulkDeleteSupplier } from "../mutations";
 
 export default () => {
-  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_SUPPLIERS);
+  const [bulkDelete, { loading }] = useMutation(BulkDeleteSupplier);
 
   const props = {
     appName: "Supplier",
-    query: GET_SUPPLIERS,
+    query: GetSuppliers,
     queryField: "suppliers",
     table: {
       defaultSort: {

@@ -9,23 +9,26 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_PRODUCT } from "@/graphql/queries/products";
-import { DELETE_PRODUCT, UPDATE_PRODUCT } from "@/graphql/mutations/products";
+import { getErrors, Publish, SaveButton, Seo } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
-import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
+import { ImageList } from "../../productsImages/ImageList";
+import { VariantList } from "../../productsVariants/VariantList";
 
-import { Images } from "./Images";
-import { Variants } from "./Variants";
+import { GetProduct } from "../queries";
+import { DeleteProduct, UpdateProduct } from "../mutations";
 
 import {
-  FormAttributes,
-  FormGeneralInformation,
-  FormInventory,
-  FormOrganizeProduct,
-  FormPricing,
-  FormWeight,
-} from "../components";
+  Attributes,
+  GeneralInformation,
+  Inventory,
+  OrganizeProduct,
+  Pricing,
+  Weight,
+} from "../_form";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -73,7 +76,7 @@ const getDefaultValues = (product) => {
 
 const Base = (props) => {
   const { product } = props;
-  const [update] = useMutation(UPDATE_PRODUCT);
+  const [update] = useMutation(UpdateProduct);
   const { enqueueSnackbar } = useSnackbar();
 
   const {
@@ -82,7 +85,7 @@ const Base = (props) => {
   } = product;
 
   const deleteProps = {
-    mutation: DELETE_PRODUCT,
+    mutation: DeleteProduct,
     id: product.id,
     name: product.name,
     field: "productDelete",
@@ -136,23 +139,23 @@ const Base = (props) => {
       <Header title={`Update ${product.name}`} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} product={product} />
-          <Images product={product} handleSubmit={handleSubmit} />
+          <GeneralInformation {...methods} product={product} />
+          <ImageList product={product} handleSubmit={handleSubmit} />
           {!hasVariants ? (
             <>
-              <FormAttributes {...props} {...methods} />
-              <FormPricing {...methods} />
-              <FormWeight {...methods} />
-              <FormInventory {...props} {...methods} />
+              <Attributes {...props} {...methods} />
+              <Pricing {...methods} />
+              <Weight {...methods} />
+              <Inventory {...props} {...methods} />
             </>
           ) : (
-            <Variants {...props} />
+            <VariantList {...props} />
           )}
-          <SeoForm {...methods} />
+          <Seo {...methods} title={product.seoTitle} description={product.seoDescription} />{" "}
         </RowGrid>
         <RowGrid>
-          <FormOrganizeProduct {...props} {...methods} />
-          <PublishForm {...methods} />
+          <OrganizeProduct {...props} {...methods} />
+          <Publish {...methods} publish={product.isPublished} date={product.publicationDate} />
         </RowGrid>
       </ColGrid>
       <SaveButton
@@ -170,7 +173,7 @@ export default () => {
 
   return (
     <QueryWrapper
-      query={GET_PRODUCT}
+      query={GetProduct}
       id={id}
       fieldName="product"
       queryOptions={{

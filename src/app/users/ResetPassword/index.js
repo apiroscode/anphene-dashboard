@@ -10,10 +10,9 @@ import { Box, Button, Card, CardContent, Link, TextField, Typography } from "@ma
 import { Help } from "@material-ui/icons";
 
 import { CONFIRM_PASSWORD_URI } from "@/config/constants";
-import { getErrors } from "@/components/form";
+import { getErrors } from "@/components/_form";
 
-import { REQUEST_PASSWORD_RESET } from "@/graphql/mutations/auth";
-
+import { RequestPasswordReset } from "../mutations";
 import { useStyles } from "../styles";
 
 const schema = yup.object().shape({
@@ -21,7 +20,7 @@ const schema = yup.object().shape({
 });
 
 export default () => {
-  const [resetPassword] = useMutation(REQUEST_PASSWORD_RESET);
+  const [resetPassword] = useMutation(RequestPasswordReset);
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
 

@@ -17,7 +17,7 @@ import { Face } from "@material-ui/icons";
 
 import { useQS } from "@/utils/hooks";
 
-import ArrowDropdown from "@/components/icons/ArrowDropdown";
+import ArrowDropdown from "@/components/_icons/ArrowDropdown";
 
 import { HeaderChangePassword } from "./HeaderChangePassword";
 
