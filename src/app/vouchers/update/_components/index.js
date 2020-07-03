@@ -1,0 +1,1 @@
+export { SpecificProduct } from "./SpecificProduct";

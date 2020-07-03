@@ -4,18 +4,18 @@ import { Delete as DeleteIcon } from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_PRODUCT_TYPES } from "@/graphql/queries/productTypes";
-import { BULK_DELETE_PRODUCT_TYPE } from "@/graphql/mutations/productTypes";
+import { List } from "@/components/List";
+import { FilterRadioBox } from "@/components/ListFilters";
 
-import { List } from "@/components/Template";
-import { FilterRadioBox } from "@/components/Template/List/Filters";
+import { GetProductTypes } from "../queries";
+import { BulkDeleteProductType } from "../mutations";
 
 export default () => {
-  const [bulkDelete, { loading }] = useMutation(BULK_DELETE_PRODUCT_TYPE);
+  const [bulkDelete, { loading }] = useMutation(BulkDeleteProductType);
 
   const props = {
     appName: "Product Type",
-    query: GET_PRODUCT_TYPES,
+    query: GetProductTypes,
     queryField: "productTypes",
     filters: [
       {

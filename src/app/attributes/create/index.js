@@ -16,7 +16,7 @@ import { RowGrid } from "@/components/RowGrid";
 import { CreateAttribute } from "../mutations";
 
 import { GeneralInformation, Properties, schema } from "../_form";
-import { FormValues } from "./FormValues";
+import { AttributeValues } from "./_form/AttributeValues";
 
 export default () => {
   const navigate = useNavigate();
@@ -72,7 +72,7 @@ export default () => {
       <ColGrid>
         <RowGrid>
           <GeneralInformation control={control} errors={errors} watch={watch} isCreate />
-          <FormValues {...methods} />
+          <AttributeValues {...methods} />
         </RowGrid>
         <Properties control={control} errors={errors} />
       </ColGrid>

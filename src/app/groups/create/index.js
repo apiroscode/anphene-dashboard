@@ -9,12 +9,15 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_ALL_PERMISSIONS } from "@/graphql/queries/groups";
-import { CREATE_GROUP } from "@/graphql/mutations/groups";
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, QueryWrapper } from "@/components/Template";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
 
-import { FormGeneralInformation, FormPermissions } from "../components";
+import { GetAllPermissions } from "../queries";
+import { CreateGroup } from "../mutations";
+
+import { GeneralInformation, Permissions } from "../_form";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -25,7 +28,7 @@ const Base = ({ data }) => {
   const { allPermissions } = data;
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [create] = useMutation(CREATE_GROUP);
+  const [create] = useMutation(CreateGroup);
 
   const methods = useForm({
     defaultValues,
@@ -88,8 +91,8 @@ const Base = ({ data }) => {
     <>
       <Header title="Create Group" />
       <ColGrid>
-        <FormGeneralInformation control={control} errors={errors} />
-        <FormPermissions
+        <GeneralInformation control={control} errors={errors} />
+        <Permissions
           allPermissions={allPermissions}
           permissions={permissions}
           handlePermission={handlePermission}
@@ -101,7 +104,7 @@ const Base = ({ data }) => {
 };
 
 export default () => (
-  <QueryWrapper query={GET_ALL_PERMISSIONS} fieldName="allPermissions">
+  <QueryWrapper query={GetAllPermissions} fieldName="allPermissions">
     {(data) => <Base data={data} />}
   </QueryWrapper>
 );

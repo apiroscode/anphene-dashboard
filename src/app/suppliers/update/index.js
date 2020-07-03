@@ -13,10 +13,10 @@ import { Header } from "@/components/Header";
 import { QueryWrapper } from "@/components/QueryWrapper";
 import { RowGrid } from "@/components/RowGrid";
 
-import { getSupplier } from "../queries";
+import { GetSupplier } from "../queries";
 import { DeleteSupplier, UpdateSupplier } from "../mutations";
 
-import { SupplierInformation, schema } from "../_form";
+import { schema, SupplierInformation } from "../_form";
 
 const getDefaultValues = (supplier) => ({
   name: supplier.name,
@@ -87,7 +87,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={getSupplier} id={id} fieldName="supplier">
+    <QueryWrapper query={GetSupplier} id={id} fieldName="supplier">
       {(data) => <Base supplier={data.supplier} />}
     </QueryWrapper>
   );

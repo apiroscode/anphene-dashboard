@@ -13,7 +13,7 @@ import { Header } from "@/components/Header";
 import { RowGrid } from "@/components/RowGrid";
 
 import { CreateSupplier } from "../mutations";
-import { SupplierInformation, schema } from "../_form";
+import { schema, SupplierInformation } from "../_form";
 
 export default () => {
   const [create] = useMutation(CreateSupplier);

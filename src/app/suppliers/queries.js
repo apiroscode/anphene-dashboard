@@ -1,10 +1,10 @@
 import gql from "graphql-tag";
 
-import { PageInfoFragment, sorterPagination } from "@/components/_graphql/fragments";
+import { PageInfoFragment } from "@/core/_graphql/fragments";
 
 import { SupplierDetailFragment, SupplierFragment } from "./fragments";
 
-export const getSupplier = gql`
+export const GetSupplier = gql`
   query GetSupplier($id: ID!) {
     supplier(id: $id) {
       ...SupplierDetailsFragment
@@ -13,13 +13,21 @@ export const getSupplier = gql`
   ${SupplierDetailFragment}
 `;
 
-export const getSuppliers = gql`
+export const GetSuppliers = gql`
   query GetSuppliers(
-    ${sorterPagination.type("SupplierSortField")}
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+    $sortBy: SupplierSortingInput
     $search: String
   ) {
     suppliers(
-      ${sorterPagination.vars}
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      sortBy: $sortBy
       filter: { search: $search }
     ) {
       pageInfo {

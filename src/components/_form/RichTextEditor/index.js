@@ -1,7 +1,7 @@
 import React from "react";
 
 import clsx from "clsx";
-import { BLOCK_TYPE, DraftailEditor, INLINE_STYLE, ENTITY_TYPE } from "draftail";
+import { BLOCK_TYPE, DraftailEditor, ENTITY_TYPE, INLINE_STYLE } from "draftail";
 import equal from "fast-deep-equal";
 
 import { Typography } from "@material-ui/core";

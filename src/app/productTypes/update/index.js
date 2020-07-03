@@ -1,32 +1,42 @@
 import React from "react";
-import { Header, QueryWrapper, RowGrid } from "@/components/Template";
-import { GET_PRODUCT_TYPE } from "@/graphql/queries/productTypes";
-import { useParams } from "react-router-dom";
-import { DELETE_PRODUCT_TYPE, UPDATE_PRODUCT_TYPE } from "@/graphql/mutations/productTypes";
-import { useMutation } from "@/utils/hooks";
+
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import { FormGeneralInformation, schema } from "../components";
+import { useParams } from "react-router-dom";
+
 import { yupResolver } from "@hookform/resolvers";
-import { getErrors, SaveButton } from "@/components/form";
-import { Attributes } from "./Attributes";
+
+import { useMutation } from "@/utils/hooks";
+
+import { getErrors, SaveButton } from "@/components/_form";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
+
+import { GetProductType } from "../queries";
+import { DeleteProductType, UpdateProductType } from "../mutations";
+
+import { GeneralInformation, schema } from "../_form";
+import { Attributes } from "./_components/Attributes";
+
+const getDefaultValues = (productType) => ({
+  name: productType.name,
+  hasVariants: productType.hasVariants,
+});
 
 const Base = ({ productType }) => {
-  const [update] = useMutation(UPDATE_PRODUCT_TYPE);
+  const [update] = useMutation(UpdateProductType);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_PRODUCT_TYPE,
+    mutation: DeleteProductType,
     id: productType.id,
     name: productType.name,
     field: "productTypeDelete",
   };
 
   const methods = useForm({
-    defaultValues: {
-      name: productType.name,
-      hasVariants: productType.hasVariants,
-    },
+    defaultValues: getDefaultValues(productType),
     resolver: yupResolver(schema),
   });
 
@@ -58,17 +68,14 @@ const Base = ({ productType }) => {
       enqueueSnackbar(`Product type ${updatedProductType.name} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        name: updatedProductType.name,
-        hasVariants: updatedProductType.hasVariants,
-      });
+      reset(getDefaultValues(updatedProductType));
     }
   };
   return (
     <>
       <Header title={`Update ${productType.name}`} />
       <RowGrid>
-        <FormGeneralInformation {...methods} />
+        <GeneralInformation {...methods} />
         <Attributes productType={productType} type="PRODUCT" />
         {productType.hasVariants && <Attributes productType={productType} type="VARIANT" />}
       </RowGrid>
@@ -85,7 +92,7 @@ const Base = ({ productType }) => {
 export default () => {
   const { id } = useParams();
   return (
-    <QueryWrapper query={GET_PRODUCT_TYPE} id={id} fieldName="productType">
+    <QueryWrapper query={GetProductType} id={id} fieldName="productType">
       {(data) => <Base productType={data?.productType} />}
     </QueryWrapper>
   );

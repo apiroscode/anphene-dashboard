@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-import { PageInfoFragment, sorterPagination } from "@/components/_graphql/fragments";
+import { PageInfoFragment } from "@/core/_graphql/fragments";
 
 import { AttributeDetailsFragment, AttributeFragment } from "./fragments";
 
@@ -15,7 +15,11 @@ export const GetAttribute = gql`
 
 export const GetAttributes = gql`
   query GetAttributes(
-    ${sorterPagination.type("AttributeSortField")}
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+    $sortBy: AttributeSortingInput
     $search: String
     $valueRequired: Boolean
     $visibleInStorefront: Boolean
@@ -24,7 +28,11 @@ export const GetAttributes = gql`
     $availableInGrid: Boolean
   ) {
     attributes(
-      ${sorterPagination.vars}
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      sortBy: $sortBy
       filter: {
         search: $search
         valueRequired: $valueRequired

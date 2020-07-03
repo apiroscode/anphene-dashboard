@@ -6,7 +6,7 @@ import { useMutation } from "@/utils/hooks";
 
 import { List } from "@/components/List";
 
-import { getCategories } from "../queries";
+import { GetCategories } from "../queries";
 import { BulkDeleteCategory } from "../mutations";
 
 export default () => {
@@ -14,7 +14,7 @@ export default () => {
 
   const props = {
     appName: "Category",
-    query: getCategories,
+    query: GetCategories,
     queryField: "categories",
     vars: { level: 0 },
     table: {

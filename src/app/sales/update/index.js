@@ -7,48 +7,44 @@ import { useParams } from "react-router-dom";
 
 import { yupResolver } from "@hookform/resolvers";
 
+import { getOptimizeDate } from "@/utils";
 import { useMutation } from "@/utils/hooks";
 
-import { GET_SALE } from "@/graphql/queries/sales";
-import { DELETE_SALE, UPDATE_SALE } from "@/graphql/mutations/sales";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
+import { QueryWrapper } from "@/components/QueryWrapper";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { ActiveDates, DiscountType, GeneralInformation, schema, Summary, Value } from "../_form";
 
-import { getOptimizeDate } from "@/app/utils";
+import { GetSale } from "../queries";
+import { DeleteSale, UpdateSale } from "../mutations";
+import { SpecificProduct } from "./_components/SpecificProduct";
 
-import {
-  FormActiveDates,
-  FormDiscountType,
-  FormGeneralInformation,
-  FormValue,
-  schema,
-  Summary,
-} from "../components";
-
-import { SpecificProduct } from "./SpecificProduct";
+const getDefaultValues = (sale) => ({
+  name: sale.name,
+  type: sale.type,
+  value: sale.value,
+  startDate: dayjs(sale.startDate).format("YYYY-MM-DD"),
+  endDate: sale.endDate ? dayjs(sale.endDate).format("YYYY-MM-DD") : "",
+  startHour: dayjs(sale.startDate).format("HH:mm"),
+  endHour: sale.endDate ? dayjs(sale.endDate).format("HH:mm") : "",
+});
 
 const Base = ({ sale }) => {
-  const [update] = useMutation(UPDATE_SALE);
+  const [update] = useMutation(UpdateSale);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_SALE,
+    mutation: DeleteSale,
     id: sale.id,
     name: sale.name,
     field: "saleDelete",
   };
 
   const methods = useForm({
-    defaultValues: {
-      name: sale.name,
-      type: sale.type,
-      value: sale.value,
-      startDate: dayjs(sale.startDate).format("YYYY-MM-DD"),
-      endDate: sale.endDate ? dayjs(sale.endDate).format("YYYY-MM-DD") : "",
-      startHour: dayjs(sale.startDate).format("HH:mm"),
-      endHour: sale.endDate ? dayjs(sale.endDate).format("HH:mm") : "",
-    },
+    defaultValues: getDefaultValues(sale),
     resolver: yupResolver(schema),
   });
   const {
@@ -74,15 +70,7 @@ const Base = ({ sale }) => {
       enqueueSnackbar(`Sale ${data.name} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        name: updatedSale.name,
-        type: updatedSale.type,
-        value: updatedSale.value,
-        startDate: dayjs(updatedSale.startDate).format("YYYY-MM-DD"),
-        endDate: updatedSale.endDate ? dayjs(updatedSale.endDate).format("YYYY-MM-DD") : "",
-        startHour: dayjs(updatedSale.startDate).format("HH:mm"),
-        endHour: updatedSale.endDate ? dayjs(updatedSale.endDate).format("HH:mm") : "",
-      });
+      reset(getDefaultValues(updatedSale));
     }
   };
 
@@ -91,11 +79,11 @@ const Base = ({ sale }) => {
       <Header title={sale.name} />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
-          <FormDiscountType {...methods} />
-          <FormValue {...methods} />
+          <GeneralInformation {...methods} />
+          <DiscountType {...methods} />
+          <Value {...methods} />
           <SpecificProduct sale={sale} />
-          <FormActiveDates {...methods} sale={sale} />
+          <ActiveDates {...methods} sale={sale} />
         </RowGrid>
         <Summary {...methods} />
       </ColGrid>
@@ -112,7 +100,7 @@ const Base = ({ sale }) => {
 export default () => {
   const { id } = useParams();
   return (
-    <QueryWrapper query={GET_SALE} id={id} fieldName="sale">
+    <QueryWrapper query={GetSale} id={id} fieldName="sale">
       {(data) => <Base sale={data.sale} />}
     </QueryWrapper>
   );

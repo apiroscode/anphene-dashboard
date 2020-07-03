@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-import { ErrorFragment } from "@/components/_graphql/fragments";
+import { ErrorFragment } from "@/core/_graphql/fragments";
 
 import { PageDetailsFragment } from "./fragments";
 

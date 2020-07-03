@@ -17,7 +17,7 @@ import { GetAttribute } from "../queries";
 import { DeleteAttribute, UpdateAttribute } from "../mutations";
 
 import { GeneralInformation, Properties, schema } from "../_form";
-import { FormValues } from "./FormValues";
+import { AttributeValues } from "./_form/AttributeValues";
 
 const getDefaultValues = (attribute) => ({
   name: attribute.name,
@@ -88,7 +88,7 @@ const Base = ({ attribute }) => {
       <ColGrid>
         <RowGrid>
           <GeneralInformation control={control} errors={errors} watch={watch} />
-          <FormValues attribute={attribute} />
+          <AttributeValues attribute={attribute} />
         </RowGrid>
         <Properties control={control} errors={errors} />
       </ColGrid>

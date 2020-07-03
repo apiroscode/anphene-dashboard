@@ -8,17 +8,20 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_GROUPS_FOR_STAFF } from "@/graphql/queries/staff";
-import { CREATE_STAFF } from "@/graphql/mutations/staff";
-
 import { CONFIRM_PASSWORD_URI } from "@/config/constants";
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { FormGroups, FormIdCard, FormUserInformation, schema } from "../components";
+import { CreateStaff } from "../mutations";
+import { GetSimpleGroups } from "../../groups/queries";
+
+import { FormIdCard, Groups, schema, UserInformation } from "../_form";
 
 const Base = ({ groups: groupsData }) => {
-  const [create] = useMutation(CREATE_STAFF);
+  const [create] = useMutation(CreateStaff);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
@@ -88,10 +91,10 @@ const Base = ({ groups: groupsData }) => {
       <Header title="Invite Staff" />
       <ColGrid>
         <RowGrid>
-          <FormUserInformation control={control} errors={errors} />
+          <UserInformation control={control} errors={errors} />
           <FormIdCard idCard={idCard} setValue={setValue} errors={errors} />
         </RowGrid>
-        <FormGroups groupsData={groupsData} setValue={setValue} groups={groups} />
+        <Groups groupsData={groupsData} setValue={setValue} groups={groups} />
       </ColGrid>
       <SaveButton
         onSubmit={handleSubmit(onSubmit)}
@@ -105,7 +108,7 @@ const Base = ({ groups: groupsData }) => {
 
 export default () => {
   return (
-    <QueryWrapper query={GET_GROUPS_FOR_STAFF} fieldName="groups">
+    <QueryWrapper query={GetSimpleGroups} fieldName="groups">
       {(data) => {
         const groups = data.groups.edges.map((item) => item.node);
         return <Base groups={groups} />;

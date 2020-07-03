@@ -6,16 +6,8 @@ import { FormControlLabel, Link, Radio, RadioGroup, TextField } from "@material-
 import { Card } from "../../Card";
 
 export const Publish = (props) => {
-  const {
-    control,
-    setValue,
-    register,
-    unregister,
-    publicationDateData,
-    publish = false,
-    date = null,
-  } = props;
-  const [open, setOpen] = useState(!!publicationDateData);
+  const { control, setValue, register, unregister, publish = false, date = null } = props;
+  const [open, setOpen] = useState(!!date);
   const isPublished = useWatch({
     control,
     name: "isPublished",

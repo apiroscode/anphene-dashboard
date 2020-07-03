@@ -12,15 +12,23 @@ import { Header } from "@/components/Header";
 import { QueryWrapper } from "@/components/QueryWrapper";
 import { RowGrid } from "@/components/RowGrid";
 
-import { AssignProducts } from "@/app/_components/AssignProducts";
-import { ProductSimpleList } from "@/app/_components/ProductSimpleList";
+import { ASSIGN_PRODUCTS, AssignItem } from "../../_components/AssignItem";
+import { SimpleListProduct } from "../../_components/SimpleListProduct";
+import { useAssignItem, useSimpleListProps } from "../../_components/_hooks";
+
+import { GetProducts } from "../../products/queries";
 
 import { GetCollection } from "../queries";
-import { DeleteCollection, UpdateCollection } from "../mutations";
+import {
+  CollectionAddProducts,
+  CollectionRemoveProducts,
+  DeleteCollection,
+  UpdateCollection,
+} from "../mutations";
 
 import { GeneralInformation } from "../_form";
-import { BackgroundImage } from "./BackgroundImage";
-import { useAssignProductsProps, useProductSimpleListProps } from "./utils";
+
+import { BackgroundImage } from "./_components";
 
 export const getDefaultValues = (collection) => ({
   name: collection.name,
@@ -41,11 +49,29 @@ const Base = ({ collection }) => {
   // products
   const [params, setParams] = useQS({ action: undefined });
   const [listProps, setListProps] = useState();
-  const assignProductsProps = useAssignProductsProps({ collection, listProps, params, setParams });
-  const productSimpleListProps = useProductSimpleListProps({
-    collection,
+  const assignProductsProps = useAssignItem({
+    instance: collection,
+    listProps,
+    params,
+    setParams,
+    mutation: CollectionAddProducts,
+    refetchQuery: GetProducts,
+    queryField: "collectionAddProducts",
+    querySelector: "products",
+    varIdMutation: "collectionId",
+    appName: "products",
+    vars: "notInCollections",
+  });
+  const productSimpleListProps = useSimpleListProps({
+    instance: collection,
+    removeMutation: CollectionRemoveProducts,
     setListProps,
     setParams,
+    assignAction: ASSIGN_PRODUCTS,
+    appName: "products",
+    selector: "products",
+    varIdMutation: "collectionId",
+    vars: "collections",
   });
 
   const deleteProps = {
@@ -99,11 +125,15 @@ const Base = ({ collection }) => {
             update={update}
             enqueueSnackbar={enqueueSnackbar}
           />
-          <ProductSimpleList {...productSimpleListProps} />
-          <Seo {...methods} />
+          <SimpleListProduct {...productSimpleListProps} />
+          <Seo {...methods} title={collection.seoTitle} description={collection.seoDescription} />
         </RowGrid>
         <RowGrid>
-          <Publish {...methods} publicationDateData={collection.publicationDate} />
+          <Publish
+            {...methods}
+            publish={collection.isPublished}
+            date={collection.publicationDate}
+          />
         </RowGrid>
       </ColGrid>
       <SaveButton
@@ -112,7 +142,7 @@ const Base = ({ collection }) => {
         loading={isSubmitting}
         disabled={!isDirty}
       />
-      <AssignProducts {...assignProductsProps} />
+      <AssignItem {...assignProductsProps} type="product" />
     </>
   );
 };

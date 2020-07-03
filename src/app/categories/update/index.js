@@ -16,14 +16,13 @@ import { Header } from "@/components/Header";
 import { QueryWrapper } from "@/components/QueryWrapper";
 import { RowGrid } from "@/components/RowGrid";
 
-import { ProductSimpleList } from "@/app/_components/ProductSimpleList";
+import { SimpleListProduct } from "../../_components/SimpleListProduct";
 
-import { getCategory } from "../queries";
+import { GetCategory } from "../queries";
 import { DeleteCategory, UpdateCategory } from "../mutations";
 
 import { GeneralInformation, schema } from "../_form";
-import { BackgroundImage } from "./BackgroundImage";
-import { SubCategories } from "./SubCategories";
+import { BackgroundImage, SubCategories } from "./_components";
 
 export const getDefaultValues = (category) => ({
   name: category.name,
@@ -117,7 +116,7 @@ const Base = ({ category }) => {
         </Tabs>
         {params.activeTab === 0 && <SubCategories category={category} />}
         {params.activeTab === 1 && (
-          <ProductSimpleList title="All Products" vars={{ categories: [category.id] }} />
+          <SimpleListProduct title="All Products" vars={{ categories: [category.id] }} />
         )}
       </RowGrid>
       <SaveButton
@@ -134,7 +133,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={getCategory} vars={{ id, first: 20 }} fieldName="category">
+    <QueryWrapper query={GetCategory} vars={{ id, first: 20 }} fieldName="category">
       {(data) => <Base category={data.category} />}
     </QueryWrapper>
   );

@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-import { PageInfoFragment, sorterPagination } from "@/components/_graphql/fragments";
+import { PageInfoFragment } from "@/core/_graphql/fragments";
 
 import { PageDetailsFragment, PageFragment } from "./fragments";
 
@@ -15,11 +15,19 @@ export const GetPage = gql`
 
 export const GetPages = gql`
   query GetPages(
-    ${sorterPagination.type("PageSortField")}
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+    $sortBy: PageSortingInput
     $search: String
   ) {
     pages(
-      ${sorterPagination.vars}
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      sortBy: $sortBy
       filter: { search: $search }
     ) {
       pageInfo {

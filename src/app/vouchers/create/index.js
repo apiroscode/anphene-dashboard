@@ -7,26 +7,27 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers";
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_VOUCHER } from "@/graphql/mutations/vouchers";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, RowGrid } from "@/components/Template";
+import { CreateVoucher } from "../mutations";
 
-import { FormActiveDates } from "@/app/sales/components";
-
+import { ActiveDates } from "../../sales/_form";
 import {
-  FormGeneralInformation,
-  FormMinimumRequirements,
-  FormUsageLimit,
-  FormValue,
-  FormVoucherType,
+  GeneralInformation,
   getOptimizeData,
+  MinimumRequirements,
   schema,
   Summary,
-} from "../components";
+  UsageLimit,
+  Value,
+  VoucherType,
+} from "../_form";
 
 export default () => {
-  const [create] = useMutation(CREATE_VOUCHER);
+  const [create] = useMutation(CreateVoucher);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const methods = useForm({
@@ -81,12 +82,12 @@ export default () => {
       <Header title="Create sale" />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} isCreate />
-          <FormVoucherType {...methods} isCreate />
-          <FormValue {...methods} />
-          <FormMinimumRequirements {...methods} />
-          <FormUsageLimit {...methods} />
-          <FormActiveDates {...methods} />
+          <GeneralInformation {...methods} isCreate />
+          <VoucherType {...methods} isCreate />
+          <Value {...methods} />
+          <MinimumRequirements {...methods} />
+          <UsageLimit {...methods} />
+          <ActiveDates {...methods} />
         </RowGrid>
         <Summary {...methods} />
       </ColGrid>

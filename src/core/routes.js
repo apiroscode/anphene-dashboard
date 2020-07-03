@@ -47,15 +47,15 @@ const PageUpdate = lazy(() => import("@/app/pages/update"));
 const ProductList = lazy(() => import("@/app/products/list"));
 const ProductCreate = lazy(() => import("@/app/products/create"));
 const ProductUpdate = lazy(() => import("@/app/products/update"));
-const ProductImagesUpdate = lazy(() => import("@/app/products/imagesUpdate"));
+const ProductImagesUpdate = lazy(() => import("@/app/productsImages/update"));
 
 const ProductTypeList = lazy(() => import("@/app/productTypes/list"));
 const ProductTypeCreate = lazy(() => import("@/app/productTypes/create"));
 const ProductTypeUpdate = lazy(() => import("@/app/productTypes/update"));
 
-const ProductVariantsCreator = lazy(() => import("@/app/productVariants/creator"));
-const ProductVariantsCreate = lazy(() => import("@/app/productVariants/create"));
-const ProductVariantsUpdate = lazy(() => import("@/app/productVariants/update"));
+const ProductVariantsCreator = lazy(() => import("@/app/productsVariants/creator"));
+const ProductVariantsCreate = lazy(() => import("@/app/productsVariants/create"));
+const ProductVariantsUpdate = lazy(() => import("@/app/productsVariants/update"));
 
 const SaleList = lazy(() => import("@/app/sales/list"));
 const SaleCreate = lazy(() => import("@/app/sales/create"));

@@ -31,6 +31,15 @@ export const optimizeParams = (obj, newKeys, rangeKeys) => {
   });
   const newObj = Object.assign({}, ...keyValues);
 
+  if (Object.keys(newObj).includes("sortDirection") || Object.keys(newObj).includes("sortField")) {
+    newObj["sortBy"] = {
+      direction: newObj["sortDirection"] || undefined,
+      field: newObj["sortField"] || undefined,
+    };
+    delete newObj["sortDirection"];
+    delete newObj["sortField"];
+  }
+
   if (rangeKeys.length > 0) {
     for (let key of rangeKeys) {
       if (newObj[`${key}From`] !== undefined && newObj[`${key}To`] !== undefined) {

@@ -1,10 +1,10 @@
 import gql from "graphql-tag";
 
-import { PageInfoFragment, sorterPagination } from "@/components/_graphql/fragments";
+import { PageInfoFragment } from "@/core/_graphql/fragments";
 
 import { CategoryDetailsFragment, CategoryFragment } from "./fragments";
 
-export const getCategory = gql`
+export const GetCategory = gql`
   query GetCategory($id: ID!) {
     category(id: $id) {
       ...CategoryDetailsFragment
@@ -13,16 +13,24 @@ export const getCategory = gql`
   ${CategoryDetailsFragment}
 `;
 
-export const getCategories = gql`
+export const GetCategories = gql`
   query GetCategories(
-     ${sorterPagination.type("CategorySortField")}
-    $search: String, 
-    $parent: ID, 
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+    $sortBy: CategorySortingInput
+    $search: String
+    $parent: ID
     $level: Int
   ) {
     categories(
-      ${sorterPagination.vars}
-      level: $level, 
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      sortBy: $sortBy
+      level: $level
       filter: { search: $search, parent: $parent }
     ) {
       pageInfo {
@@ -39,7 +47,7 @@ export const getCategories = gql`
   ${CategoryFragment}
 `;
 
-export const getSimpleCategories = gql`
+export const GetSimpleCategories = gql`
   query GetSimpleCategories(
     $first: Int
     $last: Int

@@ -2,22 +2,22 @@ import React from "react";
 
 import { Delete as DeleteIcon } from "@material-ui/icons";
 
-import { GET_STAFF_USERS } from "@/graphql/queries/staff";
-import { BULK_ACTIVATE_STAFF, BULK_DELETE_STAFF } from "@/graphql/mutations/staff";
-
 import { useMutation } from "@/utils/hooks";
 
-import { List } from "@/components/Template";
-import { FilterRadioBox } from "@/components/Template/List/Filters";
+import { List } from "@/components/List";
+import { FilterRadioBox } from "@/components/ListFilters";
 import { StatusLabel } from "@/components/StatusLabel";
 
+import { GetStaffUsers } from "../queries";
+import { BulkActivateStaff, BulkDeleteStaff } from "../mutations";
+
 export default () => {
-  const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_STAFF);
-  const [bulkActivate, { loading: activateLoading }] = useMutation(BULK_ACTIVATE_STAFF);
+  const [bulkDelete, { loading: deleteLoading }] = useMutation(BulkDeleteStaff);
+  const [bulkActivate, { loading: activateLoading }] = useMutation(BulkActivateStaff);
 
   const props = {
     appName: "Staff Member",
-    query: GET_STAFF_USERS,
+    query: GetStaffUsers,
     queryField: "staffUsers",
     filters: [
       {

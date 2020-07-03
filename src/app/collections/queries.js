@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-import { PageInfoFragment, sorterPagination } from "@/components/_graphql/fragments";
+import { PageInfoFragment } from "@/core/_graphql/fragments";
 
 import { CollectionDetailsFragment, CollectionFragment } from "./fragments";
 
@@ -15,13 +15,21 @@ export const GetCollection = gql`
 
 export const GetCollections = gql`
   query GetCollections(
-    ${sorterPagination.type("CollectionSortField")}
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+    $sortBy: CollectionSortingInput
     $search: String
-    $published: CollectionPublished  
+    $published: CollectionPublished
   ) {
     collections(
-      ${sorterPagination.vars}, 
-      filter: { search: $search, published: $published}
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      sortBy: $sortBy
+      filter: { search: $search, published: $published }
     ) {
       pageInfo {
         ...PageInfoFragment
@@ -39,7 +47,11 @@ export const GetCollections = gql`
 
 export const GetSimpleCollections = gql`
   query GetSimpleCollections(
-    ${sorterPagination.type("CollectionSortField")}
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+    $sortBy: CollectionSortingInput
     $search: String
     $sales: [ID]
     $notInSales: [ID]
@@ -47,7 +59,11 @@ export const GetSimpleCollections = gql`
     $notInVouchers: [ID]
   ) {
     collections(
-      ${sorterPagination.vars}, 
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      sortBy: $sortBy
       filter: {
         search: $search
         sales: $sales

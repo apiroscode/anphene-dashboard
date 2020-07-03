@@ -9,20 +9,23 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_PRODUCT } from "@/graphql/mutations/products";
-import { INITIALIZE_PRODUCT_CREATE } from "@/graphql/queries/products";
+import { getErrors, Publish, SaveButton, Seo } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, PublishForm, SaveButton, SeoForm } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { CreateProduct } from "../mutations";
+import { InitializeProductCreate } from "../queries";
 
 import {
-  FormAttributes,
-  FormGeneralInformation,
-  FormInventory,
-  FormOrganizeProduct,
-  FormPricing,
-  FormWeight,
-} from "../components";
+  Attributes,
+  GeneralInformation,
+  Inventory,
+  OrganizeProduct,
+  Pricing,
+  Weight,
+} from "../_form";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -35,7 +38,7 @@ const Base = (props) => {
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [create] = useMutation(CREATE_PRODUCT);
+  const [create] = useMutation(CreateProduct);
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -109,22 +112,22 @@ const Base = (props) => {
       <Header title="Create Product" />
       <ColGrid>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
+          <GeneralInformation {...methods} />
           {productType && productType?.node?.productAttributes && (
-            <FormAttributes {...props} {...methods} />
+            <Attributes {...props} {...methods} />
           )}
           {productType && !productType?.node?.hasVariants && (
             <>
-              <FormPricing {...methods} />
-              <FormWeight {...methods} />
-              <FormInventory {...methods} useGenerator />
+              <Pricing {...methods} />
+              <Weight {...methods} />
+              <Inventory {...methods} useGenerator />
             </>
           )}
-          <SeoForm {...methods} />
+          <Seo {...methods} />
         </RowGrid>
         <RowGrid>
-          <FormOrganizeProduct {...props} {...methods} />
-          <PublishForm {...methods} />
+          <OrganizeProduct {...props} {...methods} />
+          <Publish {...methods} />
         </RowGrid>
       </ColGrid>
       <SaveButton onSubmit={handleSubmit(onSubmit)} loading={isSubmitting} disabled={!isDirty} />
@@ -134,7 +137,7 @@ const Base = (props) => {
 
 export default () => {
   return (
-    <QueryWrapper query={INITIALIZE_PRODUCT_CREATE} fieldName="collections" vars={{}}>
+    <QueryWrapper query={InitializeProductCreate} fieldName="collections" vars={{}}>
       {({ collections, categories, productTypes, suppliers }) => (
         <Base
           collections={collections.edges}

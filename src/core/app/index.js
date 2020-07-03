@@ -10,8 +10,8 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { INIT_URI } from "@/config/constants";
 import { theme as mainTheme } from "@/config/theme";
 
-import { INITIALIZE } from "@/graphql/queries/initialize";
-import { LOGOUT } from "@/graphql/mutations/auth";
+import { Initialize } from "../_graphql/queries";
+import { Logout } from "@/app/users/mutations";
 
 import { Baseline } from "./components/Baseline";
 import { Error } from "./components/Error";
@@ -65,14 +65,14 @@ export const App = () => {
 
         const {
           data: { me },
-        } = await client.query({ query: INITIALIZE });
+        } = await client.query({ query: Initialize });
 
         if (me) {
           const { isStaff } = me;
           if (isStaff) {
             updateAuth(me);
           } else {
-            await client.mutate({ mutation: LOGOUT });
+            await client.mutate({ mutation: Logout });
             setAppTheme("light");
           }
         } else {

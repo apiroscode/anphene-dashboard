@@ -6,7 +6,7 @@ import { useMutation } from "@/utils/hooks";
 
 import { List } from "@/components/List";
 
-import { getSupplier } from "../queries";
+import { GetSuppliers } from "../queries";
 import { BulkDeleteSupplier } from "../mutations";
 
 export default () => {
@@ -14,7 +14,7 @@ export default () => {
 
   const props = {
     appName: "Supplier",
-    query: getSupplier,
+    query: GetSuppliers,
     queryField: "suppliers",
     table: {
       defaultSort: {

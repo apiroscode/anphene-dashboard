@@ -14,7 +14,7 @@ import { Header } from "@/components/Header";
 import { RowGrid } from "@/components/RowGrid";
 
 import { CreatePage } from "../mutations";
-import { GeneralInformation, Url, schema } from "../_form";
+import { GeneralInformation, schema, Url } from "../_form";
 
 export default () => {
   const [create] = useMutation(CreatePage);

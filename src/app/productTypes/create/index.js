@@ -6,18 +6,19 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { CREATE_PRODUCT_TYPE } from "@/graphql/mutations/productTypes";
+import { getErrors, SaveButton } from "@/components/_form";
+import { Header } from "@/components/Header";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { Header, RowGrid } from "@/components/Template";
+import { CreateProductType } from "../mutations";
 
-import { FormGeneralInformation, schema } from "../components";
+import { GeneralInformation, schema } from "../_form";
 
 export default () => {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
-  const [create] = useMutation(CREATE_PRODUCT_TYPE);
+  const [create] = useMutation(CreateProductType);
 
   const methods = useForm({
     defaultValues: {
@@ -56,7 +57,7 @@ export default () => {
     <>
       <Header title="Create Product Type" />
       <RowGrid>
-        <FormGeneralInformation {...methods} />
+        <GeneralInformation {...methods} />
       </RowGrid>
       <SaveButton onSubmit={handleSubmit(onSubmit)} loading={isSubmitting} disabled={!isDirty} />
     </>

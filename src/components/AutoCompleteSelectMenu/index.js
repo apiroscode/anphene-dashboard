@@ -2,13 +2,15 @@ import React from "react";
 
 import Downshift from "downshift";
 
-import { TextField, Paper, MenuItem, CircularProgress } from "@material-ui/core";
+import { CircularProgress, MenuItem, Paper, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { ArrowBack } from "@material-ui/icons";
 
 import { getMenuItemByPath, validateMenuOptions } from "./utils";
 
-const validationError = new Error("Values supplied to AutocompleteSelectMenu should be unique");
+const validationError = new Error(
+  "AttributeValues supplied to AutocompleteSelectMenu should be unique"
+);
 
 const useStyles = makeStyles(
   (theme) => ({

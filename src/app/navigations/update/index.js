@@ -10,12 +10,15 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_MENU } from "@/graphql/queries/navigations";
-import { DELETE_MENU, UPDATE_MENU } from "@/graphql/mutations/navigations";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, QueryWrapper, RowGrid } from "@/components/Template";
-import { FormGeneralInformation } from "./components/FormGeneralInformation";
+import { GetMenu } from "../queries";
+import { DeleteMenu, UpdateMenu } from "../mutations";
+
+import { GeneralInformation } from "./_form/GeneralInformation";
 import { MenuItems } from "./MenuItems";
 
 const schema = yup.object().shape({
@@ -24,11 +27,11 @@ const schema = yup.object().shape({
 
 const Base = (props) => {
   const { menu } = props;
-  const [update] = useMutation(UPDATE_MENU);
+  const [update] = useMutation(UpdateMenu);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_MENU,
+    mutation: DeleteMenu,
     id: menu.id,
     name: menu.name,
     field: "menuDelete",
@@ -80,7 +83,7 @@ const Base = (props) => {
           </Typography>
         </div>
         <RowGrid>
-          <FormGeneralInformation {...methods} />
+          <GeneralInformation {...methods} />
           <MenuItems {...props} />
         </RowGrid>
       </ColGrid>
@@ -98,7 +101,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={GET_MENU} id={id} fieldName="menu">
+    <QueryWrapper query={GetMenu} id={id} fieldName="menu">
       {(data) => (
         <Base
           menu={data.menu}

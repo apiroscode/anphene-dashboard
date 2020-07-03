@@ -2,7 +2,7 @@ import { action, actionOn, thunk } from "easy-peasy";
 
 import { client } from "@/config/apollo";
 
-import { LOGOUT } from "@/graphql/mutations/auth";
+import { Logout } from "@/app/users/mutations";
 
 export const app = {
   loading: false,
@@ -37,7 +37,7 @@ export const auth = {
     state.user = payload;
   }),
   logout: thunk(async (actions) => {
-    await client.mutate({ mutation: LOGOUT });
+    await client.mutate({ mutation: Logout });
     actions.update(undefined);
   }),
 };

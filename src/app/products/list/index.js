@@ -2,21 +2,23 @@ import React from "react";
 
 import { Delete as DeleteIcon } from "@material-ui/icons";
 import { useMutation } from "@/utils/hooks";
-import { GET_PRODUCTS, INITIALIZE_PRODUCT_FILTER_DATA } from "@/graphql/queries/products";
-import { BULK_DELETE_PRODUCT, BULK_PUBLISH_PRODUCT } from "@/graphql/mutations/products";
 
 import { AvatarThumb } from "@/components/AvatarThumb";
 import { StatusLabel } from "@/components/StatusLabel";
-import { List, QueryWrapper } from "@/components/Template";
-import { FilterCheckBox, FilterRadioBox, FilterRange } from "@/components/Template/List/Filters";
+import { List } from "@/components/List";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { FilterCheckBox, FilterRadioBox, FilterRange } from "@/components/ListFilters";
+
+import { GetProducts, InitializeProductList } from "../queries";
+import { BulkDeleteProduct, BulkPublishProduct } from "../mutations";
 
 const Base = ({ collections, categories, productTypes }) => {
-  const [bulkDelete, { loading: deleteLoading }] = useMutation(BULK_DELETE_PRODUCT);
-  const [bulkPublish, { loading: publishLoading }] = useMutation(BULK_PUBLISH_PRODUCT);
+  const [bulkDelete, { loading: deleteLoading }] = useMutation(BulkDeleteProduct);
+  const [bulkPublish, { loading: publishLoading }] = useMutation(BulkPublishProduct);
 
   const props = {
     appName: "Product",
-    query: GET_PRODUCTS,
+    query: GetProducts,
     queryField: "products",
     filters: [
       {
@@ -154,7 +156,7 @@ const Base = ({ collections, categories, productTypes }) => {
 
 export default () => {
   return (
-    <QueryWrapper query={INITIALIZE_PRODUCT_FILTER_DATA} fieldName="collections" vars={{}}>
+    <QueryWrapper query={InitializeProductList} fieldName="collections" vars={{}}>
       {({ collections, categories, productTypes }) => (
         <Base
           collections={collections.edges}

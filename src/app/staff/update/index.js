@@ -8,21 +8,32 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { useMutation } from "@/utils/hooks";
 
-import { GET_STAFF } from "@/graphql/queries/staff";
-import { DELETE_STAFF, UPDATE_STAFF } from "@/graphql/mutations/staff";
+import { getErrors, SaveButton } from "@/components/_form";
+import { ColGrid } from "@/components/ColGrid";
+import { Header } from "@/components/Header";
+import { QueryWrapper } from "@/components/QueryWrapper";
+import { RowGrid } from "@/components/RowGrid";
 
-import { getErrors, SaveButton } from "@/components/form";
-import { ColGrid, Header, QueryWrapper, RowGrid } from "@/components/Template";
+import { GetStaff } from "../queries";
+import { DeleteStaff, UpdateStaff } from "../mutations";
+import { Detail, FormIdCard, Groups, schema, UserInformation } from "../_form";
 
-import { FormDetail, FormGroups, FormIdCard, FormUserInformation, schema } from "../components";
+const getDefaultValues = (user) => ({
+  email: user.email,
+  name: user.name,
+  note: user.note,
+  idCard: "",
+  isActive: user.isActive,
+  groups: user.groups.map((item) => item.id),
+});
 
 const Base = (props) => {
   const { user, groups: groupsData } = props;
-  const [update] = useMutation(UPDATE_STAFF);
+  const [update] = useMutation(UpdateStaff);
   const { enqueueSnackbar } = useSnackbar();
 
   const deleteProps = {
-    mutation: DELETE_STAFF,
+    mutation: DeleteStaff,
     id: user.id,
     name: user.name,
     field: "staffDelete",
@@ -30,14 +41,7 @@ const Base = (props) => {
 
   const methods = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      email: user.email,
-      name: user.name,
-      note: user.note,
-      idCard: "",
-      isActive: user.isActive,
-      groups: user.groups.map((item) => item.id),
-    },
+    defaultValues: getDefaultValues(user),
   });
 
   const {
@@ -86,13 +90,7 @@ const Base = (props) => {
       enqueueSnackbar(`Staff ${updatedUser.name} successfully updated.`, {
         variant: "success",
       });
-      reset({
-        email: updatedUser.email,
-        name: updatedUser.name,
-        note: updatedUser.note,
-        idCard: "",
-        groups: updatedUser.groups.map((item) => item.id),
-      });
+      reset(getDefaultValues(updatedUser));
     }
   };
   return (
@@ -100,7 +98,7 @@ const Base = (props) => {
       <Header title={`Update ${user.name}`} />
       <ColGrid>
         <RowGrid>
-          <FormUserInformation control={control} errors={errors} />
+          <UserInformation control={control} errors={errors} />
           <FormIdCard
             idCard={idCard}
             setValue={setValue}
@@ -109,8 +107,8 @@ const Base = (props) => {
           />
         </RowGrid>
         <RowGrid>
-          <FormGroups groupsData={groupsData} setValue={setValue} groups={groups} />
-          <FormDetail control={control} errors={errors} />
+          <Groups groupsData={groupsData} setValue={setValue} groups={groups} />
+          <Detail control={control} errors={errors} />
         </RowGrid>
       </ColGrid>
       <SaveButton
@@ -126,7 +124,7 @@ export default () => {
   const { id } = useParams();
 
   return (
-    <QueryWrapper query={GET_STAFF} id={id} fieldName="user">
+    <QueryWrapper query={GetStaff} id={id} fieldName="user">
       {(data) => {
         const groups = data.groups.edges.map((item) => item.node);
         return <Base user={data.user} groups={groups} />;
