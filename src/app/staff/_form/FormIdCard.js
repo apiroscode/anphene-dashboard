@@ -37,7 +37,7 @@ export const FormIdCard = (props) => {
     e.preventDefault();
     const file = e.target.files[0];
     if (file) {
-      setValue("idCard", e.target.files[0]);
+      setValue("idCard", e.target.files[0], { shouldValidate: true, shouldDirty: true });
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageUrl(reader.result);

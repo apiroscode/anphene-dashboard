@@ -45,7 +45,7 @@ export const AttributeValues = (props) => {
 
     newData.splice(oldIndex, 1);
     newData.splice(newIndex, 0, element);
-    setValue("values", newData);
+    setValue("values", newData, { shouldValidate: true, shouldDirty: true });
   };
 
   const handleClose = () => setParams({ action: undefined, id: undefined });

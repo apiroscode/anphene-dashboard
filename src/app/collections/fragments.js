@@ -18,6 +18,7 @@ export const CollectionFragment = gql`
     id
     name
     isPublished
+    featureOnHomepage
     products {
       totalCount
     }
@@ -38,5 +39,6 @@ export const CollectionDetailsFragment = gql`
     }
     publicationDate
     isPublished
+    featureOnHomepage
   }
 `;

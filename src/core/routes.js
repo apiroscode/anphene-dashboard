@@ -61,6 +61,8 @@ const SaleList = lazy(() => import("@/app/sales/list"));
 const SaleCreate = lazy(() => import("@/app/sales/create"));
 const SaleUpdate = lazy(() => import("@/app/sales/update"));
 
+const SiteUpdate = lazy(() => import("@/app/site/update"));
+
 const SupplierList = lazy(() => import("@/app/suppliers/list"));
 const SupplierCreate = lazy(() => import("@/app/suppliers/create"));
 const SupplierUpdate = lazy(() => import("@/app/suppliers/update"));
@@ -82,6 +84,7 @@ export const Routes = () => (
             PermissionEnum.MANAGE_MENUS,
             PermissionEnum.MANAGE_PAGES,
             PermissionEnum.MANAGE_PRODUCT_TYPES,
+            PermissionEnum.MANAGE_SETTINGS,
             PermissionEnum.MANAGE_STAFF,
             PermissionEnum.MANAGE_SUPPLIERS,
           ]}
@@ -176,6 +179,12 @@ export const Routes = () => (
           path="configuration/staff/:id"
           element={<StaffUpdate />}
           permissions={[PermissionEnum.MANAGE_STAFF]}
+        />
+
+        <Route
+          path="configuration/site-settings"
+          element={<SiteUpdate />}
+          permissions={[PermissionEnum.MANAGE_SETTINGS]}
         />
 
         <Route

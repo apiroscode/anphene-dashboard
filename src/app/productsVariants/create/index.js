@@ -84,7 +84,7 @@ const Base = ({ product }) => {
       .map((item) => item.values[0].substr(0, 3).toUpperCase());
 
     const newSku = [product.getUniqueSku, ...attributesValues].join("-");
-    setValue("sku", newSku);
+    setValue("sku", newSku, { shouldValidate: true, shouldDirty: true });
   }, [attributes, product.getUniqueSku, setValue]);
 
   const onSubmit = async (data) => {

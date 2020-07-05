@@ -24,7 +24,7 @@ export const Value = (props) => {
 
   useEffect(() => {
     if (type === "SHIPPING") {
-      setValue("discountType", "FIXED");
+      setValue("discountType", "FIXED", { shouldValidate: true, shouldDirty: true });
     }
   }, [setValue, type]);
 
@@ -87,7 +87,7 @@ export const Value = (props) => {
         }
         label={
           <>
-            Only once per order{" "}
+            Only once per order
             <Typography variant="caption">
               If this option is disabled, discount will be counted for every eligible product
             </Typography>

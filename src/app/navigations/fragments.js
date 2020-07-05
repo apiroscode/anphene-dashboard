@@ -47,23 +47,32 @@ export const MenuItemNestedFragment = gql`
   ${MenuItemFragment}
 `;
 
-export const MenuFragment = gql`
-  fragment MenuFragment on Menu {
+export const SimpleMenuFragment = gql`
+  fragment SimpleMenuFragment on Menu {
     id
     name
+    isMainNavigation
+    isSecondaryNavigation
+  }
+`;
+
+export const MenuFragment = gql`
+  fragment MenuFragment on Menu {
+    ...SimpleMenuFragment
     items {
       id
     }
   }
+  ${SimpleMenuFragment}
 `;
 
 export const MenuDetailsFragment = gql`
   fragment MenuDetailsFragment on Menu {
-    id
-    name
+    ...SimpleMenuFragment
     items {
       ...MenuItemNestedFragment
     }
   }
+  ${SimpleMenuFragment}
   ${MenuItemNestedFragment}
 `;

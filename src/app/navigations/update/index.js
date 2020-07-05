@@ -20,13 +20,14 @@ import { DeleteMenu, UpdateMenu } from "../mutations";
 
 import { GeneralInformation } from "./_form/GeneralInformation";
 import { MenuItems } from "./MenuItems";
+import { SetNavigation } from "./SetNavigation";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
 });
 
 const Base = (props) => {
-  const { menu } = props;
+  const { menu, refetch } = props;
   const [update] = useMutation(UpdateMenu);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -74,14 +75,17 @@ const Base = (props) => {
   return (
     <>
       <ColGrid reverse>
-        <div>
-          <Typography variant="h5">Navigation</Typography>
-          <Typography variant="body1">
-            Creating the navigation structure is done by dragging and dropping. Simply create a new
-            menu item and then drag it into its destined place. You can move items inside one
-            another to create a tree structure and drag items up and down to create a hierarchy
-          </Typography>
-        </div>
+        <RowGrid>
+          <div>
+            <Typography variant="h5">Navigation</Typography>
+            <Typography variant="body1">
+              Creating the navigation structure is done by dragging and dropping. Simply create a
+              new menu item and then drag it into its destined place. You can move items inside one
+              another to create a tree structure and drag items up and down to create a hierarchy
+            </Typography>
+          </div>
+          <SetNavigation menu={menu} refetch={refetch} />
+        </RowGrid>
         <RowGrid>
           <GeneralInformation {...methods} />
           <MenuItems {...props} />
@@ -102,12 +106,13 @@ export default () => {
 
   return (
     <QueryWrapper query={GetMenu} id={id} fieldName="menu">
-      {(data) => (
+      {(data, { refetch }) => (
         <Base
           menu={data.menu}
           collections={data.collections.edges}
           categories={data.categories.edges}
           pages={data.pages.edges}
+          refetch={refetch}
         />
       )}
     </QueryWrapper>

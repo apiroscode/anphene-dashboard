@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 
 import { ErrorFragment } from "@/core/_graphql/fragments";
 
-import { MenuDetailsFragment } from "./fragments";
+import { MenuDetailsFragment, SimpleMenuFragment } from "./fragments";
 
 export const CreateMenu = gql`
   mutation CreateMenu($input: MenuCreateInput!) {
@@ -25,12 +25,12 @@ export const UpdateMenu = gql`
         ...ErrorFragment
       }
       menu {
-        id
-        name
+        ...SimpleMenuFragment
       }
     }
   }
   ${ErrorFragment}
+  ${SimpleMenuFragment}
 `;
 
 export const DeleteMenu = gql`
@@ -53,6 +53,21 @@ export const BulkDeleteMenu = gql`
     }
   }
   ${ErrorFragment}
+`;
+
+export const AssignNavigation = gql`
+  mutation AssignNavigation($menu: ID, $navigationType: NavigationType!) {
+    assignNavigation(menu: $menu, navigationType: $navigationType) {
+      errors {
+        ...ErrorFragment
+      }
+      menu {
+        ...SimpleMenuFragment
+      }
+    }
+  }
+  ${ErrorFragment}
+  ${SimpleMenuFragment}
 `;
 
 export const CreateMenuItem = gql`

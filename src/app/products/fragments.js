@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import { ProductImageFragment } from "@/app/productsImages/fragments";
 
 export const ProductFragment = gql`
   fragment ProductFragment on Product {
@@ -87,4 +88,5 @@ export const ProductDetailsFragment = gql`
       weight
     }
   }
+  ${ProductImageFragment}
 `;

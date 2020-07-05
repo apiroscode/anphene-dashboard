@@ -79,7 +79,7 @@ const Base = ({ groups: groupsData }) => {
     if (errors.length > 0) {
       getErrors(errors, setError);
     } else {
-      enqueueSnackbar(`Staff ${user.name} successfully invited.`, {
+      enqueueSnackbar(`Staff ${data.name} successfully invited.`, {
         variant: "success",
       });
       navigate(`../${user.id}`);

@@ -1,7 +1,12 @@
 import React from "react";
 
 import { Button } from "@material-ui/core";
-import { Delete as DeleteIcon } from "@material-ui/icons";
+import { green, red } from "@material-ui/core/colors";
+import {
+  CheckCircle as CheckCircleIcon,
+  Delete as DeleteIcon,
+  RemoveCircle as RemoveCircleIcon,
+} from "@material-ui/icons";
 
 import { useMutation, useQS } from "@/utils/hooks";
 
@@ -44,6 +49,28 @@ export default () => {
           field: "name",
           align: "left",
           sortField: "NAME",
+        },
+        {
+          label: "Main Navigation",
+          field: "isMainNavigation",
+          align: "center",
+          render: (value) =>
+            value ? (
+              <CheckCircleIcon style={{ color: green[500] }} />
+            ) : (
+              <RemoveCircleIcon style={{ color: red[500] }} />
+            ),
+        },
+        {
+          label: "Secondary Navigation",
+          field: "isSecondaryNavigation",
+          align: "center",
+          render: (value) =>
+            value ? (
+              <CheckCircleIcon style={{ color: green[500] }} />
+            ) : (
+              <RemoveCircleIcon style={{ color: red[500] }} />
+            ),
         },
         {
           label: "Items",

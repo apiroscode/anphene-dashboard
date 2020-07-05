@@ -31,7 +31,7 @@ export const ValueAssign = (props) => {
         message: "Name already existed",
       });
     } else {
-      setValue("values", [...values, data]);
+      setValue("values", [...values, data], { shouldValidate: true, shouldDirty: true });
       handleClose();
     }
   };

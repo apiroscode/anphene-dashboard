@@ -61,7 +61,7 @@ export const MenuItemDialog = (props) => {
         children: categories.map((category) => ({
           children: [],
           data: {},
-          label: category.node.name,
+          label: `${"-".repeat(category.node?.level)}${category?.node?.name}`,
           value: "category:" + category.node.id,
         })),
         data: {},

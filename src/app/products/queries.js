@@ -75,6 +75,9 @@ export const GetProduct = gql`
     ...SimpleCollectionsFragment
     ...SimpleSuppliersFragment
   }
+  ${SimpleCategoriesFragment}
+  ${SimpleCollectionsFragment}
+  ${SimpleSuppliersFragment}
   ${ProductDetailsFragment}
 `;
 

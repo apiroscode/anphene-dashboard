@@ -33,7 +33,7 @@ export const AttributeMultiSelect = (props) => {
     const oldAttributes = [...attributes];
     const oldValues = oldAttributes[idx].values;
     oldAttributes[idx].values = oldValues.filter((item) => item !== slug);
-    setValue("attributes", oldAttributes);
+    setValue("attributes", oldAttributes, { shouldValidate: true, shouldDirty: true });
   };
 
   return (
@@ -64,7 +64,7 @@ export const AttributeMultiSelect = (props) => {
         onChange={(_, value) => {
           const oldAttributes = [...attributes];
           oldAttributes[idx].values = value.map((item) => item.slug);
-          setValue("attributes", oldAttributes);
+          setValue("attributes", oldAttributes, { shouldValidate: true, shouldDirty: true });
         }}
       />
       <div className={classesChip.root}>

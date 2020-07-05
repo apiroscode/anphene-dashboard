@@ -59,7 +59,7 @@ const useStyles = makeStyles(
         height: 40,
         marginRight: theme.spacing(1),
       },
-      background: "#06847B",
+      background: theme.palette.primary.main,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",

@@ -3,6 +3,7 @@ import {
   AllPermissionsFragment,
   GroupDetailsFragment,
   GroupFragment,
+  SimpleGroupsFragment,
   UserFragment,
 } from "./fragments";
 import { PageInfoFragment } from "@/core/_graphql/fragments";
@@ -60,6 +61,7 @@ export const GetSimpleGroups = gql`
   query GetSimpleGroups {
     ...SimpleGroupsFragment
   }
+  ${SimpleGroupsFragment}
 `;
 
 export const GetAvailableStaff = gql`

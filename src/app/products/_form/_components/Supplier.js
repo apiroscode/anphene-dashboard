@@ -25,7 +25,10 @@ export const Supplier = (props) => {
       getOptionLabel={(item) => item?.node?.name}
       getOptionSelected={(option) => option.node.id === supplier}
       onChange={(_, value) => {
-        setValue("supplier", value?.node?.id || undefined);
+        setValue("supplier", value?.node?.id || undefined, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
       }}
       renderInput={(params) => (
         <TextField

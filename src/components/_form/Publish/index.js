@@ -6,7 +6,15 @@ import { FormControlLabel, Link, Radio, RadioGroup, TextField } from "@material-
 import { Card } from "../../Card";
 
 export const Publish = (props) => {
-  const { control, setValue, register, unregister, publish = false, date = null } = props;
+  const {
+    control,
+    setValue,
+    register,
+    unregister,
+    publish = false,
+    date = null,
+    addOn = null,
+  } = props;
   const [open, setOpen] = useState(!!date);
   const isPublished = useWatch({
     control,
@@ -29,17 +37,20 @@ export const Publish = (props) => {
   }, [register, unregister]);
 
   const handleIsPublishedChange = (e) => {
-    setValue("isPublished", e.target.value === "true");
+    setValue("isPublished", e.target.value === "true", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
   };
 
   const handlePublicationDateChange = (e) => {
-    setValue("publicationDate", e.target.value);
+    setValue("publicationDate", e.target.value, { shouldValidate: true, shouldDirty: true });
   };
 
   const handleClickOpen = () => {
     if (open) {
       setOpen(false);
-      setValue("publicationDate", null);
+      setValue("publicationDate", null, { shouldValidate: true, shouldDirty: true });
     } else {
       setOpen(true);
     }
@@ -66,6 +77,7 @@ export const Publish = (props) => {
           onChange={handlePublicationDateChange}
         />
       )}
+      {addOn}
     </Card>
   );
 };

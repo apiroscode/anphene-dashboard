@@ -38,7 +38,7 @@ export const Attribute = (props) => {
       onChange={(_, value) => {
         const oldAttributes = [...attributes];
         oldAttributes[idx].values = value?.slug ? [value.slug] : [];
-        setValue("attributes", oldAttributes);
+        setValue("attributes", oldAttributes, { shouldValidate: true, shouldDirty: true });
       }}
       renderInput={(params) => <TextField {...params} label={attribute.name} variant="outlined" />}
     />

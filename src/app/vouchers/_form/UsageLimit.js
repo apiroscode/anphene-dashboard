@@ -23,7 +23,7 @@ export const UsageLimit = (props) => {
     const newChecked = e.target.checked;
     setOpen(newChecked);
     if (!newChecked) {
-      setValue("usageLimit", 0);
+      setValue("usageLimit", 0, { shouldValidate: true, shouldDirty: true });
     }
   };
 
@@ -51,7 +51,9 @@ export const UsageLimit = (props) => {
             error={!!errors.storefrontSearchPosition}
             helperText={errors.storefrontSearchPosition?.message}
             value={usageLimit}
-            onChange={(e) => setValue("usageLimit", e.target.value)}
+            onChange={(e) =>
+              setValue("usageLimit", e.target.value, { shouldValidate: true, shouldDirty: true })
+            }
           />
         )}
         <FormControlLabel

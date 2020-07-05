@@ -68,10 +68,13 @@ const Base = ({ data }) => {
 
   const handlePermission = (e) => {
     if (e.target.checked) {
-      setValue("permissions", [...permissions, e.target.name]);
+      setValue("permissions", [...permissions, e.target.name], {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     } else {
       const newPermissions = permissions.filter((item) => item !== e.target.name);
-      setValue("permissions", newPermissions);
+      setValue("permissions", newPermissions, { shouldValidate: true, shouldDirty: true });
     }
   };
 

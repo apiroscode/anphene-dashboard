@@ -10,11 +10,12 @@ export const Groups = (props) => {
 
   const handleGroups = (e) => {
     if (e.target.checked) {
-      setValue("groups", [...groups, e.target.name]);
+      setValue("groups", [...groups, e.target.name], { shouldValidate: true, shouldDirty: true });
     } else {
       setValue(
         "groups",
-        groups.filter((item) => item !== e.target.name)
+        groups.filter((item) => item !== e.target.name),
+        { shouldValidate: true, shouldDirty: true }
       );
     }
   };

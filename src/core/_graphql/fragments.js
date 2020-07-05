@@ -30,3 +30,25 @@ export const AuthLoginFragment = gql`
     }
   }
 `;
+
+export const AddressFragment = gql`
+  fragment AddressFragment on Address {
+    id
+    name
+    phone
+    streetAddress
+    postalCode
+    subDistrict {
+      id
+      name
+      city {
+        id
+        name
+        province {
+          id
+          name
+        }
+      }
+    }
+  }
+`;

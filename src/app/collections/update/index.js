@@ -28,7 +28,7 @@ import {
 
 import { GeneralInformation } from "../_form";
 
-import { BackgroundImage } from "./_components";
+import { BackgroundImage, FeatureOnHomePage } from "./_components";
 
 export const getDefaultValues = (collection) => ({
   name: collection.name,
@@ -133,6 +133,7 @@ const Base = ({ collection }) => {
             {...methods}
             publish={collection.isPublished}
             date={collection.publicationDate}
+            addOn={<FeatureOnHomePage collection={collection} />}
           />
         </RowGrid>
       </ColGrid>

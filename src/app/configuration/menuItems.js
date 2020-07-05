@@ -9,6 +9,7 @@ import Pages from "@/components/_icons/Pages";
 import ProductTypes from "@/components/_icons/ProductTypes";
 import StaffMembers from "@/components/_icons/StaffMembers";
 import Suppliers from "@/components/_icons/Suppliers";
+import SiteSettings from "@/components/_icons/SiteSettings";
 
 export const menuItems = [
   {
@@ -77,6 +78,13 @@ export const menuItems = [
         label: "Pages",
         description: "Manage and add additional pages",
         permission: PermissionEnum.MANAGE_PAGES,
+      },
+      {
+        icon: <SiteSettings fontSize="inherit" viewBox="0 0 44 44" />,
+        url: "site-settings",
+        label: "Site Settings",
+        description: "View and update your site settings",
+        permission: PermissionEnum.MANAGE_SETTINGS,
       },
     ],
   },

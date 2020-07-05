@@ -48,7 +48,12 @@ export const Seo = (props) => {
                 : `${helperText} Max 70 characters.`
             }
             value={seoTitle}
-            onChange={(e) => setValue("seo.title", e.target.value.slice(0, 69))}
+            onChange={(e) =>
+              setValue("seo.title", e.target.value.slice(0, 69), {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
           />
           <TextField
             label="Search engine description"
@@ -57,7 +62,12 @@ export const Seo = (props) => {
             rows={10}
             error={!!errors.seo?.description}
             value={seoDescription}
-            onChange={(e) => setValue("seo.description", e.target.value.slice(0, 299))}
+            onChange={(e) =>
+              setValue("seo.description", e.target.value.slice(0, 299), {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
             helperText={
               !!errors.seo?.description
                 ? errors.seo?.description?.message

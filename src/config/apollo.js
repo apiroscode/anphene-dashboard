@@ -1,4 +1,4 @@
-import { InMemoryCache } from "apollo-cache-inmemory";
+import { defaultDataIdFromObject, InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloClient } from "apollo-client";
 import { ApolloLink, from } from "apollo-link";
 import { onError } from "apollo-link-error";
@@ -9,7 +9,16 @@ import { API_URI } from "./constants";
 import { store } from "./store";
 import { createUploadLink } from "apollo-upload-client";
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+  dataIdFromObject: (obj) => {
+    // We need to set manually shop's ID, since it is singleton and
+    // API does not return its ID
+    if (obj.__typename === "Shop") {
+      return "shop";
+    }
+    return defaultDataIdFromObject(obj);
+  },
+});
 
 const errorLog = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {

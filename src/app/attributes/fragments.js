@@ -9,6 +9,14 @@ const AttributeValueFragment = gql`
   }
 `;
 
+export const SimpleAttributeFragment = gql`
+  fragment SimpleAttributeFragment on Attribute {
+    id
+    name
+    slug
+  }
+`;
+
 export const AttributeFragment = gql`
   fragment AttributeFragment on Attribute {
     id

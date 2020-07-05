@@ -26,7 +26,10 @@ export const Category = (props) => {
       getOptionLabel={(item) => `${"-".repeat(item.node?.level)}${item?.node?.name}`}
       getOptionSelected={(option) => option.node.id === category}
       onChange={(_, value) => {
-        setValue("category", value?.node?.id || undefined);
+        setValue("category", value?.node?.id || undefined, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
       }}
       renderInput={(params) => (
         <TextField

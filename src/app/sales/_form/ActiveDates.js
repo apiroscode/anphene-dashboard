@@ -27,8 +27,8 @@ export const ActiveDates = (props) => {
   const handleChangeEndDate = () => {
     if (openEndDate) {
       setOpenEndDate(false);
-      setValue("endDate", "");
-      setValue("endHour", "");
+      setValue("endDate", "", { shouldValidate: true, shouldDirty: true });
+      setValue("endHour", "", { shouldValidate: true, shouldDirty: true });
     } else {
       setOpenEndDate(true);
     }

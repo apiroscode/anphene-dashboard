@@ -26,14 +26,18 @@ export const ProductType = (props) => {
       getOptionLabel={(item) => item?.node?.name}
       getOptionSelected={(option) => option.node.id === productType}
       onChange={(_, value) => {
-        setValue("productType", value?.node?.id || undefined);
+        setValue("productType", value?.node?.id || undefined, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
         if (value?.node?.productAttributes.length > 0) {
           setValue(
             "attributes",
-            value?.node?.productAttributes.map((item) => ({ id: item.id, values: [] }))
+            value?.node?.productAttributes.map((item) => ({ id: item.id, values: [] })),
+            { shouldValidate: true, shouldDirty: true }
           );
         } else {
-          setValue("attributes", []);
+          setValue("attributes", [], { shouldValidate: true, shouldDirty: true });
         }
       }}
       renderInput={(params) => (

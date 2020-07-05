@@ -1,6 +1,10 @@
 import React from "react";
 
-import { Delete as DeleteIcon } from "@material-ui/icons";
+import {
+  CheckCircle as CheckCircleIcon,
+  Delete as DeleteIcon,
+  RemoveCircle as RemoveCircleIcon,
+} from "@material-ui/icons";
 
 import { useMutation } from "@/utils/hooks";
 
@@ -10,6 +14,7 @@ import { StatusLabel } from "@/components/StatusLabel";
 
 import { GetCollections } from "../queries";
 import { BulkDeleteCollection, BulkPublishCollection } from "../mutations";
+import { green, red } from "@material-ui/core/colors";
 
 export default () => {
   const [bulkDelete, { loading: deleteLoading }] = useMutation(BulkDeleteCollection);
@@ -65,6 +70,17 @@ export default () => {
               label={isPublished ? "Published" : "Not published"}
             />
           ),
+        },
+        {
+          label: "Feature On Homepage",
+          field: "featureOnHomepage",
+          align: "center",
+          render: (value) =>
+            value ? (
+              <CheckCircleIcon style={{ color: green[500] }} />
+            ) : (
+              <RemoveCircleIcon style={{ color: red[500] }} />
+            ),
         },
       ],
     },

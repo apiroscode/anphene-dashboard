@@ -68,7 +68,7 @@ export const Properties = (props) => {
         }
         label={
           <>
-            Use in Filtering{" "}
+            Use in Filtering
             <Typography variant="caption">
               If enabled, you’ll be able to use this attribute to filter products in product list.
             </Typography>
@@ -87,7 +87,7 @@ export const Properties = (props) => {
         }
         label={
           <>
-            Add to Column Options{" "}
+            Add to Column Options
             <Typography variant="caption">
               If enabled this attribute can be used as a column in product table.
             </Typography>

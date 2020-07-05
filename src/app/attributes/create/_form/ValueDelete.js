@@ -10,7 +10,7 @@ export const ValueDelete = (props) => {
 
   const remove = () => {
     const newData = [...values.slice(0, id), ...values.slice(id + 1)];
-    setValue("values", newData);
+    setValue("values", newData, { shouldValidate: true, shouldDirty: true });
     handleClose();
   };
 

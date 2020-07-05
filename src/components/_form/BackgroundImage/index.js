@@ -58,7 +58,12 @@ export const BackgroundImage = (props) => {
             fullWidth
             error={!!errors.backgroundImageAlt}
             value={backgroundImageAlt}
-            onChange={(e) => setValue("backgroundImageAlt", e.target.value.slice(0, 299))}
+            onChange={(e) =>
+              setValue("backgroundImageAlt", e.target.value.slice(0, 299), {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
             helperText={
               !!errors.backgroundImageAlt ? errors.backgroundImageAlt?.message : "(Optional)"
             }

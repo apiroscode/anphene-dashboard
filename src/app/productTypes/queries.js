@@ -2,7 +2,9 @@ import gql from "graphql-tag";
 
 import { PageInfoFragment } from "@/core/_graphql/fragments";
 
-import { AttributeFragment, ProductTypeDetailsFragment, ProductTypeFragment } from "./fragments";
+import { SimpleAttributeFragment } from "../attributes/fragments";
+
+import { ProductTypeDetailsFragment, ProductTypeFragment } from "./fragments";
 
 export const GetProductType = gql`
   query GetProductType($id: ID!) {
@@ -56,11 +58,11 @@ export const GetAvailableAttributes = gql`
         }
         edges {
           node {
-            ...AttributeFragment
+            ...SimpleAttributeFragment
           }
         }
       }
     }
   }
-  ${AttributeFragment}
+  ${SimpleAttributeFragment}
 `;

@@ -28,12 +28,12 @@ export const MinimumRequirements = (props) => {
 
   const handleChange = (e) => {
     if (e.target.value === "none") {
-      setValue("minSpentAmount", 0);
-      setValue("minCheckoutItemsQuantity", 0);
+      setValue("minSpentAmount", 0, { shouldValidate: true, shouldDirty: true });
+      setValue("minCheckoutItemsQuantity", 0, { shouldValidate: true, shouldDirty: true });
     } else if (e.target.value === "value") {
-      setValue("minCheckoutItemsQuantity", 0);
+      setValue("minCheckoutItemsQuantity", 0, { shouldValidate: true, shouldDirty: true });
     } else {
-      setValue("minSpentAmount", 0);
+      setValue("minSpentAmount", 0, { shouldValidate: true, shouldDirty: true });
     }
     setState(e.target.value);
   };
@@ -65,7 +65,9 @@ export const MinimumRequirements = (props) => {
             startAdornment: <InputAdornment position="start">Rp</InputAdornment>,
           }}
           value={minSpentAmount}
-          onChange={(e) => setValue("minSpentAmount", e.target.value)}
+          onChange={(e) =>
+            setValue("minSpentAmount", e.target.value, { shouldValidate: true, shouldDirty: true })
+          }
         />
       )}
       {state === "quantity" && (
@@ -77,7 +79,12 @@ export const MinimumRequirements = (props) => {
           error={!!errors.minCheckoutItemsQuantity}
           helperText={errors.minCheckoutItemsQuantity?.message}
           value={minCheckoutItemsQuantity}
-          onChange={(e) => setValue("minCheckoutItemsQuantity", e.target.value)}
+          onChange={(e) =>
+            setValue("minCheckoutItemsQuantity", e.target.value, {
+              shouldValidate: true,
+              shouldDirty: true,
+            })
+          }
         />
       )}
     </Card>

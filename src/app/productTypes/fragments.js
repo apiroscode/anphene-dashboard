@@ -1,5 +1,7 @@
 import gql from "graphql-tag";
 
+import { SimpleAttributeFragment } from "../attributes/fragments";
+
 export const SimpleProductTypesFragment = gql`
   fragment SimpleProductTypesFragment on Query {
     productTypes(first: 100) {
@@ -39,14 +41,6 @@ export const ProductTypesFragment = gql`
   }
 `;
 
-export const AttributeFragment = gql`
-  fragment AttributeFragment on Attribute {
-    id
-    name
-    slug
-  }
-`;
-
 export const ProductTypeFragment = gql`
   fragment ProductTypeFragment on ProductType {
     id
@@ -61,11 +55,11 @@ export const ProductTypeDetailsFragment = gql`
     name
     hasVariants
     productAttributes {
-      ...AttributeFragment
+      ...SimpleAttributeFragment
     }
     variantAttributes {
-      ...AttributeFragment
+      ...SimpleAttributeFragment
     }
   }
-  ${AttributeFragment}
+  ${SimpleAttributeFragment}
 `;

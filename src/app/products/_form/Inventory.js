@@ -24,7 +24,7 @@ const GenerateSku = (props) => {
         productGetSku: { sku },
       },
     } = await generate({ variables: { name } });
-    setValue("sku", sku);
+    setValue("sku", sku, { shouldValidate: true, shouldDirty: true });
   };
 
   return (
@@ -74,7 +74,7 @@ export const Inventory = (props) => {
         }
         label={
           <>
-            Track Inventory{" "}
+            Track Inventory
             <Typography variant="caption">
               Active inventory tracking will automatically calculate changes of stock
             </Typography>

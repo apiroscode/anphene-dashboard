@@ -87,3 +87,18 @@ export const CollectionRemoveProducts = gql`
   }
   ${ErrorFragment}
 `;
+
+export const AssignCollectionHomepage = gql`
+  mutation AssignCollectionHomepage($collection: ID) {
+    assignCollectionHomepage(collection: $collection) {
+      errors {
+        ...ErrorFragment
+      }
+      collection {
+        ...CollectionDetailsFragment
+      }
+    }
+  }
+  ${ErrorFragment}
+  ${CollectionDetailsFragment}
+`;

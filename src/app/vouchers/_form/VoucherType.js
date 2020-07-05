@@ -24,7 +24,7 @@ export const VoucherType = (props) => {
               control={<Radio color="primary" />}
               label={
                 <>
-                  Specific product{" "}
+                  Specific product
                   {isCreate && (
                     <Typography variant="caption">
                       The products can be assign after this voucher created

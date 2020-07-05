@@ -87,7 +87,7 @@ const Base = (props) => {
     if (errors.length > 0) {
       getErrors(errors, setError);
     } else {
-      enqueueSnackbar(`Staff ${updatedUser.name} successfully updated.`, {
+      enqueueSnackbar(`Staff ${data.name} successfully updated.`, {
         variant: "success",
       });
       reset(getDefaultValues(updatedUser));

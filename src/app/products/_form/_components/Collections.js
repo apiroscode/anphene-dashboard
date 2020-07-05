@@ -39,7 +39,8 @@ export const Collections = (props) => {
   const removeCollection = (id) => {
     setValue(
       "collections",
-      collectionsValue.filter((item) => item !== id)
+      collectionsValue.filter((item) => item !== id),
+      { shouldValidate: true, shouldDirty: true }
     );
   };
 
@@ -77,7 +78,8 @@ export const Collections = (props) => {
         onChange={(_, value) => {
           setValue(
             "collections",
-            value.map((item) => item.node.id)
+            value.map((item) => item.node.id),
+            { shouldValidate: true, shouldDirty: true }
           );
         }}
       />

@@ -82,6 +82,7 @@ const Base = (props) => {
   const {
     variants,
     productType: { hasVariants },
+    attributes,
   } = product;
 
   const deleteProps = {
@@ -131,7 +132,6 @@ const Base = (props) => {
       reset(getDefaultValues(updatedProduct));
     }
   };
-
   return hasVariants && variants.length === 0 ? (
     <Navigate to="variants-creator" />
   ) : (
@@ -141,9 +141,9 @@ const Base = (props) => {
         <RowGrid>
           <GeneralInformation {...methods} product={product} />
           <ImageList product={product} handleSubmit={handleSubmit} />
+          {attributes && attributes.length > 0 && <Attributes {...props} {...methods} />}
           {!hasVariants ? (
             <>
-              <Attributes {...props} {...methods} />
               <Pricing {...methods} />
               <Weight {...methods} />
               <Inventory {...props} {...methods} />

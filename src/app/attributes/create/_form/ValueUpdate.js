@@ -43,7 +43,7 @@ export const ValueUpdate = (props) => {
     } else {
       const newValues = [...values];
       newValues[id] = data;
-      setValue("values", newValues);
+      setValue("values", newValues, { shouldValidate: true, shouldDirty: true });
       handleClose();
     }
   };
