@@ -40,6 +40,10 @@ export const backLink = [
     label: "Collections",
   },
   {
+    link: "/customers",
+    label: "Customers",
+  },
+  {
     link: "/products",
     label: "Products",
   },

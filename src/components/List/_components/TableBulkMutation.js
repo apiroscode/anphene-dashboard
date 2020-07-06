@@ -24,6 +24,7 @@ export const TableBulkMutation = (props) => {
     setOpen(false);
   };
   const handleMutation = async () => {
+    handleClose();
     await item.mutation({
       variables: {
         [item.selector ? item.selector : "ids"]: selected,
@@ -31,7 +32,6 @@ export const TableBulkMutation = (props) => {
       },
     });
     await refetch();
-    handleClose();
   };
 
   return (

@@ -29,6 +29,12 @@ const CollectionUpdate = lazy(() => import("@/app/collections/update"));
 
 const Configuration = lazy(() => import("@/app/configuration"));
 
+const CustomerList = lazy(() => import("@/app/customers/list"));
+const CustomerCreate = lazy(() => import("@/app/customers/create"));
+const CustomerUpdate = lazy(() => import("@/app/customers/update"));
+
+const CustomerAddressesList = lazy(() => import("@/app/customersAddresses/list"));
+
 const GroupList = lazy(() => import("@/app/groups/list"));
 const GroupCreate = lazy(() => import("@/app/groups/create"));
 const GroupUpdate = lazy(() => import("@/app/groups/update"));
@@ -238,6 +244,28 @@ export const Routes = () => (
           path="collections/:id"
           element={<CollectionUpdate />}
           permissions={[PermissionEnum.MANAGE_COLLECTIONS]}
+        />
+
+        <Route
+          path="customers"
+          element={<CustomerList />}
+          permissions={[PermissionEnum.MANAGE_CUSTOMERS]}
+        />
+        <Route
+          path="customers/create"
+          element={<CustomerCreate />}
+          permissions={[PermissionEnum.MANAGE_CUSTOMERS]}
+        />
+        <Route
+          path="customers/:id"
+          element={<CustomerUpdate />}
+          permissions={[PermissionEnum.MANAGE_CUSTOMERS]}
+        />
+
+        <Route
+          path="customers/:id/addresses"
+          element={<CustomerAddressesList />}
+          permissions={[PermissionEnum.MANAGE_CUSTOMERS]}
         />
 
         <Route

@@ -9,49 +9,49 @@ import { Districts } from "@/app/_components/Districts";
 
 import { Card } from "@/components/Card";
 
-export const StoreInformation = (props) => {
+export const PrimaryAddress = (props) => {
   const { control, errors, address, setValue, register, unregister } = props;
   const { selected, setSelected, options, loading, onChange } = useDistrict({
     address,
     setValue,
-    valueName: "addressInput.subDistrict",
+    valueName: "defaultShippingAddress.subDistrict",
   });
 
   useEffect(() => {
-    register("addressInput.subDistrict");
+    register("defaultShippingAddress.subDistrict");
     return () => {
-      unregister("addressInput.subDistrict");
+      unregister("defaultShippingAddress.subDistrict");
     };
   }, [register, unregister]);
 
   return (
-    <Card title="Store Information" useMargin>
+    <Card title="Primary Address" useMargin>
       <Controller
         as={TextField}
         control={control}
-        name="addressInput.name"
-        label="Company"
+        name="defaultShippingAddress.name"
+        label="Name"
         fullWidth
-        error={!!errors.addressInput?.name}
-        helperText={errors.addressInput?.name?.message}
+        error={!!errors.defaultShippingAddress?.name}
+        helperText={errors.defaultShippingAddress?.name?.message}
       />
       <Controller
         as={TextField}
         control={control}
-        name="addressInput.phone"
+        name="defaultShippingAddress.phone"
         label="Phone"
         fullWidth
-        error={!!errors.addressInput?.phone}
-        helperText={errors.addressInput?.phone?.message}
+        error={!!errors.defaultShippingAddress?.phone}
+        helperText={errors.defaultShippingAddress?.phone?.message}
       />
       <Controller
         as={TextField}
         control={control}
-        name="addressInput.streetAddress"
+        name="defaultShippingAddress.streetAddress"
         label="Address"
         fullWidth
-        error={!!errors.addressInput?.streetAddress}
-        helperText={errors.addressInput?.streetAddress?.message}
+        error={!!errors.defaultShippingAddress?.streetAddress}
+        helperText={errors.defaultShippingAddress?.streetAddress?.message}
       />
       <Districts
         label="Province"
@@ -76,17 +76,17 @@ export const StoreInformation = (props) => {
         loading={loading.district}
         selected={selected.district}
         setSelected={setSelected}
-        error={!!errors.addressInput?.subDistrict}
-        helperText={errors.addressInput?.subDistrict?.message}
+        error={!!errors.defaultShippingAddress?.subDistrict}
+        helperText={errors.defaultShippingAddress?.subDistrict?.message}
       />
       <Controller
         as={TextField}
         control={control}
-        name="addressInput.postalCode"
+        name="defaultShippingAddress.postalCode"
         label="Postal Code"
         fullWidth
-        error={!!errors.addressInput?.postalCode}
-        helperText={errors.addressInput?.postalCode?.message}
+        error={!!errors.defaultShippingAddress?.postalCode}
+        helperText={errors.defaultShippingAddress?.postalCode?.message}
       />
     </Card>
   );

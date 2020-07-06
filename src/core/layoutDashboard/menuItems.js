@@ -1,6 +1,8 @@
 import { PermissionEnum } from "@/config/enum";
+
 import homeIcon from "./assets/menu-home-icon.svg";
 import catalogIcon from "./assets/menu-catalog-icon.svg";
+import customerIcon from "./assets/menu-customers-icon.svg";
 import discountIcon from "./assets/menu-discounts-icon.svg";
 
 export const menuItems = [
@@ -29,6 +31,12 @@ export const menuItems = [
         permission: PermissionEnum.MANAGE_COLLECTIONS,
       },
     ],
+  },
+  {
+    label: "Customers",
+    icon: customerIcon,
+    url: "/customers",
+    permission: PermissionEnum.MANAGE_CUSTOMERS,
   },
   {
     label: "Discounts",
