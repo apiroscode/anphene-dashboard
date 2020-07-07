@@ -18,9 +18,9 @@ const useStyles = makeStyles(
       margin: 0,
       padding: theme.spacing(2),
     },
-    content: {
-      overflow: "hidden",
-    },
+    // content: {
+    //   overflow: "hidden",
+    // },
   }),
   {
     name: "Dialog",

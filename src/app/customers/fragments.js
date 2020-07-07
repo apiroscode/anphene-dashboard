@@ -5,13 +5,18 @@ export const CustomerFragment = gql`
   fragment CustomerFragment on User {
     id
     email
+    dateJoined
   }
 `;
 
 export const CustomerDetailsFragment = gql`
   fragment CustomerDetailsFragment on User {
     id
+    note
     email
+    dateJoined
+    lastLogin
+    isActive
     defaultShippingAddress {
       ...AddressFragment
     }

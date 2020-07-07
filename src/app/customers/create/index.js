@@ -36,7 +36,6 @@ export default () => {
 
   const methods = useForm({
     defaultValues: {
-      name: "",
       email: "",
       note: "",
       defaultShippingAddress: {

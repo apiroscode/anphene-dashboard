@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-import { ErrorFragment } from "@/core/_graphql/fragments";
+import { AddressFragment, ErrorFragment } from "@/core/_graphql/fragments";
 import { CustomerAddressesFragment } from "./fragments";
 
 export const CreateAddress = gql`
@@ -24,14 +24,13 @@ export const UpdateAddress = gql`
       errors {
         ...ErrorFragment
       }
-      user {
-        ...CustomerAddressesFragment
+      address {
+        ...AddressFragment
       }
     }
   }
-
   ${ErrorFragment}
-  ${CustomerAddressesFragment}
+  ${AddressFragment}
 `;
 
 export const DeleteAddress = gql`
