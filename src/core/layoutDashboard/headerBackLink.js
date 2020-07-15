@@ -20,6 +20,10 @@ export const backLink = [
     label: "PAGES",
   },
   {
+    link: "/configuration/plugins",
+    label: "PLUGINS",
+  },
+  {
     link: "/configuration/product-types",
     label: "PRODUCT TYPES",
   },

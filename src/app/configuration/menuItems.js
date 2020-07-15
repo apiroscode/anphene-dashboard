@@ -6,6 +6,7 @@ import Attributes from "@/components/_icons/Attributes";
 import Groups from "@/components/_icons/Groups";
 import Navigation from "@/components/_icons/Navigation";
 import Pages from "@/components/_icons/Pages";
+import Plugins from "@/components/_icons/Plugins";
 import ProductTypes from "@/components/_icons/ProductTypes";
 import StaffMembers from "@/components/_icons/StaffMembers";
 import Suppliers from "@/components/_icons/Suppliers";
@@ -85,6 +86,18 @@ export const menuItems = [
         label: "Site Settings",
         description: "View and update your site settings",
         permission: PermissionEnum.MANAGE_SETTINGS,
+      },
+    ],
+  },
+  {
+    description: "Miscellaneous",
+    children: [
+      {
+        icon: <Plugins fontSize="inherit" viewBox="0 0 44 44" />,
+        url: "plugins",
+        label: "Plugins",
+        description: "View and update your plugins and their settings",
+        permission: PermissionEnum.MANAGE_PLUGINS,
       },
     ],
   },

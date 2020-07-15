@@ -50,6 +50,9 @@ const PageList = lazy(() => import("@/app/pages/list"));
 const PageCreate = lazy(() => import("@/app/pages/create"));
 const PageUpdate = lazy(() => import("@/app/pages/update"));
 
+const PluginList = lazy(() => import("@/app/plugins/list"));
+const PluginUpdate = lazy(() => import("@/app/plugins/update"));
+
 const ProductList = lazy(() => import("@/app/products/list"));
 const ProductCreate = lazy(() => import("@/app/products/create"));
 const ProductUpdate = lazy(() => import("@/app/products/update"));
@@ -89,6 +92,7 @@ export const Routes = () => (
             PermissionEnum.MANAGE_GROUPS,
             PermissionEnum.MANAGE_MENUS,
             PermissionEnum.MANAGE_PAGES,
+            PermissionEnum.MANAGE_PLUGINS,
             PermissionEnum.MANAGE_PRODUCT_TYPES,
             PermissionEnum.MANAGE_SETTINGS,
             PermissionEnum.MANAGE_STAFF,
@@ -153,6 +157,17 @@ export const Routes = () => (
           path="configuration/pages/:id"
           element={<PageUpdate />}
           permissions={[PermissionEnum.MANAGE_PAGES]}
+        />
+
+        <Route
+          path="configuration/plugins"
+          element={<PluginList />}
+          permissions={[PermissionEnum.MANAGE_PLUGINS]}
+        />
+        <Route
+          path="configuration/plugins/:id"
+          element={<PluginUpdate />}
+          permissions={[PermissionEnum.MANAGE_PLUGINS]}
         />
 
         <Route

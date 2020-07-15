@@ -13,6 +13,7 @@ export const QueryWrapper = (props) => {
   const toggleLoading = useStoreActions((actions) => actions.app.toggleLoading);
   const { data, loading, refetch } = useQuery(query, { variables, ...queryOptions });
   const baseField = maybe(() => data?.[fieldName]);
+
   useEffect(() => {
     toggleLoading(loading);
   }, [toggleLoading, loading]);
